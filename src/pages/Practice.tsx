@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Code, Play, Clock, Star, ArrowLeft } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Code, Play, Clock, Star, ArrowLeft, Zap } from "lucide-react";
 import CodeEditor from "@/components/CodeEditor";
+import FreeCodeEditor from "@/components/FreeCodeEditor";
 
 const practiceExercises = [
   {
@@ -585,13 +587,14 @@ const Practice = () => {
             className="gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Exercises
+            Back to Practice Lab
           </Button>
         </div>
         <CodeEditor exercise={selectedExercise} />
       </div>
     );
   }
+  
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "Beginner":
@@ -610,71 +613,90 @@ const Practice = () => {
       <div className="space-y-2">
         <h1 className="text-3xl font-bold">Practice Lab</h1>
         <p className="text-muted-foreground">
-          Sharpen your coding skills with hands-on exercises and challenges
+          Sharpen your coding skills with hands-on exercises and free practice
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {practiceExercises.map((exercise) => (
-          <Card key={exercise.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <CardTitle className="text-lg">{exercise.title}</CardTitle>
-                  <CardDescription>{exercise.description}</CardDescription>
-                </div>
-                {exercise.completed && (
-                  <Star className="h-5 w-5 text-yellow-500 fill-current" />
-                )}
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Clock className="h-4 w-4" />
-                <span>{exercise.duration}</span>
-                <Code className="h-4 w-4 ml-2" />
-                <span>{exercise.language}</span>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <Badge 
-                  variant="outline" 
-                  className={getDifficultyColor(exercise.difficulty)}
-                >
-                  {exercise.difficulty}
-                </Badge>
-                
-                <Button 
-                  variant={exercise.completed ? "outline" : "default"}
-                  size="sm"
-                  className="gap-2"
-                  onClick={() => setSelectedExercise(exercise)}
-                >
-                  <Play className="h-4 w-4" />
-                  {exercise.completed ? "Review" : "Start"}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <Tabs defaultValue="exercises" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="exercises" className="gap-2">
+            <Code className="h-4 w-4" />
+            Guided Exercises
+          </TabsTrigger>
+          <TabsTrigger value="freedom" className="gap-2">
+            <Zap className="h-4 w-4" />
+            Freedom Editor
+          </TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="exercises" className="space-y-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {practiceExercises.map((exercise) => (
+              <Card key={exercise.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-1">
+                      <CardTitle className="text-lg">{exercise.title}</CardTitle>
+                      <CardDescription>{exercise.description}</CardDescription>
+                    </div>
+                    {exercise.completed && (
+                      <Star className="h-5 w-5 text-yellow-500 fill-current" />
+                    )}
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Clock className="h-4 w-4" />
+                    <span>{exercise.duration}</span>
+                    <Code className="h-4 w-4 ml-2" />
+                    <span>{exercise.language}</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <Badge 
+                      variant="outline" 
+                      className={getDifficultyColor(exercise.difficulty)}
+                    >
+                      {exercise.difficulty}
+                    </Badge>
+                    
+                    <Button 
+                      variant={exercise.completed ? "outline" : "default"}
+                      size="sm"
+                      className="gap-2"
+                      onClick={() => setSelectedExercise(exercise)}
+                    >
+                      <Play className="h-4 w-4" />
+                      {exercise.completed ? "Review" : "Start"}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
 
-      <div className="mt-8 p-6 bg-muted/50 rounded-lg">
-        <h2 className="text-xl font-semibold mb-2">Track Your Progress</h2>
-        <p className="text-muted-foreground mb-4">
-          Complete practice exercises to improve your skills and earn achievements
-        </p>
-        <div className="flex gap-4 text-sm">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-            <span>1 Completed</span>
+          <div className="mt-8 p-6 bg-muted/50 rounded-lg">
+            <h2 className="text-xl font-semibold mb-2">Track Your Progress</h2>
+            <p className="text-muted-foreground mb-4">
+              Complete practice exercises to improve your skills and earn achievements
+            </p>
+            <div className="flex gap-4 text-sm">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                <span>1 Completed</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                <span>3 In Progress</span>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-            <span>3 In Progress</span>
-          </div>
-        </div>
-      </div>
+        </TabsContent>
+        
+        <TabsContent value="freedom">
+          <FreeCodeEditor />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
