@@ -132,45 +132,49 @@ const FreeCodeEditor = () => {
         </CardHeader>
       </Card>
 
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* Code Editor */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Code Editor</CardTitle>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={clearCode}
-                  className="gap-2"
-                >
-                  <RotateCcw className="h-4 w-4" />
-                  Clear
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={saveCode}
-                  className="gap-2"
-                >
-                  <Save className="h-4 w-4" />
-                  Save
-                </Button>
-                <Button
-                  onClick={runCode}
-                  disabled={isRunning}
-                  size="sm"
-                  className="gap-2"
-                >
-                  <Play className="h-4 w-4" />
-                  {isRunning ? "Running..." : "Run Code"}
-                </Button>
-              </div>
+      {/* Code Editor with Integrated Output */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg">Code Editor</CardTitle>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearCode}
+                className="gap-2"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Clear
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={saveCode}
+                className="gap-2"
+              >
+                <Save className="h-4 w-4" />
+                Save
+              </Button>
+              <Button
+                onClick={runCode}
+                disabled={isRunning}
+                size="sm"
+                className="gap-2"
+              >
+                <Play className="h-4 w-4" />
+                {isRunning ? "Running..." : "Run Code"}
+              </Button>
             </div>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="border rounded-md overflow-hidden">
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="grid lg:grid-cols-3 gap-0">
+            {/* Editor */}
+            <div className="lg:col-span-2 border-r">
+              <div className="border-b bg-muted/20 px-4 py-2 text-sm font-medium">
+                {getCurrentLanguageConfig().label} Editor
+              </div>
               <Editor
                 height="500px"
                 language={getCurrentLanguageConfig().monacoLang}
@@ -198,21 +202,22 @@ const FreeCodeEditor = () => {
                 }}
               />
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Output */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Output</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="bg-muted/50 p-4 rounded-md font-mono text-sm min-h-[400px] whitespace-pre-wrap">
-              {output || "Click 'Run Code' to see output...\n\nNote: This is a simulated environment for practice purposes."}
+            
+            {/* Output Panel */}
+            <div className="bg-background">
+              <div className="border-b bg-muted/20 px-4 py-2 text-sm font-medium flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${output ? 'bg-green-500' : 'bg-muted-foreground'}`}></div>
+                Output Console
+              </div>
+              <div className="p-4 h-[500px] overflow-auto">
+                <pre className="font-mono text-sm whitespace-pre-wrap text-foreground">
+                  {output || "Click 'Run Code' to see output...\n\nNote: This is a simulated environment for practice purposes."}
+                </pre>
+              </div>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <Card className="bg-muted/20">
         <CardContent className="pt-6">
