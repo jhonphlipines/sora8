@@ -59,10 +59,7 @@ const Index = () => {
               <Button variant="ghost" onClick={() => navigate('/pricing')} className="text-foreground hover:text-primary">
                 Pricing
               </Button>
-              <Button variant="ghost" onClick={() => navigate('/data-analysis')} className="text-foreground hover:text-primary">
-                <BookOpen className="h-4 w-4 mr-2" />
-                Data Analysis
-              </Button>
+              
               <Button variant="default" onClick={() => navigate('/tests')} className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 <Trophy className="h-4 w-4 mr-2" />
                 Test
