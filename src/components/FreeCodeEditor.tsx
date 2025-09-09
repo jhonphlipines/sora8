@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Play, RotateCcw, Save, Code2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import OutputPanel from "./OutputPanel";
+import { executeCode } from "@/utils/codeExecutor";
 
 const supportedLanguages = [
   { value: "javascript", label: "JavaScript", monacoLang: "javascript", starter: "// Welcome to the free code editor!\n// Start coding in JavaScript\n\nconsole.log('Hello, World!');" },
@@ -47,69 +49,34 @@ const FreeCodeEditor = () => {
   };
 
   const runCode = async () => {
+    if (!code.trim()) {
+      toast({
+        title: "No code to run",
+        description: "Please write some code first.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsRunning(true);
     setOutput("");
     
     try {
-      // Simulate code execution
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Analyze code content for more realistic output
-      const codeContent = code.toLowerCase();
-      let simulatedOutput = "";
-      
-      if (selectedLanguage === "javascript") {
-        // Try to execute JavaScript in a safe way
-        try {
-          const logs: string[] = [];
-          const originalLog = console.log;
-          console.log = (...args) => {
-            logs.push(args.map(arg => String(arg)).join(' '));
-          };
-          
-          // Create a safe execution context
-          const safeCode = code.replace(/document|window|fetch|import|require/g, '/* restricted */');
-          new Function(safeCode)();
-          
-          console.log = originalLog;
-          simulatedOutput = logs.length > 0 ? logs.join('\n') : "No output";
-        } catch (jsError) {
-          simulatedOutput = `Error: ${(jsError as Error).message}`;
-        }
-      } else {
-        // For other languages, provide intelligent simulation
-        if (codeContent.includes('print(') || codeContent.includes('console.log') || codeContent.includes('cout') || codeContent.includes('printf') || codeContent.includes('system.out.println') || codeContent.includes('console.writeline')) {
-          // Extract potential output from print statements
-          const printMatches = code.match(/(print\(|console\.log\(|cout\s*<<|printf\(|System\.out\.println\(|Console\.WriteLine\()([^)]*)/gi);
-          if (printMatches) {
-            simulatedOutput = printMatches.map(match => {
-              const content = match.replace(/(print\(|console\.log\(|cout\s*<<\s*|printf\(|System\.out\.println\(|Console\.WriteLine\()/gi, '');
-              return content.replace(/['"]/g, '').trim();
-            }).join('\n');
-          } else {
-            simulatedOutput = "Program executed successfully (no output statements found)";
-          }
-        } else if (selectedLanguage === "html") {
-          simulatedOutput = "✓ HTML rendered successfully!\nOpen in browser to see the visual output.";
-        } else if (selectedLanguage === "sql") {
-          if (codeContent.includes('select')) {
-            simulatedOutput = "Query executed successfully\n(Results would appear here in a real database)";
-          } else {
-            simulatedOutput = "SQL command executed successfully";
-          }
-        } else {
-          simulatedOutput = "Program compiled and executed successfully";
-        }
-      }
-      
-      setOutput(simulatedOutput + "\n\n✓ Execution completed");
+      const result = await executeCode(code, selectedLanguage);
+      setOutput(result);
       
       toast({
         title: "Code executed! 🚀",
-        description: "Your code ran in the simulated environment.",
+        description: "Check the output panel for results.",
       });
     } catch (error) {
-      setOutput("Error: " + (error as Error).message);
+      const errorMsg = `Execution Error: ${(error as Error).message}`;
+      setOutput(errorMsg);
+      toast({
+        title: "Execution failed",
+        description: "Check the output panel for error details.",
+        variant: "destructive"
+      });
     } finally {
       setIsRunning(false);
     }
@@ -167,49 +134,48 @@ const FreeCodeEditor = () => {
         </CardHeader>
       </Card>
 
-      {/* Code Editor with Integrated Output */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-lg">Code Editor</CardTitle>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={clearCode}
-                className="gap-2"
-              >
-                <RotateCcw className="h-4 w-4" />
-                Clear
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={saveCode}
-                className="gap-2"
-              >
-                <Save className="h-4 w-4" />
-                Save
-              </Button>
-              <Button
-                onClick={runCode}
-                disabled={isRunning}
-                size="sm"
-                className="gap-2"
-              >
-                <Play className="h-4 w-4" />
-                {isRunning ? "Running..." : "Run Code"}
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="grid lg:grid-cols-3 gap-0">
-            {/* Editor */}
-            <div className="lg:col-span-2 border-r">
-              <div className="border-b bg-muted/20 px-4 py-2 text-sm font-medium">
+      <div className="grid lg:grid-cols-3 gap-6">
+        {/* Code Editor */}
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Code2 className="h-5 w-5" />
                 {getCurrentLanguageConfig().label} Editor
+              </CardTitle>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={clearCode}
+                  className="gap-2"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  Clear
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={saveCode}
+                  className="gap-2"
+                >
+                  <Save className="h-4 w-4" />
+                  Save
+                </Button>
+                <Button
+                  onClick={runCode}
+                  disabled={isRunning || !code.trim()}
+                  size="sm"
+                  className="gap-2"
+                >
+                  <Play className="h-4 w-4" />
+                  {isRunning ? "Running..." : "Run Code"}
+                </Button>
               </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="border rounded-md overflow-hidden">
               <Editor
                 height="500px"
                 language={getCurrentLanguageConfig().monacoLang}
@@ -237,22 +203,12 @@ const FreeCodeEditor = () => {
                 }}
               />
             </div>
-            
-            {/* Output Panel */}
-            <div className="bg-background">
-              <div className="border-b bg-muted/20 px-4 py-2 text-sm font-medium flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${output ? 'bg-green-500' : 'bg-muted-foreground'}`}></div>
-                Output Console
-              </div>
-              <div className="p-4 h-[500px] overflow-auto">
-                <pre className="font-mono text-sm whitespace-pre-wrap text-foreground">
-                  {output || "Click 'Run Code' to see output...\n\nNote: This is a simulated environment for practice purposes."}
-                </pre>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        {/* Output Panel */}
+        <OutputPanel output={output} isRunning={isRunning} />
+      </div>
 
       <Card className="bg-muted/20">
         <CardContent className="pt-6">
