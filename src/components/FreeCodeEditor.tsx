@@ -54,24 +54,59 @@ const FreeCodeEditor = () => {
       // Simulate code execution
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Mock output based on language
-      const mockOutputs = {
-        javascript: "Console output:\nHello, World!\n\n✓ Code executed successfully!",
-        python: "Hello, World!\n\n✓ Code executed successfully!",
-        java: "Hello, World!\n\n✓ Compilation and execution successful!",
-        cpp: "Hello, World!\n\n✓ Compilation and execution successful!",
-        c: "Hello, World!\n\n✓ Compilation and execution successful!",
-        csharp: "Hello, World!\n\n✓ Compilation and execution successful!",
-        html: "✓ HTML rendered successfully!\nOpen in browser to see the visual output.",
-        sql: "greeting\n---------\nHello, World!\n\n✓ Query executed successfully!",
-        php: "Hello, World!\n\n✓ PHP script executed successfully!"
-      };
+      // Analyze code content for more realistic output
+      const codeContent = code.toLowerCase();
+      let simulatedOutput = "";
       
-      setOutput(mockOutputs[selectedLanguage as keyof typeof mockOutputs] || "✓ Code executed successfully!");
+      if (selectedLanguage === "javascript") {
+        // Try to execute JavaScript in a safe way
+        try {
+          const logs: string[] = [];
+          const originalLog = console.log;
+          console.log = (...args) => {
+            logs.push(args.map(arg => String(arg)).join(' '));
+          };
+          
+          // Create a safe execution context
+          const safeCode = code.replace(/document|window|fetch|import|require/g, '/* restricted */');
+          new Function(safeCode)();
+          
+          console.log = originalLog;
+          simulatedOutput = logs.length > 0 ? logs.join('\n') : "No output";
+        } catch (jsError) {
+          simulatedOutput = `Error: ${(jsError as Error).message}`;
+        }
+      } else {
+        // For other languages, provide intelligent simulation
+        if (codeContent.includes('print(') || codeContent.includes('console.log') || codeContent.includes('cout') || codeContent.includes('printf') || codeContent.includes('system.out.println') || codeContent.includes('console.writeline')) {
+          // Extract potential output from print statements
+          const printMatches = code.match(/(print\(|console\.log\(|cout\s*<<|printf\(|System\.out\.println\(|Console\.WriteLine\()([^)]*)/gi);
+          if (printMatches) {
+            simulatedOutput = printMatches.map(match => {
+              const content = match.replace(/(print\(|console\.log\(|cout\s*<<\s*|printf\(|System\.out\.println\(|Console\.WriteLine\()/gi, '');
+              return content.replace(/['"]/g, '').trim();
+            }).join('\n');
+          } else {
+            simulatedOutput = "Program executed successfully (no output statements found)";
+          }
+        } else if (selectedLanguage === "html") {
+          simulatedOutput = "✓ HTML rendered successfully!\nOpen in browser to see the visual output.";
+        } else if (selectedLanguage === "sql") {
+          if (codeContent.includes('select')) {
+            simulatedOutput = "Query executed successfully\n(Results would appear here in a real database)";
+          } else {
+            simulatedOutput = "SQL command executed successfully";
+          }
+        } else {
+          simulatedOutput = "Program compiled and executed successfully";
+        }
+      }
+      
+      setOutput(simulatedOutput + "\n\n✓ Execution completed");
       
       toast({
         title: "Code executed! 🚀",
-        description: "Your code ran successfully in the simulated environment.",
+        description: "Your code ran in the simulated environment.",
       });
     } catch (error) {
       setOutput("Error: " + (error as Error).message);
