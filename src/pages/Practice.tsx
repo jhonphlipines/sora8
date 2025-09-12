@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Code, Play, Clock, Star, ArrowLeft, Zap } from "lucide-react";
 import CodeEditor from "@/components/CodeEditor";
-import FreeCodeEditor from "@/components/FreeCodeEditor";
+
 
 const practiceExercises = [
   {
@@ -618,14 +618,10 @@ const Practice = () => {
       </div>
 
       <Tabs defaultValue="exercises" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-1">
           <TabsTrigger value="exercises" className="gap-2">
             <Code className="h-4 w-4" />
             Guided Exercises
-          </TabsTrigger>
-          <TabsTrigger value="freedom" className="gap-2">
-            <Zap className="h-4 w-4" />
-            Freedom Editor
           </TabsTrigger>
         </TabsList>
         
@@ -693,9 +689,6 @@ const Practice = () => {
           </div>
         </TabsContent>
         
-        <TabsContent value="freedom">
-          <FreeCodeEditor />
-        </TabsContent>
       </Tabs>
     </div>
   );
