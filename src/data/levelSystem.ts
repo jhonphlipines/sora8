@@ -180,6 +180,156 @@ const javascriptLevels: Level[] = [
       color: "from-amber-400 to-yellow-500"
     },
     prerequisites: ["js-level-9"]
+  },
+  {
+    id: "js-level-11",
+    level: 11,
+    name: "Modules & Import/Export",
+    description: "ES6 modules, CommonJS, and module bundling",
+    requiredScore: 90,
+    timeLimit: 780, // 13 minutes
+    questions: ["js65", "js66", "js67", "js68", "js69", "js70"],
+    badge: {
+      name: "Module Master",
+      icon: "📦",
+      color: "from-cyan-400 to-blue-500"
+    },
+    prerequisites: ["js-level-10"]
+  },
+  {
+    id: "js-level-12",
+    level: 12,
+    name: "Regular Expressions",
+    description: "Pattern matching and text processing with regex",
+    requiredScore: 85,
+    timeLimit: 660, // 11 minutes
+    questions: ["js71", "js72", "js73", "js74", "js75"],
+    badge: {
+      name: "Regex Expert",
+      icon: "🔍",
+      color: "from-emerald-400 to-teal-500"
+    },
+    prerequisites: ["js-level-11"]
+  },
+  {
+    id: "js-level-13",
+    level: 13,
+    name: "Browser APIs",
+    description: "Web APIs, localStorage, fetch, and more",
+    requiredScore: 85,
+    timeLimit: 720, // 12 minutes
+    questions: ["js76", "js77", "js78", "js79", "js80", "js81"],
+    badge: {
+      name: "API Navigator",
+      icon: "🌐",
+      color: "from-indigo-400 to-purple-500"
+    },
+    prerequisites: ["js-level-12"]
+  },
+  {
+    id: "js-level-14",
+    level: 14,
+    name: "Performance & Optimization",
+    description: "Code optimization and performance best practices",
+    requiredScore: 90,
+    timeLimit: 840, // 14 minutes
+    questions: ["js82", "js83", "js84", "js85", "js86", "js87"],
+    badge: {
+      name: "Speed Demon",
+      icon: "⚡",
+      color: "from-yellow-400 to-orange-500"
+    },
+    prerequisites: ["js-level-13"]
+  },
+  {
+    id: "js-level-15",
+    level: 15,
+    name: "Testing & Debugging",
+    description: "Unit testing, debugging techniques, and tools",
+    requiredScore: 90,
+    timeLimit: 780, // 13 minutes
+    questions: ["js88", "js89", "js90", "js91", "js92"],
+    badge: {
+      name: "Bug Hunter",
+      icon: "🐛",
+      color: "from-red-400 to-pink-500"
+    },
+    prerequisites: ["js-level-14"]
+  },
+  {
+    id: "js-level-16",
+    level: 16,
+    name: "Node.js Fundamentals",
+    description: "Server-side JavaScript with Node.js",
+    requiredScore: 85,
+    timeLimit: 900, // 15 minutes
+    questions: ["js93", "js94", "js95", "js96", "js97", "js98"],
+    badge: {
+      name: "Node Ninja",
+      icon: "🟢",
+      color: "from-green-400 to-emerald-500"
+    },
+    prerequisites: ["js-level-15"]
+  },
+  {
+    id: "js-level-17",
+    level: 17,
+    name: "Package Management",
+    description: "npm, package.json, and dependency management",
+    requiredScore: 85,
+    timeLimit: 660, // 11 minutes
+    questions: ["js99", "js100", "js101", "js102", "js103"],
+    badge: {
+      name: "Package Pro",
+      icon: "📦",
+      color: "from-blue-400 to-cyan-500"
+    },
+    prerequisites: ["js-level-16"]
+  },
+  {
+    id: "js-level-18",
+    level: 18,
+    name: "Design Patterns",
+    description: "Common JavaScript design patterns and architectures",
+    requiredScore: 90,
+    timeLimit: 960, // 16 minutes
+    questions: ["js104", "js105", "js106", "js107", "js108", "js109"],
+    badge: {
+      name: "Pattern Master",
+      icon: "🎨",
+      color: "from-purple-400 to-pink-500"
+    },
+    prerequisites: ["js-level-17"]
+  },
+  {
+    id: "js-level-19",
+    level: 19,
+    name: "Security & Best Practices",
+    description: "JavaScript security, XSS prevention, and best practices",
+    requiredScore: 90,
+    timeLimit: 840, // 14 minutes
+    questions: ["js110", "js111", "js112", "js113", "js114"],
+    badge: {
+      name: "Security Guardian",
+      icon: "🛡️",
+      color: "from-orange-400 to-red-500"
+    },
+    prerequisites: ["js-level-18"]
+  },
+  {
+    id: "js-level-20",
+    level: 20,
+    name: "Framework Mastery",
+    description: "Advanced concepts for modern JS frameworks",
+    requiredScore: 95,
+    timeLimit: 1080, // 18 minutes
+    questions: ["js115", "js116", "js117", "js118", "js119", "js120"],
+    badge: {
+      name: "JS Architect",
+      icon: "🏆",
+      color: "from-amber-400 to-yellow-500"
+    },
+    prerequisites: ["js-level-19"]
   }
 ];
 
