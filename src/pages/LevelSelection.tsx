@@ -7,7 +7,6 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Lock, Trophy, Clock, BookOpen, Star } from "lucide-react";
 import { levelCategories, isLevelUnlocked, getCategoryProgress, Level, UserProgress } from "@/data/levelSystem";
 import { AIAssistant } from "@/components/AIAssistant";
-
 const LevelSelection = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -25,49 +24,34 @@ const LevelSelection = () => {
       setUserProgress(JSON.parse(savedProgress));
     }
   }, []);
-
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategory(categoryId);
   };
-
   const handleLevelStart = (levelId: string) => {
     navigate(`/level-quiz/${levelId}`);
   };
-
-  const selectedCategoryData = selectedCategory 
-    ? levelCategories.find(cat => cat.id === selectedCategory)
-    : null;
-
-  const LevelCard = ({ level, isUnlocked, isCompleted }: { 
-    level: Level; 
-    isUnlocked: boolean; 
+  const selectedCategoryData = selectedCategory ? levelCategories.find(cat => cat.id === selectedCategory) : null;
+  const LevelCard = ({
+    level,
+    isUnlocked,
+    isCompleted
+  }: {
+    level: Level;
+    isUnlocked: boolean;
     isCompleted: boolean;
   }) => {
     const score = userProgress.scores[level.id];
     const attempts = userProgress.attempts[level.id] || 0;
-
-    return (
-      <Card 
-        className={`relative overflow-hidden transition-all duration-300 ${
-          isUnlocked 
-            ? 'hover:shadow-xl cursor-pointer bg-[var(--gradient-card)] border-border/50' 
-            : 'opacity-60 bg-muted border-muted-foreground/20'
-        } ${isCompleted ? 'ring-2 ring-primary/50' : ''}`}
-        onClick={() => isUnlocked && handleLevelStart(level.id)}
-      >
+    return <Card className={`relative overflow-hidden transition-all duration-300 ${isUnlocked ? 'hover:shadow-xl cursor-pointer bg-[var(--gradient-card)] border-border/50' : 'opacity-60 bg-muted border-muted-foreground/20'} ${isCompleted ? 'ring-2 ring-primary/50' : ''}`} onClick={() => isUnlocked && handleLevelStart(level.id)}>
         {/* Level number badge */}
-        <div className={`absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-          isCompleted ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-muted-foreground'
-        }`}>
+        <div className={`absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${isCompleted ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-muted-foreground'}`}>
           {level.level}
         </div>
 
         {/* Lock overlay */}
-        {!isUnlocked && (
-          <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-10">
+        {!isUnlocked && <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-10">
             <Lock className="h-8 w-8 text-muted-foreground" />
-          </div>
-        )}
+          </div>}
 
         <CardHeader className="pb-4">
           <div className="flex items-center gap-3 mb-2">
@@ -78,14 +62,12 @@ const LevelSelection = () => {
               <CardTitle className="text-lg font-bold text-foreground">
                 {level.name}
               </CardTitle>
-              {isCompleted && (
-                <div className="flex items-center gap-1 mt-1">
+              {isCompleted && <div className="flex items-center gap-1 mt-1">
                   <Trophy className="h-4 w-4 text-primary" />
                   <span className="text-sm font-medium text-primary">
                     {score}% - {level.badge.name}
                   </span>
-                </div>
-              )}
+                </div>}
             </div>
           </div>
         </CardHeader>
@@ -110,46 +92,27 @@ const LevelSelection = () => {
             <Badge variant="outline" className="text-xs">
               Pass: {level.requiredScore}%+
             </Badge>
-            {attempts > 0 && (
-              <Badge variant="secondary" className="text-xs">
+            {attempts > 0 && <Badge variant="secondary" className="text-xs">
                 {attempts} attempt{attempts > 1 ? 's' : ''}
-              </Badge>
-            )}
+              </Badge>}
           </div>
 
-          {isUnlocked && (
-            <Button 
-              className={`w-full ${
-                isCompleted 
-                  ? 'bg-primary/20 text-primary hover:bg-primary/30' 
-                  : 'bg-[var(--gradient-primary)] border-0'
-              }`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleLevelStart(level.id);
-              }}
-            >
+          {isUnlocked && <Button className={`w-full ${isCompleted ? 'bg-primary/20 text-primary hover:bg-primary/30' : 'bg-[var(--gradient-primary)] border-0'}`} onClick={e => {
+          e.stopPropagation();
+          handleLevelStart(level.id);
+        }}>
               {isCompleted ? 'Retake Level' : 'Start Level'}
-            </Button>
-          )}
+            </Button>}
         </CardContent>
-      </Card>
-    );
+      </Card>;
   };
-
   if (selectedCategory && selectedCategoryData) {
     const progress = getCategoryProgress(selectedCategory, userProgress.completedLevels);
-
-    return (
-      <div className="min-h-screen bg-background py-8 px-4">
+    return <div className="min-h-screen bg-background py-8 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <Button
-              variant="ghost"
-              onClick={() => setSelectedCategory(null)}
-              className="mb-4"
-            >
+            <Button variant="ghost" onClick={() => setSelectedCategory(null)} className="mb-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Categories
             </Button>
@@ -192,37 +155,22 @@ const LevelSelection = () => {
 
           {/* Levels Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {selectedCategoryData.levels.map((level) => {
-              const isUnlocked = isLevelUnlocked(level, userProgress.completedLevels);
-              const isCompleted = userProgress.completedLevels.includes(level.id);
-
-              return (
-                <LevelCard
-                  key={level.id}
-                  level={level}
-                  isUnlocked={isUnlocked}
-                  isCompleted={isCompleted}
-                />
-              );
-            })}
+            {selectedCategoryData.levels.map(level => {
+            const isUnlocked = isLevelUnlocked(level, userProgress.completedLevels);
+            const isCompleted = userProgress.completedLevels.includes(level.id);
+            return <LevelCard key={level.id} level={level} isUnlocked={isUnlocked} isCompleted={isCompleted} />;
+          })}
           </div>
         </div>
 
         <AIAssistant context={`${selectedCategoryData.name} Levels`} />
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen bg-background py-8 px-4">
+  return <div className="min-h-screen bg-background py-8 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/tests')}
-            className="mb-4"
-          >
+          <Button variant="ghost" onClick={() => navigate('/tests')} className="mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Tests
           </Button>
@@ -240,19 +188,11 @@ const LevelSelection = () => {
 
         {/* Categories Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {levelCategories.map((category) => {
-            const progress = getCategoryProgress(category.id, userProgress.completedLevels);
-            const totalBadges = category.levels.length;
-            const earnedBadges = category.levels.filter(level => 
-              userProgress.completedLevels.includes(level.id)
-            ).length;
-
-            return (
-              <Card
-                key={category.id}
-                className="bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300 group cursor-pointer"
-                onClick={() => handleCategorySelect(category.id)}
-              >
+          {levelCategories.map(category => {
+          const progress = getCategoryProgress(category.id, userProgress.completedLevels);
+          const totalBadges = category.levels.length;
+          const earnedBadges = category.levels.filter(level => userProgress.completedLevels.includes(level.id)).length;
+          return <Card key={category.id} className="bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300 group cursor-pointer" onClick={() => handleCategorySelect(category.id)}>
                 <CardHeader className="text-center pb-4">
                   <div className={`w-20 h-20 mx-auto bg-gradient-to-r ${category.color} rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                     <span className="text-3xl">{category.icon}</span>
@@ -290,19 +230,15 @@ const LevelSelection = () => {
                     </div>
                   </div>
 
-                  <Button 
-                    className="w-full bg-[var(--gradient-primary)] border-0 mt-4"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCategorySelect(category.id);
-                    }}
-                  >
+                  <Button onClick={e => {
+                e.stopPropagation();
+                handleCategorySelect(category.id);
+              }} className="w-full bg-[var(--gradient-primary)] border-0 mt-4 text-indigo-700">
                     Start Learning Path
                   </Button>
                 </CardContent>
-              </Card>
-            );
-          })}
+              </Card>;
+        })}
         </div>
 
         {/* How It Works */}
@@ -348,8 +284,6 @@ const LevelSelection = () => {
       </div>
 
       <AIAssistant context="Level-Based Learning Paths" />
-    </div>
-  );
+    </div>;
 };
-
 export default LevelSelection;
