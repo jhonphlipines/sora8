@@ -3194,6 +3194,897 @@ const javascriptQuestions: QuizQuestion[] = [
       { id: "d", text: "Compresses JSON", isCorrect: false }
     ],
     explanation: "JSON.stringify() converts a JavaScript object or value to a JSON string."
+  },
+  // Advanced JavaScript Questions for Levels 11-20
+  {
+    id: "js41",
+    question: "What is the purpose of async/await in JavaScript?",
+    options: [
+      { id: "a", text: "To make code run faster", isCorrect: false },
+      { id: "b", text: "To handle asynchronous operations more easily", isCorrect: true },
+      { id: "c", text: "To create multiple threads", isCorrect: false },
+      { id: "d", text: "To compress code", isCorrect: false }
+    ],
+    explanation: "async/await provides a more readable way to work with Promises and asynchronous operations."
+  },
+  {
+    id: "js42",
+    question: "What is a Promise in JavaScript?",
+    options: [
+      { id: "a", text: "A guarantee that code will work", isCorrect: false },
+      { id: "b", text: "An object representing eventual completion or failure of an async operation", isCorrect: true },
+      { id: "c", text: "A type of loop", isCorrect: false },
+      { id: "d", text: "A built-in debugging tool", isCorrect: false }
+    ],
+    explanation: "A Promise is an object that represents the eventual completion (or failure) of an asynchronous operation and its resulting value."
+  },
+  {
+    id: "js43",
+    question: "Which method is used to handle Promise rejections?",
+    options: [
+      { id: "a", text: ".then()", isCorrect: false },
+      { id: "b", text: ".catch()", isCorrect: true },
+      { id: "c", text: ".finally()", isCorrect: false },
+      { id: "d", text: ".error()", isCorrect: false }
+    ],
+    explanation: "The .catch() method is used to handle Promise rejections and errors."
+  },
+  {
+    id: "js44",
+    question: "What does the spread operator (...) do?",
+    options: [
+      { id: "a", text: "Spreads elements of an iterable", isCorrect: true },
+      { id: "b", text: "Creates a new function", isCorrect: false },
+      { id: "c", text: "Performs multiplication", isCorrect: false },
+      { id: "d", text: "Comments out code", isCorrect: false }
+    ],
+    explanation: "The spread operator (...) allows an iterable to be expanded in places where zero or more arguments or elements are expected."
+  },
+  {
+    id: "js45",
+    question: "What is destructuring in JavaScript?",
+    options: [
+      { id: "a", text: "Breaking code into pieces", isCorrect: false },
+      { id: "b", text: "Extracting values from arrays or objects", isCorrect: true },
+      { id: "c", text: "Deleting variables", isCorrect: false },
+      { id: "d", text: "Creating loops", isCorrect: false }
+    ],
+    explanation: "Destructuring allows you to extract values from arrays or properties from objects into distinct variables."
+  },
+  {
+    id: "js46",
+    question: "Which keyword is used to create a generator function?",
+    options: [
+      { id: "a", text: "generator", isCorrect: false },
+      { id: "b", text: "function*", isCorrect: true },
+      { id: "c", text: "async", isCorrect: false },
+      { id: "d", text: "yield", isCorrect: false }
+    ],
+    explanation: "Generator functions are declared using function* syntax and can pause and resume execution."
+  },
+  {
+    id: "js47",
+    question: "What does the Set data structure store?",
+    options: [
+      { id: "a", text: "Key-value pairs", isCorrect: false },
+      { id: "b", text: "Unique values only", isCorrect: true },
+      { id: "c", text: "Ordered lists", isCorrect: false },
+      { id: "d", text: "Functions only", isCorrect: false }
+    ],
+    explanation: "Set is a collection of unique values - each value can only occur once in a Set."
+  },
+  {
+    id: "js48",
+    question: "Which method adds a property to an object with a descriptor?",
+    options: [
+      { id: "a", text: "Object.assign()", isCorrect: false },
+      { id: "b", text: "Object.defineProperty()", isCorrect: true },
+      { id: "c", text: "Object.create()", isCorrect: false },
+      { id: "d", text: "Object.setProperty()", isCorrect: false }
+    ],
+    explanation: "Object.defineProperty() allows you to define a property with specific descriptors like writable, enumerable, and configurable."
+  },
+  {
+    id: "js49",
+    question: "What is the difference between Map and Object?",
+    options: [
+      { id: "a", text: "No difference", isCorrect: false },
+      { id: "b", text: "Map can have any type of keys, Object keys are strings", isCorrect: true },
+      { id: "c", text: "Object is faster", isCorrect: false },
+      { id: "d", text: "Map stores only numbers", isCorrect: false }
+    ],
+    explanation: "Map allows keys of any type, while Object keys are converted to strings. Map also maintains insertion order."
+  },
+  {
+    id: "js50",
+    question: "What does Symbol.iterator define?",
+    options: [
+      { id: "a", text: "A loop counter", isCorrect: false },
+      { id: "b", text: "The default iterator for an object", isCorrect: true },
+      { id: "c", text: "A unique identifier", isCorrect: false },
+      { id: "d", text: "A mathematical symbol", isCorrect: false }
+    ],
+    explanation: "Symbol.iterator defines the default iterator for an object, making it iterable in for...of loops."
+  },
+  {
+    id: "js51",
+    question: "Which method creates a new Promise?",
+    options: [
+      { id: "a", text: "new Promise()", isCorrect: true },
+      { id: "b", text: "Promise.create()", isCorrect: false },
+      { id: "c", text: "Promise.new()", isCorrect: false },
+      { id: "d", text: "createPromise()", isCorrect: false }
+    ],
+    explanation: "Promises are created using the Promise constructor: new Promise((resolve, reject) => {})"
+  },
+  {
+    id: "js52",
+    question: "What is a WeakMap in JavaScript?",
+    options: [
+      { id: "a", text: "A Map with limited functionality", isCorrect: false },
+      { id: "b", text: "A Map with object keys only and weak references", isCorrect: true },
+      { id: "c", text: "A deprecated Map", isCorrect: false },
+      { id: "d", text: "A Map for small data", isCorrect: false }
+    ],
+    explanation: "WeakMap holds weak references to object keys, allowing garbage collection when no other references exist."
+  },
+  {
+    id: "js53",
+    question: "Which operator checks if a property exists in an object?",
+    options: [
+      { id: "a", text: "hasOwnProperty", isCorrect: false },
+      { id: "b", text: "in", isCorrect: true },
+      { id: "c", text: "exists", isCorrect: false },
+      { id: "d", text: "contains", isCorrect: false }
+    ],
+    explanation: "The 'in' operator returns true if the specified property exists in the object or its prototype chain."
+  },
+  {
+    id: "js54",
+    question: "What does Object.freeze() do?",
+    options: [
+      { id: "a", text: "Stops code execution", isCorrect: false },
+      { id: "b", text: "Makes an object immutable", isCorrect: true },
+      { id: "c", text: "Converts object to JSON", isCorrect: false },
+      { id: "d", text: "Copies an object", isCorrect: false }
+    ],
+    explanation: "Object.freeze() prevents modification of existing properties and addition of new properties to an object."
+  },
+  {
+    id: "js55",
+    question: "Which method executes a function once for each array element?",
+    options: [
+      { id: "a", text: "forEach()", isCorrect: true },
+      { id: "b", text: "map()", isCorrect: false },
+      { id: "c", text: "filter()", isCorrect: false },
+      { id: "d", text: "reduce()", isCorrect: false }
+    ],
+    explanation: "forEach() executes a provided function once for each array element, but doesn't return a new array."
+  },
+  {
+    id: "js56",
+    question: "What is the purpose of the Proxy object?",
+    options: [
+      { id: "a", text: "Network communication", isCorrect: false },
+      { id: "b", text: "Intercept and customize operations on objects", isCorrect: true },
+      { id: "c", text: "Proxy servers", isCorrect: false },
+      { id: "d", text: "Data encryption", isCorrect: false }
+    ],
+    explanation: "Proxy allows you to define custom behavior for fundamental operations like property access, assignment, function invocation, etc."
+  },
+  {
+    id: "js57",
+    question: "Which method combines arrays without modifying original arrays?",
+    options: [
+      { id: "a", text: "push()", isCorrect: false },
+      { id: "b", text: "concat()", isCorrect: true },
+      { id: "c", text: "merge()", isCorrect: false },
+      { id: "d", text: "append()", isCorrect: false }
+    ],
+    explanation: "concat() returns a new array that combines elements from the original arrays without modifying them."
+  },
+  {
+    id: "js58",
+    question: "What does the 'use strict' directive do?",
+    options: [
+      { id: "a", text: "Makes code run faster", isCorrect: false },
+      { id: "b", text: "Enables strict mode with stricter parsing and error handling", isCorrect: true },
+      { id: "c", text: "Compresses code", isCorrect: false },
+      { id: "d", text: "Enables debugging", isCorrect: false }
+    ],
+    explanation: "'use strict' enables strict mode, which catches common coding mistakes and prevents certain actions."
+  },
+  {
+    id: "js59",
+    question: "Which method returns a new array with a portion of the original array?",
+    options: [
+      { id: "a", text: "slice()", isCorrect: true },
+      { id: "b", text: "splice()", isCorrect: false },
+      { id: "c", text: "cut()", isCorrect: false },
+      { id: "d", text: "extract()", isCorrect: false }
+    ],
+    explanation: "slice() returns a shallow copy of a portion of an array without modifying the original array."
+  },
+  {
+    id: "js60",
+    question: "What is the temporal dead zone?",
+    options: [
+      { id: "a", text: "A debugging tool", isCorrect: false },
+      { id: "b", text: "Time between variable declaration and initialization with let/const", isCorrect: true },
+      { id: "c", text: "A type of error", isCorrect: false },
+      { id: "d", text: "Memory management", isCorrect: false }
+    ],
+    explanation: "The temporal dead zone is the time between entering scope and variable initialization for let and const declarations."
+  },
+  {
+    id: "js61",
+    question: "Which method creates an object with a specified prototype?",
+    options: [
+      { id: "a", text: "Object.create()", isCorrect: true },
+      { id: "b", text: "new Object()", isCorrect: false },
+      { id: "c", text: "Object.assign()", isCorrect: false },
+      { id: "d", text: "Object.prototype()", isCorrect: false }
+    ],
+    explanation: "Object.create() creates a new object with the specified prototype object and properties."
+  },
+  {
+    id: "js62",
+    question: "What does Promise.all() do?",
+    options: [
+      { id: "a", text: "Waits for all promises to resolve", isCorrect: true },
+      { id: "b", text: "Resolves with the first promise", isCorrect: false },
+      { id: "c", text: "Creates multiple promises", isCorrect: false },
+      { id: "d", text: "Cancels all promises", isCorrect: false }
+    ],
+    explanation: "Promise.all() waits for all input promises to resolve and returns a promise that resolves with an array of results."
+  },
+  {
+    id: "js63",
+    question: "Which method copies properties from source objects to target object?",
+    options: [
+      { id: "a", text: "Object.copy()", isCorrect: false },
+      { id: "b", text: "Object.assign()", isCorrect: true },
+      { id: "c", text: "Object.merge()", isCorrect: false },
+      { id: "d", text: "Object.extend()", isCorrect: false }
+    ],
+    explanation: "Object.assign() copies all enumerable own properties from one or more source objects to a target object."
+  },
+  {
+    id: "js64",
+    question: "What is the difference between for...in and for...of loops?",
+    options: [
+      { id: "a", text: "No difference", isCorrect: false },
+      { id: "b", text: "for...in iterates over keys, for...of iterates over values", isCorrect: true },
+      { id: "c", text: "for...of is faster", isCorrect: false },
+      { id: "d", text: "for...in is deprecated", isCorrect: false }
+    ],
+    explanation: "for...in iterates over enumerable properties (keys), while for...of iterates over iterable objects' values."
+  },
+  // Level 11: Modules & Import/Export
+  {
+    id: "js65",
+    question: "Which statement is used to export a default value from a module?",
+    options: [
+      { id: "a", text: "export default", isCorrect: true },
+      { id: "b", text: "module.exports", isCorrect: false },
+      { id: "c", text: "export main", isCorrect: false },
+      { id: "d", text: "default export", isCorrect: false }
+    ],
+    explanation: "export default allows you to export a single value as the default export from a module."
+  },
+  {
+    id: "js66",
+    question: "How do you import a default export?",
+    options: [
+      { id: "a", text: "import { default } from 'module'", isCorrect: false },
+      { id: "b", text: "import name from 'module'", isCorrect: true },
+      { id: "c", text: "import * from 'module'", isCorrect: false },
+      { id: "d", text: "require('module')", isCorrect: false }
+    ],
+    explanation: "Default exports can be imported using any name: import myName from 'module'"
+  },
+  {
+    id: "js67",
+    question: "What is the CommonJS syntax for exporting?",
+    options: [
+      { id: "a", text: "export default", isCorrect: false },
+      { id: "b", text: "module.exports", isCorrect: true },
+      { id: "c", text: "exports =", isCorrect: false },
+      { id: "d", text: "return", isCorrect: false }
+    ],
+    explanation: "CommonJS uses module.exports to export values from a module."
+  },
+  {
+    id: "js68",
+    question: "How do you import named exports?",
+    options: [
+      { id: "a", text: "import { name } from 'module'", isCorrect: true },
+      { id: "b", text: "import name from 'module'", isCorrect: false },
+      { id: "c", text: "import * as name from 'module'", isCorrect: false },
+      { id: "d", text: "const { name } = require('module')", isCorrect: false }
+    ],
+    explanation: "Named exports are imported using destructuring syntax: import { name } from 'module'"
+  },
+  {
+    id: "js69",
+    question: "What does 'import * as name' do?",
+    options: [
+      { id: "a", text: "Imports default export", isCorrect: false },
+      { id: "b", text: "Imports all exports as a namespace object", isCorrect: true },
+      { id: "c", text: "Imports nothing", isCorrect: false },
+      { id: "d", text: "Causes an error", isCorrect: false }
+    ],
+    explanation: "import * as name imports all exports from a module and creates a namespace object."
+  },
+  {
+    id: "js70",
+    question: "Which keyword is used for dynamic imports?",
+    options: [
+      { id: "a", text: "import()", isCorrect: true },
+      { id: "b", text: "require()", isCorrect: false },
+      { id: "c", text: "load()", isCorrect: false },
+      { id: "d", text: "fetch()", isCorrect: false }
+    ],
+    explanation: "Dynamic imports use import() as a function, which returns a Promise."
+  },
+  // Level 12: Regular Expressions
+  {
+    id: "js71",
+    question: "How do you create a regular expression in JavaScript?",
+    options: [
+      { id: "a", text: "/pattern/flags", isCorrect: true },
+      { id: "b", text: "regex('pattern')", isCorrect: false },
+      { id: "c", text: "pattern.regex()", isCorrect: false },
+      { id: "d", text: "RegExp.create('pattern')", isCorrect: false }
+    ],
+    explanation: "Regular expressions can be created using literal notation /pattern/flags or new RegExp('pattern', 'flags')"
+  },
+  {
+    id: "js72",
+    question: "What does the 'g' flag do in regular expressions?",
+    options: [
+      { id: "a", text: "Global search", isCorrect: true },
+      { id: "b", text: "Greedy matching", isCorrect: false },
+      { id: "c", text: "Group matching", isCorrect: false },
+      { id: "d", text: "Get all", isCorrect: false }
+    ],
+    explanation: "The 'g' flag enables global searching, finding all matches rather than stopping after the first match."
+  },
+  {
+    id: "js73",
+    question: "Which method tests if a string matches a regex pattern?",
+    options: [
+      { id: "a", text: "match()", isCorrect: false },
+      { id: "b", text: "test()", isCorrect: true },
+      { id: "c", text: "check()", isCorrect: false },
+      { id: "d", text: "validate()", isCorrect: false }
+    ],
+    explanation: "The test() method returns true if the pattern matches the string, false otherwise."
+  },
+  {
+    id: "js74",
+    question: "What does \\d represent in regex?",
+    options: [
+      { id: "a", text: "Any character", isCorrect: false },
+      { id: "b", text: "Any digit", isCorrect: true },
+      { id: "c", text: "Any letter", isCorrect: false },
+      { id: "d", text: "Whitespace", isCorrect: false }
+    ],
+    explanation: "\\d matches any digit character (0-9) in regular expressions."
+  },
+  {
+    id: "js75",
+    question: "What does the '+' quantifier mean in regex?",
+    options: [
+      { id: "a", text: "One or more", isCorrect: true },
+      { id: "b", text: "Zero or more", isCorrect: false },
+      { id: "c", text: "Exactly one", isCorrect: false },
+      { id: "d", text: "Addition operator", isCorrect: false }
+    ],
+    explanation: "The '+' quantifier matches one or more occurrences of the preceding element."
+  },
+  // Level 13: Browser APIs
+  {
+    id: "js76",
+    question: "Which API is used for storing data locally in the browser?",
+    options: [
+      { id: "a", text: "localStorage", isCorrect: true },
+      { id: "b", text: "cookieStorage", isCorrect: false },
+      { id: "c", text: "browserStorage", isCorrect: false },
+      { id: "d", text: "webStorage", isCorrect: false }
+    ],
+    explanation: "localStorage provides a way to store data locally within the user's browser with no expiration time."
+  },
+  {
+    id: "js77",
+    question: "What does fetch() return?",
+    options: [
+      { id: "a", text: "Response data", isCorrect: false },
+      { id: "b", text: "Promise", isCorrect: true },
+      { id: "c", text: "JSON object", isCorrect: false },
+      { id: "d", text: "String", isCorrect: false }
+    ],
+    explanation: "fetch() returns a Promise that resolves to a Response object representing the response to the request."
+  },
+  {
+    id: "js78",
+    question: "Which method adds an event listener to an element?",
+    options: [
+      { id: "a", text: "addEvent()", isCorrect: false },
+      { id: "b", text: "addEventListener()", isCorrect: true },
+      { id: "c", text: "on()", isCorrect: false },
+      { id: "d", text: "listen()", isCorrect: false }
+    ],
+    explanation: "addEventListener() method attaches an event handler to an element without overwriting existing event handlers."
+  },
+  {
+    id: "js79",
+    question: "What does sessionStorage store?",
+    options: [
+      { id: "a", text: "Data for the page session", isCorrect: true },
+      { id: "b", text: "Permanent data", isCorrect: false },
+      { id: "c", text: "Server data", isCorrect: false },
+      { id: "d", text: "User credentials", isCorrect: false }
+    ],
+    explanation: "sessionStorage stores data for the duration of the page session, cleared when the tab is closed."
+  },
+  {
+    id: "js80",
+    question: "Which API provides location information?",
+    options: [
+      { id: "a", text: "navigator.location", isCorrect: false },
+      { id: "b", text: "navigator.geolocation", isCorrect: true },
+      { id: "c", text: "window.location", isCorrect: false },
+      { id: "d", text: "document.location", isCorrect: false }
+    ],
+    explanation: "navigator.geolocation provides access to the device's location information."
+  },
+  {
+    id: "js81",
+    question: "What does the Intersection Observer API do?",
+    options: [
+      { id: "a", text: "Observes DOM changes", isCorrect: false },
+      { id: "b", text: "Observes element visibility in viewport", isCorrect: true },
+      { id: "c", text: "Observes mouse movements", isCorrect: false },
+      { id: "d", text: "Observes network requests", isCorrect: false }
+    ],
+    explanation: "Intersection Observer API provides a way to asynchronously observe changes in intersection of a target element with viewport."
+  },
+  // Level 14: Performance & Optimization
+  {
+    id: "js82",
+    question: "What is the purpose of requestAnimationFrame()?",
+    options: [
+      { id: "a", text: "Create animations", isCorrect: false },
+      { id: "b", text: "Optimize animation performance by syncing with browser refresh rate", isCorrect: true },
+      { id: "c", text: "Request server data", isCorrect: false },
+      { id: "d", text: "Load images", isCorrect: false }
+    ],
+    explanation: "requestAnimationFrame() schedules a function to run before the next repaint, optimizing animation performance."
+  },
+  {
+    id: "js83",
+    question: "Which technique prevents blocking the main thread?",
+    options: [
+      { id: "a", text: "Web Workers", isCorrect: true },
+      { id: "b", text: "Sync functions", isCorrect: false },
+      { id: "c", text: "Blocking calls", isCorrect: false },
+      { id: "d", text: "Alert dialogs", isCorrect: false }
+    ],
+    explanation: "Web Workers allow you to run JavaScript in background threads, preventing blocking of the main UI thread."
+  },
+  {
+    id: "js84",
+    question: "What is lazy loading?",
+    options: [
+      { id: "a", text: "Loading all resources at once", isCorrect: false },
+      { id: "b", text: "Loading resources only when needed", isCorrect: true },
+      { id: "c", text: "Slow loading", isCorrect: false },
+      { id: "d", text: "Loading errors", isCorrect: false }
+    ],
+    explanation: "Lazy loading defers loading of resources until they are actually needed, improving initial page load performance."
+  },
+  {
+    id: "js85",
+    question: "Which method measures code execution time?",
+    options: [
+      { id: "a", text: "performance.now()", isCorrect: true },
+      { id: "b", text: "Date.now()", isCorrect: false },
+      { id: "c", text: "timer.now()", isCorrect: false },
+      { id: "d", text: "clock.now()", isCorrect: false }
+    ],
+    explanation: "performance.now() returns a high-resolution timestamp, useful for measuring code execution time."
+  },
+  {
+    id: "js86",
+    question: "What is debouncing in JavaScript?",
+    options: [
+      { id: "a", text: "Error handling", isCorrect: false },
+      { id: "b", text: "Delaying function execution until after delay period", isCorrect: true },
+      { id: "c", text: "Function optimization", isCorrect: false },
+      { id: "d", text: "Memory cleanup", isCorrect: false }
+    ],
+    explanation: "Debouncing delays function execution until after a specified delay period has passed since the last invocation."
+  },
+  {
+    id: "js87",
+    question: "What is throttling?",
+    options: [
+      { id: "a", text: "Limiting function calls to once per time period", isCorrect: true },
+      { id: "b", text: "Speeding up functions", isCorrect: false },
+      { id: "c", text: "Breaking functions", isCorrect: false },
+      { id: "d", text: "Caching results", isCorrect: false }
+    ],
+    explanation: "Throttling limits function execution to at most once per specified time period."
+  },
+  // Level 15: Testing & Debugging
+  {
+    id: "js88",
+    question: "What is unit testing?",
+    options: [
+      { id: "a", text: "Testing individual components in isolation", isCorrect: true },
+      { id: "b", text: "Testing the entire application", isCorrect: false },
+      { id: "c", text: "Testing user interface", isCorrect: false },
+      { id: "d", text: "Testing server performance", isCorrect: false }
+    ],
+    explanation: "Unit testing involves testing individual units or components of code in isolation from the rest of the application."
+  },
+  {
+    id: "js89",
+    question: "Which method is commonly used for assertions in testing?",
+    options: [
+      { id: "a", text: "expect()", isCorrect: true },
+      { id: "b", text: "assert()", isCorrect: false },
+      { id: "c", text: "check()", isCorrect: false },
+      { id: "d", text: "verify()", isCorrect: false }
+    ],
+    explanation: "expect() is commonly used in modern testing frameworks like Jest for making assertions."
+  },
+  {
+    id: "js90",
+    question: "What does TDD stand for?",
+    options: [
+      { id: "a", text: "Test Driven Development", isCorrect: true },
+      { id: "b", text: "Time Driven Design", isCorrect: false },
+      { id: "c", text: "Technical Design Document", isCorrect: false },
+      { id: "d", text: "Type Definition Declaration", isCorrect: false }
+    ],
+    explanation: "TDD (Test Driven Development) is a development approach where tests are written before the actual code."
+  },
+  {
+    id: "js91",
+    question: "Which tool helps debug JavaScript in the browser?",
+    options: [
+      { id: "a", text: "Console", isCorrect: false },
+      { id: "b", text: "DevTools", isCorrect: true },
+      { id: "c", text: "Compiler", isCorrect: false },
+      { id: "d", text: "Linter", isCorrect: false }
+    ],
+    explanation: "Browser DevTools provide comprehensive debugging capabilities including console, debugger, network monitoring, and more."
+  },
+  {
+    id: "js92",
+    question: "What is a mock in testing?",
+    options: [
+      { id: "a", text: "Fake implementation of a dependency", isCorrect: true },
+      { id: "b", text: "Error in code", isCorrect: false },
+      { id: "c", text: "Test framework", isCorrect: false },
+      { id: "d", text: "Debugging tool", isCorrect: false }
+    ],
+    explanation: "A mock is a fake implementation used in testing to replace actual dependencies and control their behavior."
+  },
+  // Level 16: Node.js Fundamentals
+  {
+    id: "js93",
+    question: "What is Node.js?",
+    options: [
+      { id: "a", text: "JavaScript framework", isCorrect: false },
+      { id: "b", text: "JavaScript runtime for server-side", isCorrect: true },
+      { id: "c", text: "JavaScript compiler", isCorrect: false },
+      { id: "d", text: "JavaScript library", isCorrect: false }
+    ],
+    explanation: "Node.js is a JavaScript runtime built on Chrome's V8 engine that allows JavaScript to run on the server-side."
+  },
+  {
+    id: "js94",
+    question: "Which object provides information about the current Node.js process?",
+    options: [
+      { id: "a", text: "global", isCorrect: false },
+      { id: "b", text: "process", isCorrect: true },
+      { id: "c", text: "node", isCorrect: false },
+      { id: "d", text: "system", isCorrect: false }
+    ],
+    explanation: "The process object provides information and control over the current Node.js process."
+  },
+  {
+    id: "js95",
+    question: "How do you read a file asynchronously in Node.js?",
+    options: [
+      { id: "a", text: "fs.readFile()", isCorrect: true },
+      { id: "b", text: "fs.read()", isCorrect: false },
+      { id: "c", text: "file.read()", isCorrect: false },
+      { id: "d", text: "readFile()", isCorrect: false }
+    ],
+    explanation: "fs.readFile() reads a file asynchronously in Node.js, taking a callback or returning a Promise with promisify."
+  },
+  {
+    id: "js96",
+    question: "What is the Event Loop in Node.js?",
+    options: [
+      { id: "a", text: "Handles asynchronous operations", isCorrect: true },
+      { id: "b", text: "Creates loops in code", isCorrect: false },
+      { id: "c", text: "Handles events only", isCorrect: false },
+      { id: "d", text: "Manages memory", isCorrect: false }
+    ],
+    explanation: "The Event Loop handles asynchronous operations in Node.js, allowing non-blocking I/O operations."
+  },
+  {
+    id: "js97",
+    question: "Which module is used for creating HTTP servers in Node.js?",
+    options: [
+      { id: "a", text: "server", isCorrect: false },
+      { id: "b", text: "http", isCorrect: true },
+      { id: "c", text: "web", isCorrect: false },
+      { id: "d", text: "express", isCorrect: false }
+    ],
+    explanation: "The built-in 'http' module provides functionality to create HTTP servers and clients in Node.js."
+  },
+  {
+    id: "js98",
+    question: "What does Buffer represent in Node.js?",
+    options: [
+      { id: "a", text: "Text data", isCorrect: false },
+      { id: "b", text: "Binary data", isCorrect: true },
+      { id: "c", text: "Network requests", isCorrect: false },
+      { id: "d", text: "File paths", isCorrect: false }
+    ],
+    explanation: "Buffer is a global class that provides a way to work with binary data directly in Node.js."
+  },
+  // Level 17: Package Management
+  {
+    id: "js99",
+    question: "What is npm?",
+    options: [
+      { id: "a", text: "Node Package Manager", isCorrect: true },
+      { id: "b", text: "Network Protocol Manager", isCorrect: false },
+      { id: "c", text: "New Programming Method", isCorrect: false },
+      { id: "d", text: "Node Performance Monitor", isCorrect: false }
+    ],
+    explanation: "npm is the Node Package Manager, the default package manager for Node.js."
+  },
+  {
+    id: "js100",
+    question: "Which file contains project dependencies?",
+    options: [
+      { id: "a", text: "dependencies.json", isCorrect: false },
+      { id: "b", text: "package.json", isCorrect: true },
+      { id: "c", text: "node.json", isCorrect: false },
+      { id: "d", text: "modules.json", isCorrect: false }
+    ],
+    explanation: "package.json contains metadata about the project including its dependencies, scripts, and configuration."
+  },
+  {
+    id: "js101",
+    question: "What is the difference between dependencies and devDependencies?",
+    options: [
+      { id: "a", text: "No difference", isCorrect: false },
+      { id: "b", text: "dependencies for production, devDependencies for development", isCorrect: true },
+      { id: "c", text: "devDependencies are faster", isCorrect: false },
+      { id: "d", text: "dependencies are newer", isCorrect: false }
+    ],
+    explanation: "dependencies are needed in production, while devDependencies are only needed during development."
+  },
+  {
+    id: "js102",
+    question: "Which command installs a package globally?",
+    options: [
+      { id: "a", text: "npm install -g", isCorrect: true },
+      { id: "b", text: "npm install --global", isCorrect: false },
+      { id: "c", text: "npm global install", isCorrect: false },
+      { id: "d", text: "npm install -world", isCorrect: false }
+    ],
+    explanation: "npm install -g installs a package globally, making it available system-wide."
+  },
+  {
+    id: "js103",
+    question: "What does package-lock.json do?",
+    options: [
+      { id: "a", text: "Locks package installation", isCorrect: false },
+      { id: "b", text: "Records exact versions of installed packages", isCorrect: true },
+      { id: "c", text: "Prevents package updates", isCorrect: false },
+      { id: "d", text: "Encrypts package data", isCorrect: false }
+    ],
+    explanation: "package-lock.json records the exact versions of all installed packages to ensure consistent installations."
+  },
+  // Level 18: Design Patterns
+  {
+    id: "js104",
+    question: "What is the Singleton pattern?",
+    options: [
+      { id: "a", text: "Creates multiple instances", isCorrect: false },
+      { id: "b", text: "Ensures a class has only one instance", isCorrect: true },
+      { id: "c", text: "Creates arrays", isCorrect: false },
+      { id: "d", text: "Handles events", isCorrect: false }
+    ],
+    explanation: "The Singleton pattern ensures a class has only one instance and provides global access to it."
+  },
+  {
+    id: "js105",
+    question: "What is the Observer pattern?",
+    options: [
+      { id: "a", text: "Watches files", isCorrect: false },
+      { id: "b", text: "Notifies multiple objects about state changes", isCorrect: true },
+      { id: "c", text: "Observes user input", isCorrect: false },
+      { id: "d", text: "Monitors network traffic", isCorrect: false }
+    ],
+    explanation: "The Observer pattern defines a one-to-many dependency between objects so that when one object changes state, all dependents are notified."
+  },
+  {
+    id: "js106",
+    question: "What is the Module pattern?",
+    options: [
+      { id: "a", text: "Organizes code into modules", isCorrect: true },
+      { id: "b", text: "Creates HTML modules", isCorrect: false },
+      { id: "c", text: "Imports libraries", isCorrect: false },
+      { id: "d", text: "Splits files", isCorrect: false }
+    ],
+    explanation: "The Module pattern encapsulates code into modules with private and public methods, providing organization and encapsulation."
+  },
+  {
+    id: "js107",
+    question: "What is the Factory pattern?",
+    options: [
+      { id: "a", text: "Creates objects without specifying exact class", isCorrect: true },
+      { id: "b", text: "Manufactures products", isCorrect: false },
+      { id: "c", text: "Builds factories", isCorrect: false },
+      { id: "d", text: "Processes data", isCorrect: false }
+    ],
+    explanation: "The Factory pattern creates objects without specifying the exact class of object that will be created."
+  },
+  {
+    id: "js108",
+    question: "What is the Decorator pattern?",
+    options: [
+      { id: "a", text: "Adds CSS styling", isCorrect: false },
+      { id: "b", text: "Adds behavior to objects dynamically", isCorrect: true },
+      { id: "c", text: "Decorates HTML", isCorrect: false },
+      { id: "d", text: "Beautifies code", isCorrect: false }
+    ],
+    explanation: "The Decorator pattern allows behavior to be added to objects dynamically without altering their structure."
+  },
+  {
+    id: "js109",
+    question: "What is the MVC pattern?",
+    options: [
+      { id: "a", text: "Model-View-Controller architecture", isCorrect: true },
+      { id: "b", text: "Multiple-Value-Container", isCorrect: false },
+      { id: "c", text: "Main-View-Content", isCorrect: false },
+      { id: "d", text: "Memory-Variable-Cache", isCorrect: false }
+    ],
+    explanation: "MVC (Model-View-Controller) is an architectural pattern that separates application logic into three interconnected components."
+  },
+  // Level 19: Security & Best Practices
+  {
+    id: "js110",
+    question: "What is XSS (Cross-Site Scripting)?",
+    options: [
+      { id: "a", text: "Cross-server synchronization", isCorrect: false },
+      { id: "b", text: "Injection of malicious scripts into web pages", isCorrect: true },
+      { id: "c", text: "XML style sheets", isCorrect: false },
+      { id: "d", text: "Cross-platform scripting", isCorrect: false }
+    ],
+    explanation: "XSS is a security vulnerability where malicious scripts are injected into trusted websites."
+  },
+  {
+    id: "js111",
+    question: "How can you prevent XSS attacks?",
+    options: [
+      { id: "a", text: "Use HTTPS only", isCorrect: false },
+      { id: "b", text: "Sanitize and validate user input", isCorrect: true },
+      { id: "c", text: "Use strong passwords", isCorrect: false },
+      { id: "d", text: "Update browsers", isCorrect: false }
+    ],
+    explanation: "XSS can be prevented by properly sanitizing and validating user input, encoding output, and using Content Security Policy."
+  },
+  {
+    id: "js112",
+    question: "What is CSRF (Cross-Site Request Forgery)?",
+    options: [
+      { id: "a", text: "Cross-site resource failure", isCorrect: false },
+      { id: "b", text: "Unauthorized commands transmitted from trusted user", isCorrect: true },
+      { id: "c", text: "Cross-server request format", isCorrect: false },
+      { id: "d", text: "Client-side request failure", isCorrect: false }
+    ],
+    explanation: "CSRF tricks users into executing unwanted actions on a web application where they're authenticated."
+  },
+  {
+    id: "js113",
+    question: "What is Content Security Policy (CSP)?",
+    options: [
+      { id: "a", text: "Content storage policy", isCorrect: false },
+      { id: "b", text: "Security layer to detect and mitigate XSS attacks", isCorrect: true },
+      { id: "c", text: "Customer service protocol", isCorrect: false },
+      { id: "d", text: "Code style policy", isCorrect: false }
+    ],
+    explanation: "CSP is a security standard that helps prevent XSS attacks by specifying which dynamic resources are allowed to load."
+  },
+  {
+    id: "js114",
+    question: "Which practice helps prevent injection attacks?",
+    options: [
+      { id: "a", text: "Input validation and sanitization", isCorrect: true },
+      { id: "b", text: "Using var instead of let", isCorrect: false },
+      { id: "c", text: "Minifying code", isCorrect: false },
+      { id: "d", text: "Using jQuery", isCorrect: false }
+    ],
+    explanation: "Proper input validation, sanitization, and parameterized queries help prevent injection attacks."
+  },
+  // Level 20: Framework Mastery
+  {
+    id: "js115",
+    question: "What is a Virtual DOM?",
+    options: [
+      { id: "a", text: "A fake DOM", isCorrect: false },
+      { id: "b", text: "In-memory representation of DOM for performance optimization", isCorrect: true },
+      { id: "c", text: "A DOM in virtual reality", isCorrect: false },
+      { id: "d", text: "A deprecated DOM method", isCorrect: false }
+    ],
+    explanation: "Virtual DOM is an in-memory representation of the real DOM that enables efficient updates and rendering."
+  },
+  {
+    id: "js116",
+    question: "What is component-based architecture?",
+    options: [
+      { id: "a", text: "Building UI as a tree of reusable components", isCorrect: true },
+      { id: "b", text: "Using only JavaScript components", isCorrect: false },
+      { id: "c", text: "Computer component design", isCorrect: false },
+      { id: "d", text: "Database component structure", isCorrect: false }
+    ],
+    explanation: "Component-based architecture structures applications as a tree of reusable, self-contained components."
+  },
+  {
+    id: "js117",
+    question: "What is state management in frameworks?",
+    options: [
+      { id: "a", text: "Managing application state across components", isCorrect: true },
+      { id: "b", text: "Managing server state", isCorrect: false },
+      { id: "c", text: "Managing file states", isCorrect: false },
+      { id: "d", text: "Managing network states", isCorrect: false }
+    ],
+    explanation: "State management involves handling and sharing application state across different components efficiently."
+  },
+  {
+    id: "js118",
+    question: "What is server-side rendering (SSR)?",
+    options: [
+      { id: "a", text: "Rendering graphics on server", isCorrect: false },
+      { id: "b", text: "Generating HTML on server before sending to client", isCorrect: true },
+      { id: "c", text: "Server-side graphics", isCorrect: false },
+      { id: "d", text: "Rendering databases", isCorrect: false }
+    ],
+    explanation: "SSR generates the HTML on the server before sending it to the client, improving initial load time and SEO."
+  },
+  {
+    id: "js119",
+    question: "What is code splitting?",
+    options: [
+      { id: "a", text: "Dividing code into multiple files for lazy loading", isCorrect: true },
+      { id: "b", text: "Breaking code functionality", isCorrect: false },
+      { id: "c", text: "Splitting team code", isCorrect: false },
+      { id: "d", text: "Code version control", isCorrect: false }
+    ],
+    explanation: "Code splitting divides application code into smaller chunks that can be loaded on demand, improving performance."
+  },
+  {
+    id: "js120",
+    question: "What is progressive enhancement?",
+    options: [
+      { id: "a", text: "Adding features progressively as browser capabilities allow", isCorrect: true },
+      { id: "b", text: "Progressive web apps", isCorrect: false },
+      { id: "c", text: "Gradual performance improvements", isCorrect: false },
+      { id: "d", text: "Progressive downloading", isCorrect: false }
+    ],
+    explanation: "Progressive enhancement starts with basic functionality and adds enhanced features based on browser capabilities."
   }
 ];
 
