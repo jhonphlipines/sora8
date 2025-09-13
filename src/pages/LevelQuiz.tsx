@@ -45,6 +45,25 @@ const LevelQuiz = () => {
   };
 
   const levelQuestions = getLevelQuestions();
+  
+  // Check if we have questions for this level
+  if (levelQuestions.length === 0) {
+    return (
+      <div className="min-h-screen bg-background py-8 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-2xl font-bold mb-4">Questions Not Available</h1>
+          <p className="text-muted-foreground mb-6">
+            The questions for this level are not yet available. Please try a different level.
+          </p>
+          <Button onClick={() => navigate('/levels')}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Levels
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   const [quizState, setQuizState] = useState<LevelQuizState>({
     currentQuestionIndex: 0,
     answers: {},
@@ -70,6 +89,24 @@ const LevelQuiz = () => {
   }, [quizState.timeRemaining, quizState.isCompleted]);
 
   const currentQuestion = levelQuestions[quizState.currentQuestionIndex];
+
+  // Safety check for current question
+  if (!currentQuestion) {
+    return (
+      <div className="min-h-screen bg-background py-8 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-2xl font-bold mb-4">Question Not Found</h1>  
+          <p className="text-muted-foreground mb-6">
+            There was an issue loading the current question.
+          </p>
+          <Button onClick={() => navigate('/levels')}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Levels
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   const handleAnswerSelect = (optionId: string) => {
     setQuizState(prev => ({

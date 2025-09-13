@@ -4284,6 +4284,65 @@ const nextjsQuestions: QuizQuestion[] = [
   }
 ];
 
+// React Test Questions
+const reactQuestions: QuizQuestion[] = [
+  {
+    id: "react1",
+    question: "What is JSX in React?",
+    options: [
+      { id: "a", text: "A JavaScript library", isCorrect: false },
+      { id: "b", text: "A syntax extension for JavaScript", isCorrect: true },
+      { id: "c", text: "A CSS framework", isCorrect: false },
+      { id: "d", text: "A database query language", isCorrect: false }
+    ],
+    explanation: "JSX is a syntax extension for JavaScript that allows you to write HTML-like code in JavaScript files."
+  },
+  {
+    id: "react2",
+    question: "Which method is used to create React components?",
+    options: [
+      { id: "a", text: "React.createComponent()", isCorrect: false },
+      { id: "b", text: "function or class", isCorrect: true },
+      { id: "c", text: "React.newComponent()", isCorrect: false },
+      { id: "d", text: "React.makeComponent()", isCorrect: false }
+    ],
+    explanation: "React components can be created using function components or class components."
+  },
+  {
+    id: "react3",
+    question: "What is the correct way to render an element in React?",
+    options: [
+      { id: "a", text: "ReactDOM.render()", isCorrect: true },
+      { id: "b", text: "React.render()", isCorrect: false },
+      { id: "c", text: "document.render()", isCorrect: false },
+      { id: "d", text: "render()", isCorrect: false }
+    ],
+    explanation: "ReactDOM.render() is used to render React elements into the DOM."
+  },
+  {
+    id: "react4",
+    question: "What are props in React?",
+    options: [
+      { id: "a", text: "Properties passed to components", isCorrect: true },
+      { id: "b", text: "CSS properties", isCorrect: false },
+      { id: "c", text: "JavaScript methods", isCorrect: false },
+      { id: "d", text: "HTML attributes", isCorrect: false }
+    ],
+    explanation: "Props are properties passed from parent components to child components in React."
+  },
+  {
+    id: "react5",
+    question: "What is state in React?",
+    options: [
+      { id: "a", text: "External API data", isCorrect: false },
+      { id: "b", text: "Component's internal data", isCorrect: true },
+      { id: "c", text: "Global variables", isCorrect: false },
+      { id: "d", text: "CSS styles", isCorrect: false }
+    ],
+    explanation: "State is a component's internal data that can change over time and trigger re-renders."
+  }
+];
+
 export const testCategories: TestCategory[] = [
   {
     id: "python",
@@ -4300,6 +4359,14 @@ export const testCategories: TestCategory[] = [
     icon: "⚡",
     color: "from-yellow-500 to-orange-500",
     questions: javascriptQuestions
+  },
+  {
+    id: "react",
+    name: "React",
+    description: "Test your React knowledge including components, JSX, props, and state management",
+    icon: "⚛️",
+    color: "from-blue-400 to-cyan-500",
+    questions: reactQuestions
   },
   {
     id: "html",
