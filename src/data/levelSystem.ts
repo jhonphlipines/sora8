@@ -483,6 +483,156 @@ const pythonLevels: Level[] = [
       color: "from-yellow-400 to-orange-500"
     },
     prerequisites: ["py-level-9"]
+  },
+  {
+    id: "py-level-11",
+    level: 11,
+    name: "Modules & Packages",
+    description: "Import systems, packages, and module creation",
+    requiredScore: 90,
+    timeLimit: 780,
+    questions: ["py66", "py67", "py68", "py69", "py70", "py71"],
+    badge: {
+      name: "Module Master",
+      icon: "📦",
+      color: "from-cyan-400 to-blue-500"
+    },
+    prerequisites: ["py-level-10"]
+  },
+  {
+    id: "py-level-12",
+    level: 12,
+    name: "Regular Expressions",
+    description: "Pattern matching and text processing with regex",
+    requiredScore: 85,
+    timeLimit: 660,
+    questions: ["py72", "py73", "py74", "py75", "py76"],
+    badge: {
+      name: "Regex Expert",
+      icon: "🔍",
+      color: "from-emerald-400 to-teal-500"
+    },
+    prerequisites: ["py-level-11"]
+  },
+  {
+    id: "py-level-13",
+    level: 13,
+    name: "Web Development",
+    description: "Flask, Django basics, and web frameworks",
+    requiredScore: 85,
+    timeLimit: 720,
+    questions: ["py77", "py78", "py79", "py80", "py81", "py82"],
+    badge: {
+      name: "Web Developer",
+      icon: "🌐",
+      color: "from-indigo-400 to-purple-500"
+    },
+    prerequisites: ["py-level-12"]
+  },
+  {
+    id: "py-level-14",
+    level: 14,
+    name: "Data Science Basics",
+    description: "NumPy, Pandas, and data manipulation",
+    requiredScore: 90,
+    timeLimit: 840,
+    questions: ["py83", "py84", "py85", "py86", "py87", "py88"],
+    badge: {
+      name: "Data Scientist",
+      icon: "📊",
+      color: "from-yellow-400 to-orange-500"
+    },
+    prerequisites: ["py-level-13"]
+  },
+  {
+    id: "py-level-15",
+    level: 15,
+    name: "Testing & Debugging",
+    description: "Unit testing, pytest, and debugging techniques",
+    requiredScore: 90,
+    timeLimit: 780,
+    questions: ["py89", "py90", "py91", "py92", "py93"],
+    badge: {
+      name: "Test Master",
+      icon: "🧪",
+      color: "from-red-400 to-pink-500"
+    },
+    prerequisites: ["py-level-14"]
+  },
+  {
+    id: "py-level-16",
+    level: 16,
+    name: "Database Integration",
+    description: "SQLite, ORM, and database operations",
+    requiredScore: 85,
+    timeLimit: 900,
+    questions: ["py94", "py95", "py96", "py97", "py98", "py99"],
+    badge: {
+      name: "Database Pro",
+      icon: "🗄️",
+      color: "from-green-400 to-emerald-500"
+    },
+    prerequisites: ["py-level-15"]
+  },
+  {
+    id: "py-level-17",
+    level: 17,
+    name: "API Development",
+    description: "REST APIs, JSON handling, and web services",
+    requiredScore: 85,
+    timeLimit: 660,
+    questions: ["py100", "py101", "py102", "py103", "py104"],
+    badge: {
+      name: "API Architect",
+      icon: "🔗",
+      color: "from-blue-400 to-cyan-500"
+    },
+    prerequisites: ["py-level-16"]
+  },
+  {
+    id: "py-level-18",
+    level: 18,
+    name: "Machine Learning",
+    description: "Scikit-learn, ML algorithms, and model building",
+    requiredScore: 90,
+    timeLimit: 960,
+    questions: ["py105", "py106", "py107", "py108", "py109", "py110"],
+    badge: {
+      name: "ML Engineer",
+      icon: "🤖",
+      color: "from-purple-400 to-pink-500"
+    },
+    prerequisites: ["py-level-17"]
+  },
+  {
+    id: "py-level-19",
+    level: 19,
+    name: "Performance & Security",
+    description: "Code optimization, security, and best practices",
+    requiredScore: 90,
+    timeLimit: 840,
+    questions: ["py111", "py112", "py113", "py114", "py115"],
+    badge: {
+      name: "Security Expert",
+      icon: "🛡️",
+      color: "from-orange-400 to-red-500"
+    },
+    prerequisites: ["py-level-18"]
+  },
+  {
+    id: "py-level-20",
+    level: 20,
+    name: "Python Architect",
+    description: "Advanced patterns, concurrency, and system design",
+    requiredScore: 95,
+    timeLimit: 1080,
+    questions: ["py116", "py117", "py118", "py119", "py120", "py121"],
+    badge: {
+      name: "Python Architect",
+      icon: "🏆",
+      color: "from-amber-400 to-yellow-500"
+    },
+    prerequisites: ["py-level-19"]
   }
 ];
 
