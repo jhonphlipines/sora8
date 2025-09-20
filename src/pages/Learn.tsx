@@ -4,8 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, BookOpen, Code, Database, Globe, Cpu, Smartphone, Search, Home } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, BookOpen, Code, Database, Globe, Cpu, Smartphone, Search, Home, Video } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
+import VideoLearning from "@/components/VideoLearning";
 
 interface Slide {
   title: string;
@@ -31,6 +32,7 @@ const Learn = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [completedLanguages, setCompletedLanguages] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
+  const [showVideoLearning, setShowVideoLearning] = useState(false);
 
   const languages: Language[] = [
     // JavaScript courses
@@ -2123,6 +2125,7 @@ const postSchema = new mongoose.Schema({
   const goBackToLanguages = () => {
     setSelectedLanguage(null);
     setCurrentSlide(0);
+    setShowVideoLearning(false);
   };
 
   const markLanguageCompleted = () => {
@@ -2137,6 +2140,10 @@ const postSchema = new mongoose.Schema({
       navigate('/quiz');
     }
   };
+
+  if (showVideoLearning) {
+    return <VideoLearning onBackToCategories={goBackToLanguages} />;
+  }
 
   if (selectedLang) {
     return (
@@ -2289,6 +2296,27 @@ const postSchema = new mongoose.Schema({
           <p className="text-xl text-muted-foreground mb-8">
             Master programming languages with our comprehensive, interactive courses
           </p>
+          
+          {/* Learning Mode Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+            <Button
+              variant="outline"
+              size="lg"
+              className="gap-2"
+              onClick={() => setShowVideoLearning(true)}
+            >
+              <Video className="h-5 w-5" />
+              Video Learning Hub
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="gap-2"
+            >
+              <BookOpen className="h-5 w-5" />
+              Interactive Courses
+            </Button>
+          </div>
           
           <div className="relative max-w-md mx-auto">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
