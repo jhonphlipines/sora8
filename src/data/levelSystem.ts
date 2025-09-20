@@ -711,6 +711,156 @@ const reactLevels: Level[] = [
       color: "from-orange-400 to-red-500"
     },
     prerequisites: ["react-level-4"]
+  },
+  {
+    id: "react-level-6",
+    level: 6,
+    name: "Forms & Controlled Components",
+    description: "Form handling, validation, and controlled inputs",
+    requiredScore: 85,
+    timeLimit: 660,
+    questions: ["react28", "react29", "react30", "react31", "react32", "react33"],
+    badge: {
+      name: "Form Master",
+      icon: "📝",
+      color: "from-yellow-400 to-orange-500"
+    },
+    prerequisites: ["react-level-5"]
+  },
+  {
+    id: "react-level-7",
+    level: 7,
+    name: "Context API & State Management",
+    description: "React Context, state lifting, and component communication",
+    requiredScore: 85,
+    timeLimit: 720,
+    questions: ["react34", "react35", "react36", "react37", "react38"],
+    badge: {
+      name: "Context Expert",
+      icon: "🌐",
+      color: "from-emerald-400 to-green-500"
+    },
+    prerequisites: ["react-level-6"]
+  },
+  {
+    id: "react-level-8",
+    level: 8,
+    name: "React Router",
+    description: "Client-side routing and navigation",
+    requiredScore: 90,
+    timeLimit: 780,
+    questions: ["react39", "react40", "react41", "react42", "react43", "react44"],
+    badge: {
+      name: "Router Pro",
+      icon: "🧭",
+      color: "from-indigo-400 to-purple-500"
+    },
+    prerequisites: ["react-level-7"]
+  },
+  {
+    id: "react-level-9",
+    level: 9,
+    name: "Performance Optimization",
+    description: "React.memo, useMemo, useCallback, and optimization techniques",
+    requiredScore: 90,
+    timeLimit: 840,
+    questions: ["react45", "react46", "react47", "react48", "react49"],
+    badge: {
+      name: "Performance Guru",
+      icon: "⚡",
+      color: "from-cyan-400 to-blue-500"
+    },
+    prerequisites: ["react-level-8"]
+  },
+  {
+    id: "react-level-10",
+    level: 10,
+    name: "Advanced Hooks",
+    description: "useReducer, useRef, useLayoutEffect, and custom hook patterns",
+    requiredScore: 90,
+    timeLimit: 900,
+    questions: ["react50", "react51", "react52", "react53", "react54", "react55"],
+    badge: {
+      name: "Hook Architect",
+      icon: "🏗️",
+      color: "from-violet-400 to-purple-500"
+    },
+    prerequisites: ["react-level-9"]
+  },
+  {
+    id: "react-level-11",
+    level: 11,
+    name: "Testing React Components",
+    description: "Jest, React Testing Library, and component testing strategies",
+    requiredScore: 85,
+    timeLimit: 840,
+    questions: ["react56", "react57", "react58", "react59", "react60"],
+    badge: {
+      name: "Test Engineer",
+      icon: "🧪",
+      color: "from-lime-400 to-green-500"
+    },
+    prerequisites: ["react-level-10"]
+  },
+  {
+    id: "react-level-12",
+    level: 12,
+    name: "Error Boundaries & Error Handling",
+    description: "Error boundaries, error handling patterns, and debugging",
+    requiredScore: 85,
+    timeLimit: 720,
+    questions: ["react61", "react62", "react63", "react64", "react65"],
+    badge: {
+      name: "Error Handler",
+      icon: "🛠️",
+      color: "from-red-400 to-pink-500"
+    },
+    prerequisites: ["react-level-11"]
+  },
+  {
+    id: "react-level-13",
+    level: 13,
+    name: "Server-Side Rendering (SSR)",
+    description: "SSR concepts, hydration, and Next.js fundamentals",
+    requiredScore: 90,
+    timeLimit: 960,
+    questions: ["react66", "react67", "react68", "react69", "react70", "react71"],
+    badge: {
+      name: "SSR Specialist",
+      icon: "🖥️",
+      color: "from-slate-400 to-gray-600"
+    },
+    prerequisites: ["react-level-12"]
+  },
+  {
+    id: "react-level-14",
+    level: 14,
+    name: "State Management Libraries",
+    description: "Redux, Zustand, and external state management solutions",
+    requiredScore: 90,
+    timeLimit: 1020,
+    questions: ["react72", "react73", "react74", "react75", "react76"],
+    badge: {
+      name: "State Architect",
+      icon: "🏛️",
+      color: "from-purple-400 to-indigo-500"
+    },
+    prerequisites: ["react-level-13"]
+  },
+  {
+    id: "react-level-15",
+    level: 15,
+    name: "React Patterns & Architecture",
+    description: "Design patterns, component composition, and architectural best practices",
+    requiredScore: 95,
+    timeLimit: 1080,
+    questions: ["react77", "react78", "react79", "react80", "react81", "react82"],
+    badge: {
+      name: "React Master",
+      icon: "🏆",
+      color: "from-amber-400 to-yellow-500"
+    },
+    prerequisites: ["react-level-14"]
   }
 ];
 
