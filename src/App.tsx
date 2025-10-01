@@ -16,6 +16,7 @@ import LevelSelection from "./pages/LevelSelection";
 import LevelQuiz from "./pages/LevelQuiz";
 import LevelResults from "./pages/LevelResults";
 import DataAnalysis from "./pages/DataAnalysis";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ const App = () => (
               <div className="flex-1">
                 <Routes>
                   <Route path="/" element={<Index />} />
+                  <Route path="/auth" element={<Auth />} />
                   <Route path="/learn" element={<Learn />} />
                   <Route path="/practice" element={<Practice />} />
                   <Route path="/pricing" element={<Pricing />} />
