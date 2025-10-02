@@ -25,17 +25,19 @@ import {
   LogOut
 } from "lucide-react";
 import Editor from "@monaco-editor/react";
-import { codingProblems, CodingProblem } from "@/data/codingProblems";
+import { codingProblems, CodingProblem, supportedLanguages } from "@/data/codingProblems";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Practice = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProblem, setSelectedProblem] = useState<CodingProblem>(codingProblems[0]);
-  const [code, setCode] = useState(selectedProblem.startingCode);
+  const [selectedLanguage, setSelectedLanguage] = useState('javascript');
+  const [code, setCode] = useState(selectedProblem.startingCode[selectedLanguage] || '');
   const [activeTab, setActiveTab] = useState("description");
   const [testResults, setTestResults] = useState<any[]>([]);
   const [isRunning, setIsRunning] = useState(false);
@@ -67,10 +69,10 @@ const Practice = () => {
   }, []);
 
   useEffect(() => {
-    setCode(selectedProblem.startingCode);
+    setCode(selectedProblem.startingCode[selectedLanguage] || '');
     setTestResults([]);
     setShowHint(false);
-  }, [selectedProblem]);
+  }, [selectedProblem, selectedLanguage]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -424,8 +426,18 @@ Format your response as JSON:
               {/* Editor Header */}
               <div className="h-12 border-b border-border flex items-center justify-between px-4 bg-card">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">JavaScript</span>
-                  <Badge variant="outline" className="text-xs">Auto</Badge>
+                  <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                    <SelectTrigger className="w-[180px] h-8">
+                      <SelectValue placeholder="Select language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {supportedLanguages.map((lang) => (
+                        <SelectItem key={lang.value} value={lang.value}>
+                          {lang.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="flex items-center gap-2">
                   {!user && (
@@ -448,7 +460,7 @@ Format your response as JSON:
               <div className="flex-1 overflow-hidden">
                 <Editor
                   height="100%"
-                  defaultLanguage="javascript"
+                  language={supportedLanguages.find(l => l.value === selectedLanguage)?.monaco || 'javascript'}
                   value={code}
                   onChange={(value) => setCode(value || '')}
                   theme="vs-dark"

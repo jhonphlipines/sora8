@@ -11,14 +11,32 @@ export interface CodingProblem {
   constraints: string[];
   topics: string[];
   companies: string[];
-  language: string;
-  startingCode: string;
+  startingCode: Record<string, string>;
   testCases: {
     input: string;
     expected: string;
   }[];
   hints?: string[];
 }
+
+export const supportedLanguages = [
+  { value: 'javascript', label: 'JavaScript', monaco: 'javascript' },
+  { value: 'typescript', label: 'TypeScript', monaco: 'typescript' },
+  { value: 'python', label: 'Python', monaco: 'python' },
+  { value: 'python3', label: 'Python3', monaco: 'python' },
+  { value: 'java', label: 'Java', monaco: 'java' },
+  { value: 'cpp', label: 'C++', monaco: 'cpp' },
+  { value: 'c', label: 'C', monaco: 'c' },
+  { value: 'csharp', label: 'C#', monaco: 'csharp' },
+  { value: 'go', label: 'Go', monaco: 'go' },
+  { value: 'rust', label: 'Rust', monaco: 'rust' },
+  { value: 'kotlin', label: 'Kotlin', monaco: 'kotlin' },
+  { value: 'swift', label: 'Swift', monaco: 'swift' },
+  { value: 'ruby', label: 'Ruby', monaco: 'ruby' },
+  { value: 'php', label: 'PHP', monaco: 'php' },
+  { value: 'dart', label: 'Dart', monaco: 'dart' },
+  { value: 'scala', label: 'Scala', monaco: 'scala' },
+];
 
 export const codingProblems: CodingProblem[] = [
   {
@@ -49,15 +67,24 @@ export const codingProblems: CodingProblem[] = [
     ],
     topics: ["Array", "Hash Table"],
     companies: ["Amazon", "Google", "Microsoft"],
-    language: "javascript",
-    startingCode: `/**
- * @param {number[]} nums
- * @param {number} target
- * @return {number[]}
- */
-var twoSum = function(nums, target) {
-    
-};`,
+    startingCode: {
+      javascript: `/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nvar twoSum = function(nums, target) {\n    \n};`,
+      typescript: `function twoSum(nums: number[], target: number): number[] {\n    \n};`,
+      python: `def twoSum(nums: List[int], target: int) -> List[int]:\n    `,
+      python3: `def twoSum(nums: List[int], target: int) -> List[int]:\n    `,
+      java: `class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        \n    }\n}`,
+      cpp: `class Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        \n    }\n};`,
+      c: `int* twoSum(int* nums, int numsSize, int target, int* returnSize) {\n    \n}`,
+      csharp: `public class Solution {\n    public int[] TwoSum(int[] nums, int target) {\n        \n    }\n}`,
+      go: `func twoSum(nums []int, target int) []int {\n    \n}`,
+      rust: `impl Solution {\n    pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {\n        \n    }\n}`,
+      kotlin: `class Solution {\n    fun twoSum(nums: IntArray, target: Int): IntArray {\n        \n    }\n}`,
+      swift: `class Solution {\n    func twoSum(_ nums: [Int], _ target: Int) -> [Int] {\n        \n    }\n}`,
+      ruby: `def two_sum(nums, target)\n    \nend`,
+      php: `class Solution {\n    function twoSum($nums, $target) {\n        \n    }\n}`,
+      dart: `class Solution {\n  List<int> twoSum(List<int> nums, int target) {\n    \n  }\n}`,
+      scala: `object Solution {\n    def twoSum(nums: Array[Int], target: Int): Array[Int] = {\n        \n    }\n}`,
+    },
     testCases: [
       { input: "[2,7,11,15], 9", expected: "[0,1]" },
       { input: "[3,2,4], 6", expected: "[1,2]" },
@@ -96,22 +123,24 @@ var twoSum = function(nums, target) {
     ],
     topics: ["Linked List", "Math", "Recursion"],
     companies: ["Amazon", "Microsoft", "Adobe"],
-    language: "javascript",
-    startingCode: `/**
- * Definition for singly-linked list.
- * function ListNode(val, next) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.next = (next===undefined ? null : next)
- * }
- */
-/**
- * @param {ListNode} l1
- * @param {ListNode} l2
- * @return {ListNode}
- */
-var addTwoNumbers = function(l1, l2) {
-    
-};`,
+    startingCode: {
+      javascript: `/**\n * Definition for singly-linked list.\n * function ListNode(val, next) {\n *     this.val = (val===undefined ? 0 : val)\n *     this.next = (next===undefined ? null : next)\n * }\n */\n/**\n * @param {ListNode} l1\n * @param {ListNode} l2\n * @return {ListNode}\n */\nvar addTwoNumbers = function(l1, l2) {\n    \n};`,
+      typescript: `class ListNode {\n    val: number\n    next: ListNode | null\n    constructor(val?: number, next?: ListNode | null) {\n        this.val = (val===undefined ? 0 : val)\n        this.next = (next===undefined ? null : next)\n    }\n}\n\nfunction addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {\n    \n}`,
+      python: `# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\nclass Solution:\n    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:\n        `,
+      python3: `# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\nclass Solution:\n    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:\n        `,
+      java: `class Solution {\n    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {\n        \n    }\n}`,
+      cpp: `class Solution {\npublic:\n    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {\n        \n    }\n};`,
+      c: `struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {\n    \n}`,
+      csharp: `public class Solution {\n    public ListNode AddTwoNumbers(ListNode l1, ListNode l2) {\n        \n    }\n}`,
+      go: `func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {\n    \n}`,
+      rust: `impl Solution {\n    pub fn add_two_numbers(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {\n        \n    }\n}`,
+      kotlin: `class Solution {\n    fun addTwoNumbers(l1: ListNode?, l2: ListNode?): ListNode? {\n        \n    }\n}`,
+      swift: `class Solution {\n    func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {\n        \n    }\n}`,
+      ruby: `def add_two_numbers(l1, l2)\n    \nend`,
+      php: `class Solution {\n    function addTwoNumbers($l1, $l2) {\n        \n    }\n}`,
+      dart: `class Solution {\n  ListNode? addTwoNumbers(ListNode? l1, ListNode? l2) {\n    \n  }\n}`,
+      scala: `object Solution {\n    def addTwoNumbers(l1: ListNode, l2: ListNode): ListNode = {\n        \n    }\n}`,
+    },
     testCases: [
       { input: "[2,4,3], [5,6,4]", expected: "[7,0,8]" },
       { input: "[0], [0]", expected: "[0]" },
@@ -146,14 +175,24 @@ var addTwoNumbers = function(l1, l2) {
     ],
     topics: ["Hash Table", "String", "Sliding Window"],
     companies: ["Amazon", "Bloomberg", "Adobe"],
-    language: "javascript",
-    startingCode: `/**
- * @param {string} s
- * @return {number}
- */
-var lengthOfLongestSubstring = function(s) {
-    
-};`,
+    startingCode: {
+      javascript: `/**\n * @param {string} s\n * @return {number}\n */\nvar lengthOfLongestSubstring = function(s) {\n    \n};`,
+      typescript: `function lengthOfLongestSubstring(s: string): number {\n    \n}`,
+      python: `class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        `,
+      python3: `class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        `,
+      java: `class Solution {\n    public int lengthOfLongestSubstring(String s) {\n        \n    }\n}`,
+      cpp: `class Solution {\npublic:\n    int lengthOfLongestSubstring(string s) {\n        \n    }\n};`,
+      c: `int lengthOfLongestSubstring(char* s) {\n    \n}`,
+      csharp: `public class Solution {\n    public int LengthOfLongestSubstring(string s) {\n        \n    }\n}`,
+      go: `func lengthOfLongestSubstring(s string) int {\n    \n}`,
+      rust: `impl Solution {\n    pub fn length_of_longest_substring(s: String) -> i32 {\n        \n    }\n}`,
+      kotlin: `class Solution {\n    fun lengthOfLongestSubstring(s: String): Int {\n        \n    }\n}`,
+      swift: `class Solution {\n    func lengthOfLongestSubstring(_ s: String) -> Int {\n        \n    }\n}`,
+      ruby: `def length_of_longest_substring(s)\n    \nend`,
+      php: `class Solution {\n    function lengthOfLongestSubstring($s) {\n        \n    }\n}`,
+      dart: `class Solution {\n  int lengthOfLongestSubstring(String s) {\n    \n  }\n}`,
+      scala: `object Solution {\n    def lengthOfLongestSubstring(s: String): Int = {\n        \n    }\n}`,
+    },
     testCases: [
       { input: '"abcabcbb"', expected: "3" },
       { input: '"bbbbb"', expected: "1" },
@@ -187,15 +226,24 @@ var lengthOfLongestSubstring = function(s) {
     ],
     topics: ["Array", "Binary Search", "Divide and Conquer"],
     companies: ["Google", "Amazon", "Microsoft"],
-    language: "javascript",
-    startingCode: `/**
- * @param {number[]} nums1
- * @param {number[]} nums2
- * @return {number}
- */
-var findMedianSortedArrays = function(nums1, nums2) {
-    
-};`,
+    startingCode: {
+      javascript: `/**\n * @param {number[]} nums1\n * @param {number[]} nums2\n * @return {number}\n */\nvar findMedianSortedArrays = function(nums1, nums2) {\n    \n};`,
+      typescript: `function findMedianSortedArrays(nums1: number[], nums2: number[]): number {\n    \n}`,
+      python: `class Solution:\n    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:\n        `,
+      python3: `class Solution:\n    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:\n        `,
+      java: `class Solution {\n    public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n        \n    }\n}`,
+      cpp: `class Solution {\npublic:\n    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {\n        \n    }\n};`,
+      c: `double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size) {\n    \n}`,
+      csharp: `public class Solution {\n    public double FindMedianSortedArrays(int[] nums1, int[] nums2) {\n        \n    }\n}`,
+      go: `func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {\n    \n}`,
+      rust: `impl Solution {\n    pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {\n        \n    }\n}`,
+      kotlin: `class Solution {\n    fun findMedianSortedArrays(nums1: IntArray, nums2: IntArray): Double {\n        \n    }\n}`,
+      swift: `class Solution {\n    func findMedianSortedArrays(_ nums1: [Int], _ nums2: [Int]) -> Double {\n        \n    }\n}`,
+      ruby: `def find_median_sorted_arrays(nums1, nums2)\n    \nend`,
+      php: `class Solution {\n    function findMedianSortedArrays($nums1, $nums2) {\n        \n    }\n}`,
+      dart: `class Solution {\n  double findMedianSortedArrays(List<int> nums1, List<int> nums2) {\n    \n  }\n}`,
+      scala: `object Solution {\n    def findMedianSortedArrays(nums1: Array[Int], nums2: Array[Int]): Double = {\n        \n    }\n}`,
+    },
     testCases: [
       { input: "[1,3], [2]", expected: "2.00000" },
       { input: "[1,2], [3,4]", expected: "2.50000" }
@@ -223,14 +271,24 @@ var findMedianSortedArrays = function(nums1, nums2) {
     ],
     topics: ["String", "Dynamic Programming"],
     companies: ["Amazon", "Microsoft", "Adobe"],
-    language: "javascript",
-    startingCode: `/**
- * @param {string} s
- * @return {string}
- */
-var longestPalindrome = function(s) {
-    
-};`,
+    startingCode: {
+      javascript: `/**\n * @param {string} s\n * @return {string}\n */\nvar longestPalindrome = function(s) {\n    \n};`,
+      typescript: `function longestPalindrome(s: string): string {\n    \n}`,
+      python: `class Solution:\n    def longestPalindrome(self, s: str) -> str:\n        `,
+      python3: `class Solution:\n    def longestPalindrome(self, s: str) -> str:\n        `,
+      java: `class Solution {\n    public String longestPalindrome(String s) {\n        \n    }\n}`,
+      cpp: `class Solution {\npublic:\n    string longestPalindrome(string s) {\n        \n    }\n};`,
+      c: `char* longestPalindrome(char* s) {\n    \n}`,
+      csharp: `public class Solution {\n    public string LongestPalindrome(string s) {\n        \n    }\n}`,
+      go: `func longestPalindrome(s string) string {\n    \n}`,
+      rust: `impl Solution {\n    pub fn longest_palindrome(s: String) -> String {\n        \n    }\n}`,
+      kotlin: `class Solution {\n    fun longestPalindrome(s: String): String {\n        \n    }\n}`,
+      swift: `class Solution {\n    func longestPalindrome(_ s: String) -> String {\n        \n    }\n}`,
+      ruby: `def longest_palindrome(s)\n    \nend`,
+      php: `class Solution {\n    function longestPalindrome($s) {\n        \n    }\n}`,
+      dart: `class Solution {\n  String longestPalindrome(String s) {\n    \n  }\n}`,
+      scala: `object Solution {\n    def longestPalindrome(s: String): String = {\n        \n    }\n}`,
+    },
     testCases: [
       { input: '"babad"', expected: '"bab"' },
       { input: '"cbbd"', expected: '"bb"' }
@@ -263,15 +321,24 @@ var longestPalindrome = function(s) {
     ],
     topics: ["String"],
     companies: ["Amazon", "Microsoft"],
-    language: "javascript",
-    startingCode: `/**
- * @param {string} s
- * @param {number} numRows
- * @return {string}
- */
-var convert = function(s, numRows) {
-    
-};`,
+    startingCode: {
+      javascript: `/**\n * @param {string} s\n * @param {number} numRows\n * @return {string}\n */\nvar convert = function(s, numRows) {\n    \n};`,
+      typescript: `function convert(s: string, numRows: number): string {\n    \n}`,
+      python: `class Solution:\n    def convert(self, s: str, numRows: int) -> str:\n        `,
+      python3: `class Solution:\n    def convert(self, s: str, numRows: int) -> str:\n        `,
+      java: `class Solution {\n    public String convert(String s, int numRows) {\n        \n    }\n}`,
+      cpp: `class Solution {\npublic:\n    string convert(string s, int numRows) {\n        \n    }\n};`,
+      c: `char* convert(char* s, int numRows) {\n    \n}`,
+      csharp: `public class Solution {\n    public string Convert(string s, int numRows) {\n        \n    }\n}`,
+      go: `func convert(s string, numRows int) string {\n    \n}`,
+      rust: `impl Solution {\n    pub fn convert(s: String, num_rows: i32) -> String {\n        \n    }\n}`,
+      kotlin: `class Solution {\n    fun convert(s: String, numRows: Int): String {\n        \n    }\n}`,
+      swift: `class Solution {\n    func convert(_ s: String, _ numRows: Int) -> String {\n        \n    }\n}`,
+      ruby: `def convert(s, num_rows)\n    \nend`,
+      php: `class Solution {\n    function convert($s, $numRows) {\n        \n    }\n}`,
+      dart: `class Solution {\n  String convert(String s, int numRows) {\n    \n  }\n}`,
+      scala: `object Solution {\n    def convert(s: String, numRows: Int): String = {\n        \n    }\n}`,
+    },
     testCases: [
       { input: '"PAYPALISHIRING", 3', expected: '"PAHNAPLSIIGYIR"' },
       { input: '"PAYPALISHIRING", 4', expected: '"PINALSIGYAHRPI"' },
@@ -302,14 +369,24 @@ var convert = function(s, numRows) {
     ],
     topics: ["Math"],
     companies: ["Bloomberg", "Apple"],
-    language: "javascript",
-    startingCode: `/**
- * @param {number} x
- * @return {number}
- */
-var reverse = function(x) {
-    
-};`,
+    startingCode: {
+      javascript: `/**\n * @param {number} x\n * @return {number}\n */\nvar reverse = function(x) {\n    \n};`,
+      typescript: `function reverse(x: number): number {\n    \n}`,
+      python: `class Solution:\n    def reverse(self, x: int) -> int:\n        `,
+      python3: `class Solution:\n    def reverse(self, x: int) -> int:\n        `,
+      java: `class Solution {\n    public int reverse(int x) {\n        \n    }\n}`,
+      cpp: `class Solution {\npublic:\n    int reverse(int x) {\n        \n    }\n};`,
+      c: `int reverse(int x) {\n    \n}`,
+      csharp: `public class Solution {\n    public int Reverse(int x) {\n        \n    }\n}`,
+      go: `func reverse(x int) int {\n    \n}`,
+      rust: `impl Solution {\n    pub fn reverse(x: i32) -> i32 {\n        \n    }\n}`,
+      kotlin: `class Solution {\n    fun reverse(x: Int): Int {\n        \n    }\n}`,
+      swift: `class Solution {\n    func reverse(_ x: Int) -> Int {\n        \n    }\n}`,
+      ruby: `def reverse(x)\n    \nend`,
+      php: `class Solution {\n    function reverse($x) {\n        \n    }\n}`,
+      dart: `class Solution {\n  int reverse(int x) {\n    \n  }\n}`,
+      scala: `object Solution {\n    def reverse(x: Int): Int = {\n        \n    }\n}`,
+    },
     testCases: [
       { input: "123", expected: "321" },
       { input: "-123", expected: "-321" },
@@ -341,14 +418,24 @@ var reverse = function(x) {
     ],
     topics: ["String"],
     companies: ["Microsoft", "Amazon", "Bloomberg"],
-    language: "javascript",
-    startingCode: `/**
- * @param {string} s
- * @return {number}
- */
-var myAtoi = function(s) {
-    
-};`,
+    startingCode: {
+      javascript: `/**\n * @param {string} s\n * @return {number}\n */\nvar myAtoi = function(s) {\n    \n};`,
+      typescript: `function myAtoi(s: string): number {\n    \n}`,
+      python: `class Solution:\n    def myAtoi(self, s: str) -> int:\n        `,
+      python3: `class Solution:\n    def myAtoi(self, s: str) -> int:\n        `,
+      java: `class Solution {\n    public int myAtoi(String s) {\n        \n    }\n}`,
+      cpp: `class Solution {\npublic:\n    int myAtoi(string s) {\n        \n    }\n};`,
+      c: `int myAtoi(char* s) {\n    \n}`,
+      csharp: `public class Solution {\n    public int MyAtoi(string s) {\n        \n    }\n}`,
+      go: `func myAtoi(s string) int {\n    \n}`,
+      rust: `impl Solution {\n    pub fn my_atoi(s: String) -> i32 {\n        \n    }\n}`,
+      kotlin: `class Solution {\n    fun myAtoi(s: String): Int {\n        \n    }\n}`,
+      swift: `class Solution {\n    func myAtoi(_ s: String) -> Int {\n        \n    }\n}`,
+      ruby: `def my_atoi(s)\n    \nend`,
+      php: `class Solution {\n    function myAtoi($s) {\n        \n    }\n}`,
+      dart: `class Solution {\n  int myAtoi(String s) {\n    \n  }\n}`,
+      scala: `object Solution {\n    def myAtoi(s: String): Int = {\n        \n    }\n}`,
+    },
     testCases: [
       { input: '"42"', expected: "42" },
       { input: '"   -42"', expected: "-42" },
@@ -382,14 +469,24 @@ var myAtoi = function(s) {
     ],
     topics: ["Math"],
     companies: ["Amazon", "Adobe", "Apple"],
-    language: "javascript",
-    startingCode: `/**
- * @param {number} x
- * @return {boolean}
- */
-var isPalindrome = function(x) {
-    
-};`,
+    startingCode: {
+      javascript: `/**\n * @param {number} x\n * @return {boolean}\n */\nvar isPalindrome = function(x) {\n    \n};`,
+      typescript: `function isPalindrome(x: number): boolean {\n    \n}`,
+      python: `class Solution:\n    def isPalindrome(self, x: int) -> bool:\n        `,
+      python3: `class Solution:\n    def isPalindrome(self, x: int) -> bool:\n        `,
+      java: `class Solution {\n    public boolean isPalindrome(int x) {\n        \n    }\n}`,
+      cpp: `class Solution {\npublic:\n    bool isPalindrome(int x) {\n        \n    }\n};`,
+      c: `bool isPalindrome(int x) {\n    \n}`,
+      csharp: `public class Solution {\n    public bool IsPalindrome(int x) {\n        \n    }\n}`,
+      go: `func isPalindrome(x int) bool {\n    \n}`,
+      rust: `impl Solution {\n    pub fn is_palindrome(x: i32) -> bool {\n        \n    }\n}`,
+      kotlin: `class Solution {\n    fun isPalindrome(x: Int): Boolean {\n        \n    }\n}`,
+      swift: `class Solution {\n    func isPalindrome(_ x: Int) -> Bool {\n        \n    }\n}`,
+      ruby: `def is_palindrome(x)\n    \nend`,
+      php: `class Solution {\n    function isPalindrome($x) {\n        \n    }\n}`,
+      dart: `class Solution {\n  bool isPalindrome(int x) {\n    \n  }\n}`,
+      scala: `object Solution {\n    def isPalindrome(x: Int): Boolean = {\n        \n    }\n}`,
+    },
     testCases: [
       { input: "121", expected: "true" },
       { input: "-121", expected: "false" },
@@ -427,15 +524,24 @@ var isPalindrome = function(x) {
     ],
     topics: ["String", "Dynamic Programming", "Recursion"],
     companies: ["Facebook", "Google", "Uber"],
-    language: "javascript",
-    startingCode: `/**
- * @param {string} s
- * @param {string} p
- * @return {boolean}
- */
-var isMatch = function(s, p) {
-    
-};`,
+    startingCode: {
+      javascript: `/**\n * @param {string} s\n * @param {string} p\n * @return {boolean}\n */\nvar isMatch = function(s, p) {\n    \n};`,
+      typescript: `function isMatch(s: string, p: string): boolean {\n    \n}`,
+      python: `class Solution:\n    def isMatch(self, s: str, p: str) -> bool:\n        `,
+      python3: `class Solution:\n    def isMatch(self, s: str, p: str) -> bool:\n        `,
+      java: `class Solution {\n    public boolean isMatch(String s, String p) {\n        \n    }\n}`,
+      cpp: `class Solution {\npublic:\n    bool isMatch(string s, string p) {\n        \n    }\n};`,
+      c: `bool isMatch(char* s, char* p) {\n    \n}`,
+      csharp: `public class Solution {\n    public bool IsMatch(string s, string p) {\n        \n    }\n}`,
+      go: `func isMatch(s string, p string) bool {\n    \n}`,
+      rust: `impl Solution {\n    pub fn is_match(s: String, p: String) -> bool {\n        \n    }\n}`,
+      kotlin: `class Solution {\n    fun isMatch(s: String, p: String): Boolean {\n        \n    }\n}`,
+      swift: `class Solution {\n    func isMatch(_ s: String, _ p: String) -> Bool {\n        \n    }\n}`,
+      ruby: `def is_match(s, p)\n    \nend`,
+      php: `class Solution {\n    function isMatch($s, $p) {\n        \n    }\n}`,
+      dart: `class Solution {\n  bool isMatch(String s, String p) {\n    \n  }\n}`,
+      scala: `object Solution {\n    def isMatch(s: String, p: String): Boolean = {\n        \n    }\n}`,
+    },
     testCases: [
       { input: '"aa", "a"', expected: "false" },
       { input: '"aa", "a*"', expected: "true" },
