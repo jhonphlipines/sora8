@@ -5,6 +5,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Learn from "./pages/Learn";
 import Practice from "./pages/Practice";
@@ -41,21 +42,21 @@ const App = () => (
               
               <div className="flex-1">
                 <Routes>
-                  <Route path="/" element={<Index />} />
                   <Route path="/auth" element={<Auth />} />
-                  <Route path="/learn" element={<Learn />} />
-                  <Route path="/practice" element={<Practice />} />
-                  <Route path="/pricing" element={<Pricing />} />
-                  <Route path="/data-analysis" element={<DataAnalysis />} />
-                  <Route path="/tests" element={<TestSelection />} />
-                  <Route path="/levels" element={<LevelSelection />} />
-                  <Route path="/level-quiz/:levelId" element={<LevelQuiz />} />
-                  <Route path="/level-results" element={<LevelResults />} />
-                  <Route path="/quiz/:testType" element={<Quiz />} />
-                  <Route path="/quiz" element={<Quiz />} />
-                  <Route path="/results" element={<Results />} />
+                  <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+                  <Route path="/learn" element={<ProtectedRoute><Learn /></ProtectedRoute>} />
+                  <Route path="/practice" element={<ProtectedRoute><Practice /></ProtectedRoute>} />
+                  <Route path="/pricing" element={<ProtectedRoute><Pricing /></ProtectedRoute>} />
+                  <Route path="/data-analysis" element={<ProtectedRoute><DataAnalysis /></ProtectedRoute>} />
+                  <Route path="/tests" element={<ProtectedRoute><TestSelection /></ProtectedRoute>} />
+                  <Route path="/levels" element={<ProtectedRoute><LevelSelection /></ProtectedRoute>} />
+                  <Route path="/level-quiz/:levelId" element={<ProtectedRoute><LevelQuiz /></ProtectedRoute>} />
+                  <Route path="/level-results" element={<ProtectedRoute><LevelResults /></ProtectedRoute>} />
+                  <Route path="/quiz/:testType" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
+                  <Route path="/quiz" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
+                  <Route path="/results" element={<ProtectedRoute><Results /></ProtectedRoute>} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
+                  <Route path="*" element={<ProtectedRoute><NotFound /></ProtectedRoute>} />
                 </Routes>
               </div>
             </main>
