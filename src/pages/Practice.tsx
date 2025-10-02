@@ -459,6 +459,7 @@ Format your response as JSON:
               {/* Monaco Editor */}
               <div className="flex-1 overflow-hidden">
                 <Editor
+                  key={selectedLanguage}
                   height="100%"
                   language={supportedLanguages.find(l => l.value === selectedLanguage)?.monaco || 'javascript'}
                   value={code}
