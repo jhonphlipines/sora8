@@ -111,72 +111,45 @@ const Practice = () => {
     setTestResults([]);
 
     try {
-      const analysisPrompt = `
-Analyze this JavaScript code for the following problem:
+      // Import the code executor
+      const { executeCodeWithTests } = await import("@/utils/codeExecutor");
+      
+      // Execute code with real test cases
+      const { results, allPassed } = await executeCodeWithTests(
+        code,
+        selectedLanguage,
+        selectedProblem.testCases
+      );
 
-**Problem:** ${selectedProblem.title}
-**Description:** ${selectedProblem.description}
+      // Format results for display
+      const formattedResults = results.map(result => ({
+        passed: result.passed,
+        input: result.input,
+        expected: result.expected,
+        actual: result.actual,
+        message: result.message
+      }));
 
-**Code to analyze:**
-\`\`\`javascript
-${code}
-\`\`\`
+      setTestResults(formattedResults);
 
-**Test Cases:**
-${selectedProblem.testCases.map((tc, i) => 
-  `${i + 1}. Input: ${tc.input} → Expected: ${tc.expected}`
-).join('\n')}
-
-Please provide:
-1. For each test case, determine if the code would pass or fail
-2. Provide the actual output for each test case
-3. Provide feedback on code quality and potential improvements
-
-Format your response as JSON:
-{
-  "testResults": [
-    {"passed": true/false, "input": "test input", "expected": "expected output", "actual": "actual output", "message": "explanation"},
-  ],
-  "feedback": "overall code quality feedback"
-}`;
-
-      const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-goog-api-key': 'AIzaSyCO1e6T8L4njBxga2-EqKOKt1Q6xfD4qGI'
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: analysisPrompt
-            }]
-          }]
-        })
-      });
-
-      if (!response.ok) throw new Error('AI analysis failed');
-
-      const data = await response.json();
-      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-      if (aiResponse) {
-        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-          const analysis = JSON.parse(jsonMatch[0]);
-          setTestResults(analysis.testResults || []);
-
-          const allPassed = analysis.testResults?.every((result: any) => result.passed);
-          if (allPassed) {
-            toast.success("All test cases passed! 🎉");
-          } else {
-            toast.error("Some test cases failed");
-          }
-        }
+      if (allPassed) {
+        toast.success("All test cases passed! 🎉");
+      } else {
+        const failedCount = results.filter(r => !r.passed).length;
+        toast.error(`${failedCount} test case${failedCount > 1 ? 's' : ''} failed`);
       }
     } catch (error) {
       console.error('Error running code:', error);
       toast.error("Failed to run code. Please try again.");
+      
+      // Show error in test results
+      setTestResults([{
+        passed: false,
+        input: 'Error',
+        expected: '',
+        actual: '',
+        message: `Execution error: ${(error as Error).message}`
+      }]);
     } finally {
       setIsRunning(false);
     }
