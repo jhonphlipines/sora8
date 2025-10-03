@@ -1,9 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Certificate } from "@/components/Certificate";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Trophy, 
   RotateCcw, 
@@ -32,6 +35,7 @@ interface LevelResultsState {
 const LevelResults = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const state = location.state as LevelResultsState;
 
   if (!state) {
@@ -40,6 +44,57 @@ const LevelResults = () => {
   }
 
   const { score, totalQuestions, level, passed, badge, attempts, timeSpent } = state;
+
+  // Save progress to database
+  useEffect(() => {
+    const saveProgress = async () => {
+      if (!passed) return; // Only save if passed
+
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        // Find category for this level
+        const category = levelCategories.find(cat => 
+          cat.levels.some(l => l.id === level.id)
+        );
+
+        // Save course progress
+        const { error: progressError } = await supabase
+          .from('user_course_progress')
+          .upsert({
+            user_id: user.id,
+            category_id: category?.id || 'unknown',
+            level_id: level.id,
+            score: score,
+            time_taken_seconds: timeSpent
+          }, {
+            onConflict: 'user_id,level_id'
+          });
+
+        if (progressError) throw progressError;
+
+        // Save certificate if passed
+        if (badge) {
+          const { error: certError } = await supabase
+            .from('user_certificates')
+            .upsert({
+              user_id: user.id,
+              certificate_name: badge.name,
+              category_id: category?.id || 'unknown'
+            }, {
+              onConflict: 'user_id,certificate_name'
+            });
+
+          if (certError) throw certError;
+        }
+      } catch (error) {
+        console.error('Error saving progress:', error);
+      }
+    };
+
+    saveProgress();
+  }, [passed, level, score, timeSpent, badge]);
   
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);

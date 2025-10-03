@@ -1,10 +1,13 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { Certificate } from "@/components/Certificate";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, RotateCcw, Home } from "lucide-react";
 import { programmingQuiz, testCategories } from "@/data/quizData";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface ResultsState {
   score: number;
@@ -19,6 +22,7 @@ interface ResultsState {
 const Results = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const state = location.state as ResultsState;
 
   if (!state) {
@@ -29,6 +33,35 @@ const Results = () => {
   const { score, totalQuestions, answers, timeSpent, testType, testName, isQuickTest } = state;
   const percentage = Math.round((score / totalQuestions) * 100);
   const isPassed = percentage >= 70;
+
+  // Save results to database
+  useEffect(() => {
+    const saveResults = async () => {
+      if (!isPassed) return; // Only save if passed
+
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        // Save certificate if passed
+        const { error: certError } = await supabase
+          .from('user_certificates')
+          .upsert({
+            user_id: user.id,
+            certificate_name: testName || "Programming Fundamentals Certification",
+            category_id: testType || 'general'
+          }, {
+            onConflict: 'user_id,certificate_name'
+          });
+
+        if (certError) throw certError;
+      } catch (error) {
+        console.error('Error saving results:', error);
+      }
+    };
+
+    saveResults();
+  }, [isPassed, testType, testName]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);

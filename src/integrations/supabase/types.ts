@@ -14,7 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      user_certificates: {
+        Row: {
+          category_id: string
+          certificate_name: string
+          earned_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          category_id: string
+          certificate_name: string
+          earned_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          category_id?: string
+          certificate_name?: string
+          earned_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_course_progress: {
+        Row: {
+          category_id: string
+          completed_at: string
+          id: string
+          level_id: string
+          score: number
+          time_taken_seconds: number | null
+          user_id: string
+        }
+        Insert: {
+          category_id: string
+          completed_at?: string
+          id?: string
+          level_id: string
+          score: number
+          time_taken_seconds?: number | null
+          user_id: string
+        }
+        Update: {
+          category_id?: string
+          completed_at?: string
+          id?: string
+          level_id?: string
+          score?: number
+          time_taken_seconds?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_problems_solved: {
+        Row: {
+          id: string
+          language: string
+          problem_id: string
+          solved_at: string
+          test_cases_passed: number | null
+          time_taken_seconds: number | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          language: string
+          problem_id: string
+          solved_at?: string
+          test_cases_passed?: number | null
+          time_taken_seconds?: number | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          language?: string
+          problem_id?: string
+          solved_at?: string
+          test_cases_passed?: number | null
+          time_taken_seconds?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

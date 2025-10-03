@@ -166,6 +166,28 @@ const Practice = () => {
     const allPassed = testResults.every(result => result.passed);
     if (allPassed) {
       toast.success("Solution accepted! 🎉");
+      
+      // Save to database
+      try {
+        const passedTests = testResults.filter(r => r.passed).length;
+        const { error } = await supabase
+          .from('user_problems_solved')
+          .upsert({
+            user_id: user.id,
+            problem_id: selectedProblem.id.toString(),
+            language: selectedLanguage,
+            time_taken_seconds: elapsedTime,
+            test_cases_passed: passedTests
+          }, {
+            onConflict: 'user_id,problem_id'
+          });
+
+        if (error) {
+          console.error('Error saving problem solution:', error);
+        }
+      } catch (error) {
+        console.error('Error saving to database:', error);
+      }
     }
   };
 
