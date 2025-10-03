@@ -34,7 +34,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 
 const mainItems = [
   { title: "Home", url: "/", icon: Home },
-  { title: "Data Analysis", url: "/data-analysis", icon: BarChart3 },
+  { title: "Analysis", url: "/data-analysis", icon: BarChart3 },
   { title: "Pricing", url: "/pricing", icon: DollarSign },
 ];
 
