@@ -141,10 +141,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {adminItems.map(item => <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild className={getNavClass(isActive(item.url))}>
-                    <NavLink to={item.url}>
-                      <item.icon className="h-4 w-4" />
-                      {!isCollapsed}
-                    </NavLink>
+                    
                   </SidebarMenuButton>
                 </SidebarMenuItem>)}
             </SidebarMenu>
