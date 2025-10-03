@@ -1,46 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Award, Clock, CheckCircle, BookOpen, Users, Trophy, ArrowRight, Star, User, LogOut } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { toast } from "sonner";
+import { Award, Clock, CheckCircle, BookOpen, Users, Trophy, ArrowRight, Star } from "lucide-react";
 import heroImage from "@/assets/hero-programming.jpg";
 const Index = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
-  const [session, setSession] = useState<any>(null);
 
-  useEffect(() => {
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-      }
-    );
-
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const handleSignOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast.error("Error signing out");
-    } else {
-      toast.success("Signed out successfully");
-    }
-  };
   const features = [{
     icon: BookOpen,
     title: "11+ Technologies",
@@ -76,67 +42,6 @@ const Index = () => {
     value: "78%"
   }];
   return <div className="min-h-screen bg-[var(--gradient-background)]">
-      {/* Navigation Menu */}
-      <nav className="bg-card border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="text-xl font-bold bg-[var(--gradient-primary)] bg-clip-text text-transparent">
-              CodeCert
-            </div>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" onClick={() => navigate('/learn')} className="text-foreground hover:text-primary">
-                <BookOpen className="h-4 w-4 mr-2" />
-                Learn
-              </Button>
-              <Button variant="ghost" onClick={() => navigate('/pricing')} className="text-foreground hover:text-primary">
-                Pricing
-              </Button>
-              
-              <Button variant="default" onClick={() => navigate('/tests')} className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                <Trophy className="h-4 w-4 mr-2" />
-                Test
-              </Button>
-              <ThemeToggle />
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Avatar className="h-8 w-8 ml-2 cursor-pointer hover:opacity-80 transition-opacity">
-                    <AvatarImage src="" alt="Profile" />
-                    <AvatarFallback className="bg-primary/10 text-primary">
-                      <User className="h-4 w-4" />
-                    </AvatarFallback>
-                  </Avatar>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  {user ? (
-                    <>
-                      <div className="px-2 py-1.5 text-sm text-muted-foreground">
-                        {user.email}
-                      </div>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem className="cursor-pointer" onClick={handleSignOut}>
-                        <LogOut className="mr-2 h-4 w-4" />
-                        Sign Out
-                      </DropdownMenuItem>
-                    </>
-                  ) : (
-                    <>
-                      <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/auth')}>
-                        <User className="mr-2 h-4 w-4" />
-                        Sign In
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/auth')}>
-                        <User className="mr-2 h-4 w-4" />
-                        Sign Up
-                      </DropdownMenuItem>
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[var(--gradient-primary)] opacity-10"></div>

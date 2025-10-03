@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { Header } from "@/components/Header";
 import Index from "./pages/Index";
 import Learn from "./pages/Learn";
 import Practice from "./pages/Practice";
@@ -32,13 +33,7 @@ const App = () => (
           <div className="min-h-screen flex w-full">
             <AppSidebar />
             <main className="flex-1">
-              {/* Global navigation trigger */}
-              <header className="h-12 flex items-center border-b border-border bg-background px-4">
-                <SidebarTrigger className="mr-4" />
-                <div className="text-sm font-medium text-muted-foreground">
-                  CodeCert Development Labs
-                </div>
-              </header>
+              <Header />
               
               <div className="flex-1">
                 <Routes>
