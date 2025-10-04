@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { toast } from "sonner";
-import { BookOpen, Trophy, User, LogOut } from "lucide-react";
+import { BookOpen, Trophy, User, LogOut, Settings } from "lucide-react";
 
 export function Header() {
   const navigate = useNavigate();
