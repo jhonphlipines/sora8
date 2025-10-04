@@ -19,6 +19,7 @@ import LevelQuiz from "./pages/LevelQuiz";
 import LevelResults from "./pages/LevelResults";
 import DataAnalysis from "./pages/DataAnalysis";
 import Completion from "./pages/Completion";
+import Profile from "./pages/Profile";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -44,6 +45,7 @@ const App = () => (
                   <Route path="/practice" element={<ProtectedRoute><Practice /></ProtectedRoute>} />
                   <Route path="/pricing" element={<ProtectedRoute><Pricing /></ProtectedRoute>} />
                   <Route path="/completion" element={<ProtectedRoute><Completion /></ProtectedRoute>} />
+                  <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                   <Route path="/data-analysis" element={<ProtectedRoute><DataAnalysis /></ProtectedRoute>} />
                   <Route path="/tests" element={<ProtectedRoute><TestSelection /></ProtectedRoute>} />
                   <Route path="/levels" element={<ProtectedRoute><LevelSelection /></ProtectedRoute>} />

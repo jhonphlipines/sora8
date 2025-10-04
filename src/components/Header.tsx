@@ -75,6 +75,10 @@ export function Header() {
                     {user.email}
                   </div>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/profile')}>
+                    <User className="mr-2 h-4 w-4" />
+                    Profile Settings
+                  </DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer" onClick={handleSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
                     Sign Out
