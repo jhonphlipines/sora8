@@ -8,6 +8,10 @@ const mainItems = [{
   url: "/",
   icon: Home
 }, {
+  title: "Completion",
+  url: "/completion",
+  icon: Award
+}, {
   title: "Analysis",
   url: "/data-analysis",
   icon: BarChart3
