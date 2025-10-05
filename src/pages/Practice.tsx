@@ -194,36 +194,32 @@ const Practice = () => {
   return (
     <div className="h-screen flex flex-col bg-background">
       {/* Top Navigation */}
-      <header className="h-12 border-b border-border bg-card flex items-center justify-between px-4">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm" onClick={() => navigate("/")}>
-            <ChevronLeft className="h-4 w-4 mr-1" />
-            Back
+      <header className="h-12 border-b border-border bg-card flex items-center justify-between px-2 sm:px-4">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Button variant="ghost" size="sm" onClick={() => navigate("/")} className="h-8 px-2 sm:px-3">
+            <ChevronLeft className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Back</span>
           </Button>
-          <div className="text-sm font-medium">Problem List</div>
+          <div className="text-xs sm:text-sm font-medium hidden md:block">Problem List</div>
         </div>
         
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Clock className="h-4 w-4" />
-            {formatTime(elapsedTime)}
+        <div className="flex items-center gap-1 sm:gap-3">
+          <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-muted-foreground">
+            <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden xs:inline">{formatTime(elapsedTime)}</span>
           </div>
-          
-          <Button size="sm" variant="outline">
-            <SlidersHorizontal className="h-4 w-4" />
-          </Button>
 
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Avatar className="h-8 w-8 cursor-pointer">
+                <Avatar className="h-7 w-7 sm:h-8 sm:w-8 cursor-pointer">
                   <AvatarImage src="" />
                   <AvatarFallback className="bg-primary/10 text-primary">
-                    <User className="h-4 w-4" />
+                    <User className="h-3 w-3 sm:h-4 sm:w-4" />
                   </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="bg-popover z-50">
                 <div className="px-2 py-1.5 text-sm text-muted-foreground">
                   {user.email}
                 </div>
@@ -235,7 +231,7 @@ const Practice = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button size="sm" onClick={() => navigate("/auth")}>
+            <Button size="sm" onClick={() => navigate("/auth")} className="h-7 text-xs sm:h-8 sm:text-sm">
               Sign In
             </Button>
           )}
@@ -244,7 +240,207 @@ const Practice = () => {
 
       {/* Main Content */}
       <div className="flex-1 overflow-hidden">
-        <ResizablePanelGroup direction="horizontal">
+        {/* Mobile View */}
+        <div className="md:hidden h-full flex flex-col">
+          {/* Mobile Problem Selector */}
+          <div className="border-b border-border bg-card p-2">
+            <Select
+              value={selectedProblem.id.toString()}
+              onValueChange={(value) => {
+                const problem = codingProblems.find(p => p.id.toString() === value);
+                if (problem) setSelectedProblem(problem);
+              }}
+            >
+              <SelectTrigger className="w-full h-9">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-popover z-50">
+                {filteredProblems.map((problem) => (
+                  <SelectItem key={problem.id} value={problem.id.toString()}>
+                    <div className="flex items-center justify-between gap-2 w-full">
+                      <span className="text-sm">{problem.id}. {problem.title}</span>
+                      <Badge variant="outline" className={`text-xs ${getDifficultyColor(problem.difficulty)}`}>
+                        {problem.difficulty}
+                      </Badge>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Mobile Tabs */}
+          <Tabs defaultValue="code" className="flex-1 flex flex-col overflow-hidden">
+            <TabsList className="w-full rounded-none border-b h-10 bg-muted/50 justify-start">
+              <TabsTrigger value="problem" className="flex-1 text-xs">Problem</TabsTrigger>
+              <TabsTrigger value="code" className="flex-1 text-xs">Code</TabsTrigger>
+            </TabsList>
+
+            {/* Problem Tab */}
+            <TabsContent value="problem" className="flex-1 overflow-auto m-0 p-3">
+              <div className="space-y-4">
+                <div>
+                  <h1 className="text-lg font-bold mb-2">
+                    {selectedProblem.id}. {selectedProblem.title}
+                  </h1>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <Badge className={getDifficultyColor(selectedProblem.difficulty)}>
+                      {selectedProblem.difficulty}
+                    </Badge>
+                    {selectedProblem.topics.map((topic) => (
+                      <Badge key={topic} variant="outline" className="text-xs">
+                        {topic}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-sm text-foreground whitespace-pre-line">
+                    {selectedProblem.description}
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold mb-2 text-sm">Examples:</h3>
+                  {selectedProblem.examples.map((example, index) => (
+                    <Card key={index} className="p-3 mb-2 bg-muted/50">
+                      <div className="font-mono text-xs space-y-1">
+                        <div><strong>Input:</strong> {example.input}</div>
+                        <div><strong>Output:</strong> {example.output}</div>
+                        {example.explanation && (
+                          <div className="text-muted-foreground">
+                            <strong>Explanation:</strong> {example.explanation}
+                          </div>
+                        )}
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+
+                <div>
+                  <h3 className="font-semibold mb-2 text-sm">Constraints:</h3>
+                  <ul className="list-disc list-inside space-y-1 text-xs text-muted-foreground">
+                    {selectedProblem.constraints.map((constraint, index) => (
+                      <li key={index}>{constraint}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                {selectedProblem.hints && (
+                  <div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowHint(!showHint)}
+                      className="mb-2 h-8 text-xs"
+                    >
+                      <Lightbulb className="h-3 w-3 mr-1" />
+                      {showHint ? 'Hide' : 'Show'} Hint
+                    </Button>
+                    {showHint && (
+                      <div className="space-y-2">
+                        {selectedProblem.hints.map((hint, index) => (
+                          <Card key={index} className="p-2 bg-yellow-500/10 border-yellow-500/20">
+                            <p className="text-xs">💡 <strong>Hint {index + 1}:</strong> {hint}</p>
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+
+            {/* Code Tab */}
+            <TabsContent value="code" className="flex-1 flex flex-col m-0 overflow-hidden">
+              <div className="border-b border-border bg-card p-2 flex items-center gap-2">
+                <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                  <SelectTrigger className="w-32 h-8 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-popover z-50">
+                    {supportedLanguages.map((lang) => (
+                      <SelectItem key={lang.value} value={lang.value} className="text-xs">
+                        {lang.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <div className="flex gap-1 ml-auto">
+                  <Button
+                    onClick={runCode}
+                    disabled={!user || isRunning}
+                    size="sm"
+                    variant="outline"
+                    className="h-8 text-xs px-2"
+                  >
+                    <Play className="h-3 w-3 mr-1" />
+                    Run
+                  </Button>
+                  <Button
+                    onClick={submitCode}
+                    disabled={!user || isRunning || testResults.length === 0}
+                    size="sm"
+                    className="h-8 text-xs px-2"
+                  >
+                    <Upload className="h-3 w-3 mr-1" />
+                    Submit
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-hidden">
+                <Editor
+                  height="100%"
+                  language={supportedLanguages.find(l => l.value === selectedLanguage)?.monaco}
+                  value={code}
+                  onChange={(value) => setCode(value || '')}
+                  theme="vs-dark"
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 12,
+                    lineNumbers: 'on',
+                    scrollBeyondLastLine: false,
+                    automaticLayout: true,
+                  }}
+                />
+              </div>
+
+              {testResults.length > 0 && (
+                <div className="border-t border-border bg-card p-2 max-h-32 overflow-auto">
+                  <div className="space-y-1">
+                    {testResults.map((result, index) => (
+                      <div
+                        key={index}
+                        className={`p-2 rounded text-xs ${
+                          result.passed
+                            ? 'bg-green-500/10 text-green-600 dark:text-green-400'
+                            : 'bg-red-500/10 text-red-600 dark:text-red-400'
+                        }`}
+                      >
+                        <div className="font-medium flex items-center gap-1">
+                          {result.passed ? (
+                            <CheckCircle2 className="h-3 w-3" />
+                          ) : (
+                            <XCircle className="h-3 w-3" />
+                          )}
+                          Test {index + 1}: {result.passed ? 'Passed' : 'Failed'}
+                        </div>
+                        {!result.passed && result.message && (
+                          <div className="mt-1 text-xs opacity-90">{result.message}</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        {/* Desktop View */}
+        <ResizablePanelGroup direction="horizontal" className="hidden md:flex">
           {/* Problem List Sidebar */}
           <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
             <div className="h-full flex flex-col bg-card border-r border-border">
