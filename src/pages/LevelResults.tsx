@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,6 +37,7 @@ const LevelResults = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const state = location.state as LevelResultsState;
+  const [displayName, setDisplayName] = useState("Achievement Earner");
 
   if (!state) {
     navigate('/levels');
@@ -45,14 +46,25 @@ const LevelResults = () => {
 
   const { score, totalQuestions, level, passed, badge, attempts, timeSpent } = state;
 
-  // Save progress to database
+  // Fetch user profile and save progress to database
   useEffect(() => {
     const saveProgress = async () => {
-      if (!passed) return; // Only save if passed
-
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
+
+        // Fetch user profile for display name
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('display_name')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (profile?.display_name) {
+          setDisplayName(profile.display_name);
+        }
+
+        if (!passed) return; // Only save if passed
 
         // Find category for this level
         const category = levelCategories.find(cat => 
@@ -262,7 +274,7 @@ const LevelResults = () => {
             </CardHeader>
             <CardContent>
               <Certificate
-                studentName="Achievement Earner"
+                studentName={displayName}
                 courseName={`Level ${level.level}: ${level.name}`}
                 score={Math.round((score / 100) * totalQuestions)}
                 totalQuestions={totalQuestions}

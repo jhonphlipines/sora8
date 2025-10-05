@@ -16,6 +16,7 @@ const Completion = () => {
   const [certificates, setCertificates] = useState<UserCertificate[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCertificate, setSelectedCertificate] = useState<UserCertificate | null>(null);
+  const [displayName, setDisplayName] = useState("Student");
 
   useEffect(() => {
     fetchCertificates();
@@ -28,6 +29,17 @@ const Completion = () => {
       if (!user) {
         toast.error("Please log in to view your certificates");
         return;
+      }
+
+      // Fetch user profile for display name
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('display_name')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (profile?.display_name) {
+        setDisplayName(profile.display_name);
       }
 
       const { data, error } = await supabase
@@ -65,7 +77,7 @@ const Completion = () => {
           ← Back to all certificates
         </button>
         <Certificate
-          studentName={selectedCertificate.certificate_name.split(" - ")[0] || "Student"}
+          studentName={displayName}
           score={100}
           totalQuestions={100}
           courseName={selectedCertificate.certificate_name}

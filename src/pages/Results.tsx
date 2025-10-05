@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Certificate } from "@/components/Certificate";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,6 +24,7 @@ const Results = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const state = location.state as ResultsState;
+  const [displayName, setDisplayName] = useState("Programming Student");
 
   if (!state) {
     navigate('/');
@@ -34,14 +35,25 @@ const Results = () => {
   const percentage = Math.round((score / totalQuestions) * 100);
   const isPassed = percentage >= 70;
 
-  // Save results to database
+  // Fetch user profile and save results to database
   useEffect(() => {
     const saveResults = async () => {
-      if (!isPassed) return; // Only save if passed
-
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
+
+        // Fetch user profile for display name
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('display_name')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (profile?.display_name) {
+          setDisplayName(profile.display_name);
+        }
+
+        if (!isPassed) return; // Only save if passed
 
         // Save certificate if passed
         const { error: certError } = await supabase
@@ -162,7 +174,7 @@ const Results = () => {
 
         {/* Certificate */}
         <Certificate
-          studentName="Programming Student"
+          studentName={displayName}
           score={score}
           totalQuestions={totalQuestions}
           courseName={testName || "Programming Fundamentals Certification"}
