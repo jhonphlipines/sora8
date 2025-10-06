@@ -59,31 +59,31 @@ const Pricing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background py-8 px-4">
+    <div className="min-h-screen bg-background py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <Button
             variant="ghost"
             onClick={() => navigate('/')}
-            className="mb-4"
+            className="mb-3 sm:mb-4 text-sm"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Home
           </Button>
           
           <div className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold bg-[var(--gradient-primary)] bg-clip-text text-transparent mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-[var(--gradient-primary)] bg-clip-text text-transparent mb-3 sm:mb-4">
               Choose Your Plan
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-3xl mx-auto mb-6 sm:mb-8 px-2">
               Select the perfect plan for your certification needs. All plans include professional certificates and instant results.
             </p>
           </div>
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-5xl mx-auto mb-8 sm:mb-16">
           {plans.map((plan, index) => (
             <Card 
               key={index}
@@ -92,38 +92,38 @@ const Pricing = () => {
               }`}
             >
               {plan.popular && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-primary text-primary-foreground">Most Popular</Badge>
+                <div className="absolute -top-2 sm:-top-3 left-1/2 transform -translate-x-1/2">
+                  <Badge className="bg-primary text-primary-foreground text-xs">Most Popular</Badge>
                 </div>
               )}
               
-              <CardHeader className={`text-center pb-6 ${plan.popular ? 'pt-8' : ''}`}>
-                <CardTitle className="text-2xl font-bold text-foreground mb-2">
+              <CardHeader className={`text-center pb-4 sm:pb-6 p-4 sm:p-6 ${plan.popular ? 'pt-6 sm:pt-8' : ''}`}>
+                <CardTitle className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2">
                   {plan.name}
                 </CardTitle>
-                <div className="text-4xl font-bold text-foreground mb-4">
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 sm:mb-4">
                   {plan.price}
-                  <span className="text-lg text-muted-foreground font-normal">
+                  <span className="text-sm sm:text-base md:text-lg text-muted-foreground font-normal">
                     {plan.period}
                   </span>
                 </div>
-                <CardDescription className="text-muted-foreground">
+                <CardDescription className="text-muted-foreground text-xs sm:text-sm">
                   {plan.description}
                 </CardDescription>
               </CardHeader>
               
-              <CardContent className="space-y-4">
-                <ul className="space-y-3 text-sm">
+              <CardContent className="space-y-3 sm:space-y-4 p-4 sm:p-6 pt-0">
+                <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                      <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500 flex-shrink-0" />
                       <span className="text-muted-foreground">{feature}</span>
                     </li>
                   ))}
                 </ul>
                 
                 <Button 
-                  className={`w-full mt-6 ${
+                  className={`w-full mt-4 sm:mt-6 text-xs sm:text-sm ${
                     plan.popular 
                       ? 'bg-[var(--gradient-primary)] border-0 shadow-[var(--glow-primary)]' 
                       : 'bg-[var(--gradient-primary)] border-0'
