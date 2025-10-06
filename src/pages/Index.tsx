@@ -45,48 +45,48 @@ const Index = () => {
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[var(--gradient-primary)] opacity-10"></div>
-        <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <Badge className="bg-primary/10 text-primary border-primary/20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+            <div className="space-y-6 sm:space-y-8">
+              <div className="space-y-3 sm:space-y-4">
+                <Badge className="bg-primary/10 text-primary border-primary/20 text-xs sm:text-sm">
                   Programming Certification
                 </Badge>
-                <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
                   <span className="bg-[var(--gradient-primary)] bg-clip-text text-transparent">
                     Master Programming
                   </span>
                   <br />
                   <span className="text-foreground">Get Certified</span>
                 </h1>
-                <p className="text-xl text-muted-foreground leading-relaxed">
+                <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
                   Test your programming knowledge with our comprehensive certification quiz. 
                   Cover essential topics from JavaScript and React to Python and algorithms.
                   Join over 12 million developers who trust our platform for skill validation.
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" onClick={() => navigate('/tests')} className="bg-primary hover:bg-primary/90 text-primary-foreground border-0 shadow-[var(--glow-primary)] text-lg px-8 py-6">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <Button size="lg" onClick={() => navigate('/tests')} className="bg-primary hover:bg-primary/90 text-primary-foreground border-0 shadow-[var(--glow-primary)] text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 w-full sm:w-auto">
                   Choose Your Test
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-border hover:bg-accent" onClick={() => navigate('/tests')}>
+                <Button size="lg" variant="outline" className="text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 border-border hover:bg-accent w-full sm:w-auto" onClick={() => navigate('/tests')}>
                   View All Categories
                 </Button>
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 pt-8 border-t border-border/50">
-                {stats.map((stat, index) => <div key={index} className="text-center p-2">
-                    <stat.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
-                    <div className="font-bold text-lg text-foreground">{stat.value}</div>
-                    <div className="text-xs sm:text-sm text-muted-foreground leading-tight">{stat.label}</div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6 pt-6 sm:pt-8 border-t border-border/50">
+                {stats.map((stat, index) => <div key={index} className="text-center p-2 sm:p-3">
+                    <stat.icon className="h-5 w-5 sm:h-6 sm:w-6 mx-auto mb-1 sm:mb-2 text-primary" />
+                    <div className="font-bold text-base sm:text-lg text-foreground">{stat.value}</div>
+                    <div className="text-xs text-muted-foreground leading-tight">{stat.label}</div>
                   </div>)}
               </div>
             </div>
 
-            <div className="relative">
+            <div className="relative hidden lg:block">
               <div className="absolute inset-0 bg-[var(--gradient-primary)] rounded-3xl blur-3xl opacity-20"></div>
               <img src={heroImage} alt="Programming certification platform" className="relative rounded-3xl shadow-2xl w-full" />
             </div>
@@ -95,29 +95,29 @@ const Index = () => {
       </div>
 
       {/* Features Section */}
-      <div className="py-24 bg-background-secondary">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+      <div className="py-12 sm:py-16 md:py-24 bg-background-secondary">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 sm:mb-4">
               Multiple Technology Certifications
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
               Choose from 11 different programming languages and technologies. 
               Each certification covers essential concepts with professional-grade questions.
               Our adaptive learning system ensures you master key concepts before advancing.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             {features.map((feature, index) => <Card key={index} className="bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300">
-                <CardHeader className="text-center pb-4">
-                  <div className="w-12 h-12 mx-auto bg-[var(--gradient-primary)] rounded-full flex items-center justify-center mb-4">
-                    <feature.icon className="h-6 w-6 text-white bg-gray-950" />
+                <CardHeader className="text-center pb-3 sm:pb-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-[var(--gradient-primary)] rounded-full flex items-center justify-center mb-3 sm:mb-4">
+                    <feature.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white bg-gray-950" />
                   </div>
-                  <CardTitle className="text-lg">{feature.title}</CardTitle>
+                  <CardTitle className="text-base sm:text-lg">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-center">
+                  <CardDescription className="text-center text-sm sm:text-base">
                     {feature.description}
                   </CardDescription>
                 </CardContent>
@@ -127,38 +127,38 @@ const Index = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="py-24">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <div className="bg-[var(--gradient-card)] rounded-3xl p-12 border border-border/50 shadow-2xl">
-            <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+      <div className="py-12 sm:py-16 md:py-24">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6">
+          <div className="bg-[var(--gradient-card)] rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 border border-border/50 shadow-2xl">
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4 sm:mb-6">
               Ready to Test Your Skills?
             </h3>
-            <p className="text-xl text-muted-foreground mb-8">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8">
               Take our comprehensive programming quiz and earn your certification today. 
               Join thousands of developers who have already proven their skills.
               Get industry-recognized credentials that boost your career prospects.
             </p>
-            <Button size="lg" onClick={() => navigate('/tests')} className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-[var(--glow-primary)] text-lg px-12 py-6">
+            <Button size="lg" onClick={() => navigate('/tests')} className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-[var(--glow-primary)] text-base sm:text-lg px-8 sm:px-12 py-5 sm:py-6 w-full sm:w-auto">
               Choose Your Test
-              <Award className="ml-2 h-5 w-5" />
+              <Award className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
         </div>
       </div>
 
       {/* Student Ratings Section */}
-      <div className="py-24 bg-background-tertiary">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+      <div className="py-12 sm:py-16 md:py-24 bg-background-tertiary">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 sm:mb-4">
               What Our Students Say
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
               Over 12 million developers trust CodeCert for their programming certification needs.
               Here are some of their success stories.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {[{
               name: "Sarah Chen",
               role: "Full Stack Developer",
@@ -196,41 +196,41 @@ const Index = () => {
               rating: 4,
               review: "The HTML/CSS certification was thorough and helped me brush up on fundamentals. The timed format really tests your knowledge under pressure."
             }].map((testimonial, index) => <Card key={index} className="bg-card hover:shadow-xl transition-all duration-300 border-border/50">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center justify-between mb-2">
+                <CardHeader className="pb-3 sm:pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-2">
                     <div>
-                      <CardTitle className="text-lg font-semibold">{testimonial.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground">{testimonial.role} at {testimonial.company}</p>
+                      <CardTitle className="text-base sm:text-lg font-semibold">{testimonial.name}</CardTitle>
+                      <p className="text-xs sm:text-sm text-muted-foreground">{testimonial.role} at {testimonial.company}</p>
                     </div>
                     <div className="flex">
-                      {[...Array(5)].map((_, i) => <Star key={i} className={`h-4 w-4 ${i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-muted-foreground'}`} />)}
+                      {[...Array(5)].map((_, i) => <Star key={i} className={`h-3 w-3 sm:h-4 sm:w-4 ${i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-muted-foreground'}`} />)}
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground italic">"{testimonial.review}"</p>
+                  <p className="text-sm sm:text-base text-muted-foreground italic">"{testimonial.review}"</p>
                 </CardContent>
               </Card>)}
           </div>
 
           {/* Overall Stats */}
-          <div className="mt-16 text-center">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-              <div>
-                <div className="text-3xl font-bold text-primary">4.8/5</div>
-                <div className="text-sm text-muted-foreground">Average Rating</div>
+          <div className="mt-10 sm:mt-12 md:mt-16 text-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
+              <div className="p-3 sm:p-4">
+                <div className="text-2xl sm:text-3xl font-bold text-primary">4.8/5</div>
+                <div className="text-xs sm:text-sm text-muted-foreground mt-1">Average Rating</div>
               </div>
-              <div>
-                <div className="text-3xl font-bold text-primary">98%</div>
-                <div className="text-sm text-muted-foreground">Completion Rate</div>
+              <div className="p-3 sm:p-4">
+                <div className="text-2xl sm:text-3xl font-bold text-primary">98%</div>
+                <div className="text-xs sm:text-sm text-muted-foreground mt-1">Completion Rate</div>
               </div>
-              <div>
-                <div className="text-3xl font-bold text-primary">15k+</div>
-                <div className="text-sm text-muted-foreground">Reviews</div>
+              <div className="p-3 sm:p-4">
+                <div className="text-2xl sm:text-3xl font-bold text-primary">15k+</div>
+                <div className="text-xs sm:text-sm text-muted-foreground mt-1">Reviews</div>
               </div>
-              <div>
-                <div className="text-3xl font-bold text-primary">7M+</div>
-                <div className="text-sm text-muted-foreground">Certificates Issued</div>
+              <div className="p-3 sm:p-4">
+                <div className="text-2xl sm:text-3xl font-bold text-primary">7M+</div>
+                <div className="text-xs sm:text-sm text-muted-foreground mt-1">Certificates Issued</div>
               </div>
             </div>
           </div>
