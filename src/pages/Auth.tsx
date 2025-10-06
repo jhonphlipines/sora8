@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { z } from "zod";
+import { Code2, Trophy, BookOpen, Target, CheckCircle2 } from "lucide-react";
 
 const authSchema = z.object({
   email: z.string().email("Invalid email address").max(255),
@@ -111,88 +112,165 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Welcome</CardTitle>
-          <CardDescription className="text-center">
-            Sign in to your account or create a new one
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="signin">
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signin-email">Email</Label>
-                  <Input
-                    id="signin-email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signin-password">Password</Label>
-                  <Input
-                    id="signin-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Signing in..." : "Sign In"}
-                </Button>
-              </form>
-            </TabsContent>
-            
-            <TabsContent value="signup">
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
-                  <Input
-                    id="signup-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Creating account..." : "Sign Up"}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-        <CardFooter className="flex justify-center">
-          <Button variant="ghost" onClick={() => navigate("/")}>
-            Back to Home
-          </Button>
-        </CardFooter>
-      </Card>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-secondary/20 p-4">
+      <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
+        {/* Left Side - Features */}
+        <div className="hidden lg:block space-y-8">
+          <div className="space-y-4">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              Master Programming
+            </h1>
+            <p className="text-xl text-muted-foreground">
+              Learn, practice, and excel with interactive coding challenges
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            <div className="flex items-start gap-4">
+              <div className="p-3 rounded-lg bg-primary/10">
+                <Code2 className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">Interactive Coding</h3>
+                <p className="text-sm text-muted-foreground">
+                  Write and execute code in real-time with our built-in editor
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="p-3 rounded-lg bg-primary/10">
+                <BookOpen className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">Structured Learning</h3>
+                <p className="text-sm text-muted-foreground">
+                  Progress through levels from beginner to advanced
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="p-3 rounded-lg bg-primary/10">
+                <Target className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">Practice Problems</h3>
+                <p className="text-sm text-muted-foreground">
+                  Solve real-world coding challenges and improve your skills
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="p-3 rounded-lg bg-primary/10">
+                <Trophy className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">Earn Certificates</h3>
+                <p className="text-sm text-muted-foreground">
+                  Get recognized for your achievements with downloadable certificates
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="p-3 rounded-lg bg-primary/10">
+                <CheckCircle2 className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">Track Progress</h3>
+                <p className="text-sm text-muted-foreground">
+                  Monitor your learning journey with detailed analytics
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side - Auth Card */}
+        <Card className="w-full shadow-xl">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl font-bold text-center">Welcome</CardTitle>
+            <CardDescription className="text-center">
+              Sign in to your account or create a new one
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="signin" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="signin">Sign In</TabsTrigger>
+                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="signin">
+                <form onSubmit={handleSignIn} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="signin-email">Email</Label>
+                    <Input
+                      id="signin-email"
+                      type="email"
+                      placeholder="your@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="signin-password">Password</Label>
+                    <Input
+                      id="signin-password"
+                      type="password"
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? "Signing in..." : "Sign In"}
+                  </Button>
+                </form>
+              </TabsContent>
+              
+              <TabsContent value="signup">
+                <form onSubmit={handleSignUp} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-email">Email</Label>
+                    <Input
+                      id="signup-email"
+                      type="email"
+                      placeholder="your@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-password">Password</Label>
+                    <Input
+                      id="signup-password"
+                      type="password"
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? "Creating account..." : "Sign Up"}
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+          <CardFooter className="flex justify-center">
+            <Button variant="ghost" onClick={() => navigate("/")}>
+              Back to Home
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
     </div>
   );
 };
