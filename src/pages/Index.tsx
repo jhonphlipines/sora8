@@ -6,7 +6,6 @@ import { Award, Clock, CheckCircle, BookOpen, Users, Trophy, ArrowRight, Star } 
 import heroImage from "@/assets/hero-programming.jpg";
 const Index = () => {
   const navigate = useNavigate();
-
   const features = [{
     icon: BookOpen,
     title: "11+ Technologies",
@@ -77,11 +76,7 @@ const Index = () => {
 
               {/* Stats */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 md:gap-6 pt-4 sm:pt-8 border-t border-border/50">
-                {stats.map((stat, index) => <div key={index} className="text-center p-1 sm:p-3">
-                    <stat.icon className="h-4 w-4 sm:h-6 sm:w-6 mx-auto mb-1 sm:mb-2 text-primary" />
-                    <div className="font-bold text-sm sm:text-lg text-foreground">{stat.value}</div>
-                    <div className="text-[10px] sm:text-xs text-muted-foreground leading-tight">{stat.label}</div>
-                  </div>)}
+                {stats.map((stat, index) => {})}
               </div>
             </div>
 
@@ -209,24 +204,7 @@ const Index = () => {
 
           {/* Overall Stats */}
           <div className="mt-8 sm:mt-12 md:mt-16 text-center">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
-              <div className="p-2 sm:p-4">
-                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-primary">4.8/5</div>
-                <div className="text-[10px] sm:text-xs md:text-sm text-muted-foreground mt-1">Average Rating</div>
-              </div>
-              <div className="p-2 sm:p-4">
-                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-primary">98%</div>
-                <div className="text-[10px] sm:text-xs md:text-sm text-muted-foreground mt-1">Completion Rate</div>
-              </div>
-              <div className="p-2 sm:p-4">
-                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-primary">15k+</div>
-                <div className="text-[10px] sm:text-xs md:text-sm text-muted-foreground mt-1">Reviews</div>
-              </div>
-              <div className="p-2 sm:p-4">
-                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-primary">7M+</div>
-                <div className="text-[10px] sm:text-xs md:text-sm text-muted-foreground mt-1">Certificates Issued</div>
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>
