@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Play, Search, BookOpen, Clock, Users, Star } from "lucide-react";
+import { Play, Search, BookOpen, Clock, Users, Star, Save, FileText } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const YOUTUBE_API_KEY = "AIzaSyAYIZFLc4DU7o219ImEiCKqLjH10x7Nm_I";
 
@@ -37,6 +39,8 @@ const VideoLearning = ({ onBackToCategories }: VideoLearningProps) => {
   const [loading, setLoading] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState("javascript");
+  const [notes, setNotes] = useState("");
+  const [savedNotes, setSavedNotes] = useState<Array<{ id: string; text: string; timestamp: string }>>([]);
 
   const learningCategories = [
     { id: "javascript", name: "JavaScript", query: "JavaScript tutorial programming" },
@@ -100,6 +104,22 @@ const VideoLearning = ({ onBackToCategories }: VideoLearningProps) => {
     return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
   };
 
+  const handleSaveNote = () => {
+    if (notes.trim()) {
+      const newNote = {
+        id: Date.now().toString(),
+        text: notes,
+        timestamp: new Date().toLocaleString()
+      };
+      setSavedNotes([newNote, ...savedNotes]);
+      setNotes("");
+    }
+  };
+
+  const handleDeleteNote = (id: string) => {
+    setSavedNotes(savedNotes.filter(note => note.id !== id));
+  };
+
   if (selectedVideo) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background to-muted p-6">
@@ -113,7 +133,7 @@ const VideoLearning = ({ onBackToCategories }: VideoLearningProps) => {
           </Button>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 space-y-6">
               <div className="aspect-video rounded-lg overflow-hidden bg-black">
                 <iframe
                   width="100%"
@@ -125,6 +145,68 @@ const VideoLearning = ({ onBackToCategories }: VideoLearningProps) => {
                   allowFullScreen
                 ></iframe>
               </div>
+
+              {/* Notes Container */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="h-5 w-5" />
+                    Learning Notes
+                  </CardTitle>
+                  <CardDescription>
+                    Take notes while watching the video
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Textarea
+                      placeholder="Write your notes here..."
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      className="min-h-[120px] resize-none"
+                    />
+                    <Button 
+                      onClick={handleSaveNote} 
+                      className="w-full gap-2"
+                      disabled={!notes.trim()}
+                    >
+                      <Save className="h-4 w-4" />
+                      Save Note
+                    </Button>
+                  </div>
+
+                  {savedNotes.length > 0 && (
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-sm">Saved Notes</h4>
+                      <ScrollArea className="h-[300px] rounded-md border p-4">
+                        <div className="space-y-3">
+                          {savedNotes.map((note) => (
+                            <div
+                              key={note.id}
+                              className="p-3 bg-muted/50 rounded-lg space-y-2"
+                            >
+                              <p className="text-sm whitespace-pre-wrap">{note.text}</p>
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-muted-foreground">
+                                  {note.timestamp}
+                                </span>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleDeleteNote(note.id)}
+                                  className="h-6 px-2 text-xs"
+                                >
+                                  Delete
+                                </Button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
             
             <div className="space-y-4">
