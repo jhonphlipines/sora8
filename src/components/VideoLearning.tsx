@@ -148,23 +148,25 @@ const VideoLearning = ({ onBackToCategories }: VideoLearningProps) => {
             </div>
             
             <div className="space-y-4">
-              <Card>
+              <Card className="overflow-hidden">
                 <Tabs defaultValue="videos" className="w-full">
-                  <CardHeader className="pb-3">
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="videos" className="gap-2">
+                  <CardHeader className="pb-0 border-b">
+                    <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/50">
+                      <TabsTrigger value="videos" className="gap-2 data-[state=active]:bg-background">
                         <Play className="h-4 w-4" />
-                        Related Videos
+                        <span className="hidden sm:inline">Related Videos</span>
+                        <span className="sm:hidden">Videos</span>
                       </TabsTrigger>
-                      <TabsTrigger value="notes" className="gap-2">
+                      <TabsTrigger value="notes" className="gap-2 data-[state=active]:bg-background">
                         <FileText className="h-4 w-4" />
-                        Notes
+                        <span className="hidden sm:inline">Take Notes</span>
+                        <span className="sm:hidden">Notes</span>
                       </TabsTrigger>
                     </TabsList>
                   </CardHeader>
 
-                  <TabsContent value="videos" className="mt-0">
-                    <CardContent className="space-y-3">
+                  <TabsContent value="videos" className="mt-0 p-0">
+                    <CardContent className="p-4">
                       <ScrollArea className="h-[600px]">
                         <div className="space-y-3 pr-4">
                           {videos.slice(0, 8).map((video) => (
@@ -193,29 +195,34 @@ const VideoLearning = ({ onBackToCategories }: VideoLearningProps) => {
                     </CardContent>
                   </TabsContent>
 
-                  <TabsContent value="notes" className="mt-0">
-                    <CardContent className="space-y-4">
-                      <div className="space-y-2">
-                        <Textarea
-                          placeholder="Write your notes here..."
-                          value={notes}
-                          onChange={(e) => setNotes(e.target.value)}
-                          className="min-h-[100px] resize-none"
-                        />
-                        <Button 
-                          onClick={handleSaveNote} 
-                          className="w-full gap-2"
-                          disabled={!notes.trim()}
-                        >
-                          <Save className="h-4 w-4" />
-                          Save Note
-                        </Button>
-                      </div>
-
-                      {savedNotes.length > 0 && (
+                  <TabsContent value="notes" className="mt-0 p-0">
+                    <CardContent className="p-4">
+                      <div className="space-y-4">
                         <div className="space-y-2">
-                          <h4 className="font-semibold text-sm">Saved Notes ({savedNotes.length})</h4>
-                          <ScrollArea className="h-[460px] rounded-md border p-4">
+                          <label className="text-sm font-medium">Write a note</label>
+                          <Textarea
+                            placeholder="Take notes while watching the video..."
+                            value={notes}
+                            onChange={(e) => setNotes(e.target.value)}
+                            className="min-h-[100px] resize-none"
+                          />
+                          <Button 
+                            onClick={handleSaveNote} 
+                            className="w-full gap-2"
+                            disabled={!notes.trim()}
+                          >
+                            <Save className="h-4 w-4" />
+                            Save Note
+                          </Button>
+                        </div>
+
+                        {savedNotes.length > 0 && (
+                          <div className="space-y-2">
+                            <h4 className="font-semibold text-sm flex items-center justify-between">
+                              <span>Your Notes ({savedNotes.length})</span>
+                              <Badge variant="secondary">{savedNotes.length}</Badge>
+                            </h4>
+                            <ScrollArea className="h-[460px] rounded-md border bg-muted/20 p-4">
                             <div className="space-y-3">
                               {savedNotes.map((note) => (
                                 <div
@@ -249,6 +256,7 @@ const VideoLearning = ({ onBackToCategories }: VideoLearningProps) => {
                           <p className="text-sm">No notes yet. Start taking notes!</p>
                         </div>
                       )}
+                      </div>
                     </CardContent>
                   </TabsContent>
                 </Tabs>
