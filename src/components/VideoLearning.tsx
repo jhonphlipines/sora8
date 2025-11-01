@@ -133,7 +133,7 @@ const VideoLearning = ({ onBackToCategories }: VideoLearningProps) => {
           </Button>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2">
               <div className="aspect-video rounded-lg overflow-hidden bg-black">
                 <iframe
                   width="100%"
@@ -145,98 +145,113 @@ const VideoLearning = ({ onBackToCategories }: VideoLearningProps) => {
                   allowFullScreen
                 ></iframe>
               </div>
-
-              {/* Notes Container */}
+            </div>
+            
+            <div className="space-y-4">
               <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <FileText className="h-5 w-5" />
-                    Learning Notes
-                  </CardTitle>
-                  <CardDescription>
-                    Take notes while watching the video
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Textarea
-                      placeholder="Write your notes here..."
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      className="min-h-[120px] resize-none"
-                    />
-                    <Button 
-                      onClick={handleSaveNote} 
-                      className="w-full gap-2"
-                      disabled={!notes.trim()}
-                    >
-                      <Save className="h-4 w-4" />
-                      Save Note
-                    </Button>
-                  </div>
+                <Tabs defaultValue="videos" className="w-full">
+                  <CardHeader className="pb-3">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="videos" className="gap-2">
+                        <Play className="h-4 w-4" />
+                        Related Videos
+                      </TabsTrigger>
+                      <TabsTrigger value="notes" className="gap-2">
+                        <FileText className="h-4 w-4" />
+                        Notes
+                      </TabsTrigger>
+                    </TabsList>
+                  </CardHeader>
 
-                  {savedNotes.length > 0 && (
-                    <div className="space-y-2">
-                      <h4 className="font-semibold text-sm">Saved Notes</h4>
-                      <ScrollArea className="h-[300px] rounded-md border p-4">
-                        <div className="space-y-3">
-                          {savedNotes.map((note) => (
+                  <TabsContent value="videos" className="mt-0">
+                    <CardContent className="space-y-3">
+                      <ScrollArea className="h-[600px]">
+                        <div className="space-y-3 pr-4">
+                          {videos.slice(0, 8).map((video) => (
                             <div
-                              key={note.id}
-                              className="p-3 bg-muted/50 rounded-lg space-y-2"
+                              key={video.id.videoId}
+                              className="flex gap-3 cursor-pointer hover:bg-muted/50 p-2 rounded-lg transition-colors"
+                              onClick={() => setSelectedVideo(video.id.videoId)}
                             >
-                              <p className="text-sm whitespace-pre-wrap">{note.text}</p>
-                              <div className="flex items-center justify-between">
-                                <span className="text-xs text-muted-foreground">
-                                  {note.timestamp}
-                                </span>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => handleDeleteNote(note.id)}
-                                  className="h-6 px-2 text-xs"
-                                >
-                                  Delete
-                                </Button>
+                              <img
+                                src={video.snippet.thumbnails.medium.url}
+                                alt={video.snippet.title}
+                                className="w-24 h-16 object-cover rounded flex-shrink-0"
+                              />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium line-clamp-2 mb-1">
+                                  {truncateText(video.snippet.title, 60)}
+                                </p>
+                                <p className="text-xs text-muted-foreground line-clamp-1">
+                                  {video.snippet.channelTitle}
+                                </p>
                               </div>
                             </div>
                           ))}
                         </div>
                       </ScrollArea>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-            
-            <div className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Related Videos</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {videos.slice(0, 5).map((video) => (
-                    <div
-                      key={video.id.videoId}
-                      className="flex gap-3 cursor-pointer hover:bg-muted/50 p-2 rounded-lg transition-colors"
-                      onClick={() => setSelectedVideo(video.id.videoId)}
-                    >
-                      <img
-                        src={video.snippet.thumbnails.medium.url}
-                        alt={video.snippet.title}
-                        className="w-20 h-12 object-cover rounded"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium line-clamp-2">
-                          {truncateText(video.snippet.title, 60)}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {video.snippet.channelTitle}
-                        </p>
+                    </CardContent>
+                  </TabsContent>
+
+                  <TabsContent value="notes" className="mt-0">
+                    <CardContent className="space-y-4">
+                      <div className="space-y-2">
+                        <Textarea
+                          placeholder="Write your notes here..."
+                          value={notes}
+                          onChange={(e) => setNotes(e.target.value)}
+                          className="min-h-[100px] resize-none"
+                        />
+                        <Button 
+                          onClick={handleSaveNote} 
+                          className="w-full gap-2"
+                          disabled={!notes.trim()}
+                        >
+                          <Save className="h-4 w-4" />
+                          Save Note
+                        </Button>
                       </div>
-                    </div>
-                  ))}
-                </CardContent>
+
+                      {savedNotes.length > 0 && (
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-sm">Saved Notes ({savedNotes.length})</h4>
+                          <ScrollArea className="h-[460px] rounded-md border p-4">
+                            <div className="space-y-3">
+                              {savedNotes.map((note) => (
+                                <div
+                                  key={note.id}
+                                  className="p-3 bg-muted/50 rounded-lg space-y-2"
+                                >
+                                  <p className="text-sm whitespace-pre-wrap">{note.text}</p>
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-xs text-muted-foreground">
+                                      {note.timestamp}
+                                    </span>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleDeleteNote(note.id)}
+                                      className="h-7 px-2 text-xs hover:bg-destructive/10 hover:text-destructive"
+                                    >
+                                      Delete
+                                    </Button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </ScrollArea>
+                        </div>
+                      )}
+
+                      {savedNotes.length === 0 && (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <FileText className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                          <p className="text-sm">No notes yet. Start taking notes!</p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </TabsContent>
+                </Tabs>
               </Card>
             </div>
           </div>
