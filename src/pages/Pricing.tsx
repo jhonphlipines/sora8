@@ -11,7 +11,7 @@ const Pricing = () => {
   const plans = [
     {
       name: "Basic",
-      price: "$8",
+      price: "$4",
       period: "/test",
       description: "Perfect for trying out our platform",
       popular: false,
