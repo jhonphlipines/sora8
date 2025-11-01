@@ -140,7 +140,8 @@ export function AppSidebar() {
 
         {/* Admin Section */}
         <SidebarGroup>
-          <SidebarGroupLabel className="text-sidebar-foreground/70">Admin</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-sidebar-foreground/70">
+        </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {adminItems.map(item => <SidebarMenuItem key={item.title}>
