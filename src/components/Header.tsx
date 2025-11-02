@@ -12,20 +12,44 @@ import { BookOpen, Trophy, User, LogOut, Settings } from "lucide-react";
 export function Header() {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
+  const [profile, setProfile] = useState<{ avatar_url?: string; display_name?: string } | null>(null);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setUser(session?.user ?? null);
+        if (session?.user) {
+          fetchProfile(session.user.id);
+        } else {
+          setProfile(null);
+        }
       }
     );
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchProfile(session.user.id);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const fetchProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("avatar_url, display_name")
+        .eq("user_id", userId)
+        .single();
+
+      if (error) throw error;
+      setProfile(data);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -62,9 +86,9 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="h-8 w-8 ml-2 cursor-pointer hover:opacity-80 transition-opacity">
-                <AvatarImage src="" alt="Profile" />
+                <AvatarImage src={profile?.avatar_url || ""} alt="Profile" />
                 <AvatarFallback className="bg-primary/10 text-primary">
-                  <User className="h-4 w-4" />
+                  {profile?.display_name?.[0]?.toUpperCase() || <User className="h-4 w-4" />}
                 </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
