@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Play, Search, BookOpen, Clock, Users, Star, Save, FileText } from "lucide-react";
+import { Play, Search, BookOpen, Clock, Users, Star, Save, FileText, List, Heading1, Heading2, Heading3, Palette, Sparkles } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 const YOUTUBE_API_KEY = "AIzaSyAYIZFLc4DU7o219ImEiCKqLjH10x7Nm_I";
 
@@ -41,6 +43,9 @@ const VideoLearning = ({ onBackToCategories }: VideoLearningProps) => {
   const [activeCategory, setActiveCategory] = useState("javascript");
   const [notes, setNotes] = useState("");
   const [savedNotes, setSavedNotes] = useState<Array<{ id: string; text: string; timestamp: string }>>([]);
+  const [textColor, setTextColor] = useState("#000000");
+  const [isAiProcessing, setIsAiProcessing] = useState(false);
+  const { toast } = useToast();
 
   const learningCategories = [
     { id: "javascript", name: "JavaScript", query: "JavaScript tutorial programming" },
@@ -118,6 +123,77 @@ const VideoLearning = ({ onBackToCategories }: VideoLearningProps) => {
 
   const handleDeleteNote = (id: string) => {
     setSavedNotes(savedNotes.filter(note => note.id !== id));
+  };
+
+  const insertFormatting = (prefix: string, suffix: string = "") => {
+    const textarea = document.querySelector('textarea');
+    if (!textarea) return;
+    
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = notes.substring(start, end);
+    const newText = notes.substring(0, start) + prefix + selectedText + suffix + notes.substring(end);
+    
+    setNotes(newText);
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + prefix.length, start + prefix.length + selectedText.length);
+    }, 0);
+  };
+
+  const handleBulletPoint = () => {
+    insertFormatting("• ");
+  };
+
+  const handleHeading = (level: number) => {
+    const prefix = "#".repeat(level) + " ";
+    insertFormatting(prefix);
+  };
+
+  const handleColorChange = (color: string) => {
+    setTextColor(color);
+    insertFormatting(`<span style="color:${color}">`, "</span>");
+  };
+
+  const handleAiAssist = async () => {
+    if (!notes.trim()) {
+      toast({
+        title: "No content",
+        description: "Please write some notes first for AI to improve.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsAiProcessing(true);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/improve-notes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ notes }),
+      });
+
+      if (!response.ok) throw new Error("Failed to improve notes");
+
+      const data = await response.json();
+      setNotes(data.improvedNotes);
+      toast({
+        title: "Notes improved!",
+        description: "AI has enhanced your notes.",
+      });
+    } catch (error) {
+      console.error("AI assist error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to improve notes. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAiProcessing(false);
+    }
   };
 
   if (selectedVideo) {
@@ -200,6 +276,83 @@ const VideoLearning = ({ onBackToCategories }: VideoLearningProps) => {
                       <div className="space-y-4">
                         <div className="space-y-2">
                           <label className="text-sm font-medium">Write a note</label>
+                          
+                          {/* Formatting Toolbar */}
+                          <div className="flex flex-wrap gap-2 p-2 bg-muted/30 rounded-lg border">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={handleBulletPoint}
+                              className="h-8 px-2"
+                              title="Add bullet point"
+                            >
+                              <List className="h-4 w-4" />
+                            </Button>
+                            
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleHeading(1)}
+                              className="h-8 px-2"
+                              title="Heading 1"
+                            >
+                              <Heading1 className="h-4 w-4" />
+                            </Button>
+                            
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleHeading(2)}
+                              className="h-8 px-2"
+                              title="Heading 2"
+                            >
+                              <Heading2 className="h-4 w-4" />
+                            </Button>
+                            
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleHeading(3)}
+                              className="h-8 px-2"
+                              title="Heading 3"
+                            >
+                              <Heading3 className="h-4 w-4" />
+                            </Button>
+                            
+                            <Select onValueChange={handleColorChange} value={textColor}>
+                              <SelectTrigger className="h-8 w-[100px]">
+                                <Palette className="h-4 w-4 mr-2" />
+                                <SelectValue placeholder="Color" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="#000000">Black</SelectItem>
+                                <SelectItem value="#ef4444">Red</SelectItem>
+                                <SelectItem value="#3b82f6">Blue</SelectItem>
+                                <SelectItem value="#22c55e">Green</SelectItem>
+                                <SelectItem value="#eab308">Yellow</SelectItem>
+                                <SelectItem value="#a855f7">Purple</SelectItem>
+                                <SelectItem value="#ec4899">Pink</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={handleAiAssist}
+                              disabled={isAiProcessing || !notes.trim()}
+                              className="h-8 px-2 ml-auto"
+                              title="AI Improve"
+                            >
+                              <Sparkles className="h-4 w-4 mr-1" />
+                              AI
+                            </Button>
+                          </div>
+
                           <Textarea
                             placeholder="Take notes while watching the video..."
                             value={notes}
