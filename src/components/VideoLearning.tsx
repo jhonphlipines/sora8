@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const YOUTUBE_API_KEY = "AIzaSyAYIZFLc4DU7o219ImEiCKqLjH10x7Nm_I";
 
@@ -109,15 +110,55 @@ const VideoLearning = ({ onBackToCategories }: VideoLearningProps) => {
     return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
   };
 
-  const handleSaveNote = () => {
+  const handleSaveNote = async () => {
     if (notes.trim()) {
-      const newNote = {
-        id: Date.now().toString(),
-        text: notes,
-        timestamp: new Date().toLocaleString()
-      };
-      setSavedNotes([newNote, ...savedNotes]);
-      setNotes("");
+      try {
+        const { data: userData } = await supabase.auth.getUser();
+        if (!userData.user) {
+          toast({
+            title: "Authentication required",
+            description: "Please log in to save notes.",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        const currentVideo = videos.find(v => v.id.videoId === selectedVideo);
+        
+        const { data, error } = await supabase
+          .from("user_notes")
+          .insert([{
+            user_id: userData.user.id,
+            title: currentVideo?.snippet.title || "Video Note",
+            content: notes,
+            video_id: selectedVideo || undefined,
+            video_title: currentVideo?.snippet.title || undefined,
+          }])
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        const newNote = {
+          id: data.id,
+          text: notes,
+          timestamp: new Date().toLocaleString()
+        };
+        setSavedNotes([newNote, ...savedNotes]);
+        setNotes("");
+        
+        toast({
+          title: "Note saved",
+          description: "Your note has been saved successfully.",
+        });
+      } catch (error) {
+        console.error("Error saving note:", error);
+        toast({
+          title: "Error",
+          description: "Failed to save note. Please try again.",
+          variant: "destructive",
+        });
+      }
     }
   };
 

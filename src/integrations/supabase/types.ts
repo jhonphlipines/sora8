@@ -110,6 +110,39 @@ export type Database = {
         }
         Relationships: []
       }
+      user_notes: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+          video_id: string | null
+          video_title: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id: string
+          video_id?: string | null
+          video_title?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          video_id?: string | null
+          video_title?: string | null
+        }
+        Relationships: []
+      }
       user_problems_solved: {
         Row: {
           id: string

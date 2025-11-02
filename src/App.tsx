@@ -22,6 +22,7 @@ import Completion from "./pages/Completion";
 import Profile from "./pages/Profile";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import Notes from "./pages/Notes";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => (
                   <Route path="/pricing" element={<ProtectedRoute><Pricing /></ProtectedRoute>} />
                   <Route path="/completion" element={<ProtectedRoute><Completion /></ProtectedRoute>} />
                   <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                  <Route path="/notes" element={<ProtectedRoute><Notes /></ProtectedRoute>} />
                   <Route path="/data-analysis" element={<ProtectedRoute><DataAnalysis /></ProtectedRoute>} />
                   <Route path="/tests" element={<ProtectedRoute><TestSelection /></ProtectedRoute>} />
                   <Route path="/levels" element={<ProtectedRoute><LevelSelection /></ProtectedRoute>} />
