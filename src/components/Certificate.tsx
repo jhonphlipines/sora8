@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Award, Download, Calendar, CheckCircle, FileImage, FileText } from "lucide-react";
+import { Award, Download, Calendar, CheckCircle, FileImage, FileText, Code } from "lucide-react";
 import { useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
@@ -180,77 +180,88 @@ export const Certificate = ({
   }
   return <div className="w-full max-w-4xl mx-auto">
       {/* Rectangular Certificate Design */}
-      <div ref={certificateRef} className="relative bg-white dark:bg-background overflow-hidden rounded-3xl shadow-2xl border border-border/20 aspect-square w-full m-0 p-0">
+      <div ref={certificateRef} className="relative bg-white overflow-hidden rounded-3xl shadow-2xl border border-border/20 aspect-square w-full m-0 p-0">
         {/* Background Pattern */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-white to-blue-50"></div>
           <div className="absolute top-0 left-0 w-full h-full">
-            <div className="absolute top-6 left-6 w-20 h-20 bg-primary/10 rounded-full blur-2xl"></div>
-            <div className="absolute bottom-8 right-8 w-16 h-16 bg-secondary/10 rounded-full blur-xl"></div>
-            <div className="absolute top-1/3 right-1/4 w-12 h-12 bg-accent/10 rounded-full blur-lg"></div>
+            <div className="absolute top-6 left-6 w-20 h-20 bg-purple-100 rounded-full blur-2xl"></div>
+            <div className="absolute bottom-8 right-8 w-16 h-16 bg-blue-100 rounded-full blur-xl"></div>
+            <div className="absolute top-1/3 right-1/4 w-12 h-12 bg-purple-50 rounded-full blur-lg"></div>
           </div>
           
           {/* Decorative Corner Ornaments */}
           {/* Top Left Corner */}
           <div className="absolute top-0 left-0 p-4">
             <div className="relative">
-              <div className="w-8 h-8 border-l-2 border-t-2 border-primary/30"></div>
-              <div className="absolute -top-1 -left-1 w-3 h-3 border-l-2 border-t-2 border-primary/20"></div>
-              <div className="absolute top-2 left-2 w-1 h-1 bg-primary/40 rounded-full"></div>
-              <div className="absolute top-6 left-1 w-6 h-px bg-gradient-to-r from-primary/30 to-transparent"></div>
-              <div className="absolute top-1 left-6 w-px h-6 bg-gradient-to-b from-primary/30 to-transparent"></div>
+              <div className="w-8 h-8 border-l-2 border-t-2 border-purple-400"></div>
+              <div className="absolute -top-1 -left-1 w-3 h-3 border-l-2 border-t-2 border-purple-300"></div>
+              <div className="absolute top-2 left-2 w-1 h-1 bg-purple-400 rounded-full"></div>
+              <div className="absolute top-6 left-1 w-6 h-px bg-gradient-to-r from-purple-300 to-transparent"></div>
+              <div className="absolute top-1 left-6 w-px h-6 bg-gradient-to-b from-purple-300 to-transparent"></div>
             </div>
           </div>
           
           {/* Top Right Corner */}
           <div className="absolute top-0 right-0 p-4">
             <div className="relative">
-              <div className="w-8 h-8 border-r-2 border-t-2 border-primary/30"></div>
-              <div className="absolute -top-1 -right-1 w-3 h-3 border-r-2 border-t-2 border-primary/20"></div>
-              <div className="absolute top-2 right-2 w-1 h-1 bg-primary/40 rounded-full"></div>
-              <div className="absolute top-6 right-1 w-6 h-px bg-gradient-to-l from-primary/30 to-transparent"></div>
-              <div className="absolute top-1 right-6 w-px h-6 bg-gradient-to-b from-primary/30 to-transparent"></div>
+              <div className="w-8 h-8 border-r-2 border-t-2 border-purple-400"></div>
+              <div className="absolute -top-1 -right-1 w-3 h-3 border-r-2 border-t-2 border-purple-300"></div>
+              <div className="absolute top-2 right-2 w-1 h-1 bg-purple-400 rounded-full"></div>
+              <div className="absolute top-6 right-1 w-6 h-px bg-gradient-to-l from-purple-300 to-transparent"></div>
+              <div className="absolute top-1 right-6 w-px h-6 bg-gradient-to-b from-purple-300 to-transparent"></div>
             </div>
           </div>
           
           {/* Bottom Left Corner */}
           <div className="absolute bottom-0 left-0 p-4">
             <div className="relative">
-              <div className="w-8 h-8 border-l-2 border-b-2 border-primary/30"></div>
-              <div className="absolute -bottom-1 -left-1 w-3 h-3 border-l-2 border-b-2 border-primary/20"></div>
-              <div className="absolute bottom-2 left-2 w-1 h-1 bg-primary/40 rounded-full"></div>
-              <div className="absolute bottom-6 left-1 w-6 h-px bg-gradient-to-r from-primary/30 to-transparent"></div>
-              <div className="absolute bottom-1 left-6 w-px h-6 bg-gradient-to-t from-primary/30 to-transparent"></div>
+              <div className="w-8 h-8 border-l-2 border-b-2 border-purple-400"></div>
+              <div className="absolute -bottom-1 -left-1 w-3 h-3 border-l-2 border-b-2 border-purple-300"></div>
+              <div className="absolute bottom-2 left-2 w-1 h-1 bg-purple-400 rounded-full"></div>
+              <div className="absolute bottom-6 left-1 w-6 h-px bg-gradient-to-r from-purple-300 to-transparent"></div>
+              <div className="absolute bottom-1 left-6 w-px h-6 bg-gradient-to-t from-purple-300 to-transparent"></div>
             </div>
           </div>
           
           {/* Bottom Right Corner */}
           <div className="absolute bottom-0 right-0 p-4">
             <div className="relative">
-              <div className="w-8 h-8 border-r-2 border-b-2 border-primary/30"></div>
-              <div className="absolute -bottom-1 -right-1 w-3 h-3 border-r-2 border-b-2 border-primary/20"></div>
-              <div className="absolute bottom-2 right-2 w-1 h-1 bg-primary/40 rounded-full"></div>
-              <div className="absolute bottom-6 right-1 w-6 h-px bg-gradient-to-l from-primary/30 to-transparent"></div>
-              <div className="absolute bottom-1 right-6 w-px h-6 bg-gradient-to-t from-primary/30 to-transparent"></div>
+              <div className="w-8 h-8 border-r-2 border-b-2 border-purple-400"></div>
+              <div className="absolute -bottom-1 -right-1 w-3 h-3 border-r-2 border-b-2 border-purple-300"></div>
+              <div className="absolute bottom-2 right-2 w-1 h-1 bg-purple-400 rounded-full"></div>
+              <div className="absolute bottom-6 right-1 w-6 h-px bg-gradient-to-l from-purple-300 to-transparent"></div>
+              <div className="absolute bottom-1 right-6 w-px h-6 bg-gradient-to-t from-purple-300 to-transparent"></div>
             </div>
           </div>
         </div>
 
         {/* Content */}
         <div className="relative z-10 p-3 md:p-4 h-full flex flex-col justify-between">
+          {/* Logo at Top */}
+          <div className="absolute top-4 left-4 flex items-center gap-2">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+              <Code className="h-6 w-6 text-white" />
+            </div>
+            <div className="text-left">
+              <p className="text-sm font-bold text-gray-800 leading-none">CodeCert</p>
+              <p className="text-xs text-gray-600 leading-none">Labs</p>
+            </div>
+          </div>
+
           {/* Header Section */}
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-primary to-primary/80 rounded-2xl shadow-lg mb-4 transform rotate-3">
+          <div className="text-center pt-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl shadow-lg mb-4 transform rotate-3">
               <Award className="h-8 w-8 md:h-10 md:w-10 text-white" />
             </div>
             
             <div className="space-y-1">
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-                <span className="text-primary font-bold">
+                <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent font-bold">
                   Certificate
                 </span>
               </h1>
-              <p className="text-sm md:text-base font-medium text-muted-foreground tracking-wider uppercase">
+              <p className="text-sm md:text-base font-medium text-gray-600 tracking-wider uppercase">
                 of Achievement
               </p>
             </div>
@@ -258,27 +269,27 @@ export const Certificate = ({
 
           {/* Divider */}
           <div className="flex items-center justify-center my-4">
-            <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent w-full max-w-32"></div>
-            <div className="mx-3 w-1.5 h-1.5 bg-primary/30 rounded-full"></div>
-            <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent w-full max-w-32"></div>
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent w-full max-w-32"></div>
+            <div className="mx-3 w-1.5 h-1.5 bg-purple-400 rounded-full"></div>
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent w-full max-w-32"></div>
           </div>
 
           {/* Main Content */}
           <div className="text-center space-y-4 flex-1 flex flex-col justify-center">
             <div className="space-y-2">
-              <p className="text-sm md:text-base text-muted-foreground font-light">
+              <p className="text-sm md:text-base text-gray-600 font-light">
                 This certifies that
               </p>
-              <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground leading-tight">
+              <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">
                 {studentName}
               </h2>
             </div>
 
             <div className="space-y-2">
-              <p className="text-sm md:text-base text-muted-foreground font-light">
+              <p className="text-sm md:text-base text-gray-600 font-light">
                 has successfully mastered
               </p>
-              <h3 className="text-base md:text-xl font-semibold text-primary leading-relaxed px-2">
+              <h3 className="text-base md:text-xl font-semibold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent leading-relaxed px-2">
                 {courseName}
               </h3>
             </div>
@@ -286,54 +297,54 @@ export const Certificate = ({
             {/* Achievement Stats */}
             <div className="flex items-center justify-center gap-6 md:gap-8 pt-4">
               <div className="text-center group">
-                <div className="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 bg-quiz-correct/10 rounded-xl md:rounded-2xl mb-2 group-hover:scale-105 transition-transform">
-                  <CheckCircle className="h-6 w-6 md:h-7 md:w-7 text-quiz-correct" />
+                <div className="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 bg-green-50 rounded-xl md:rounded-2xl mb-2 group-hover:scale-105 transition-transform">
+                  <CheckCircle className="h-6 w-6 md:h-7 md:w-7 text-green-600" />
                 </div>
-                <div className="text-xl md:text-2xl font-bold text-quiz-correct mb-1">{percentage}%</div>
-                <p className="text-xs md:text-sm text-muted-foreground font-medium">Score</p>
+                <div className="text-xl md:text-2xl font-bold text-green-600 mb-1">{percentage}%</div>
+                <p className="text-xs md:text-sm text-gray-600 font-medium">Score</p>
               </div>
               
-              <div className="w-px h-12 md:h-14 bg-border/50"></div>
+              <div className="w-px h-12 md:h-14 bg-gray-300"></div>
               
               <div className="text-center group">
-                <div className="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 bg-primary/10 rounded-xl md:rounded-2xl mb-2 group-hover:scale-105 transition-transform">
-                  <Calendar className="h-6 w-6 md:h-7 md:w-7 text-primary" />
+                <div className="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 bg-purple-50 rounded-xl md:rounded-2xl mb-2 group-hover:scale-105 transition-transform">
+                  <Calendar className="h-6 w-6 md:h-7 md:w-7 text-purple-600" />
                 </div>
-                <div className="text-sm md:text-base font-semibold text-foreground mb-1">
+                <div className="text-sm md:text-base font-semibold text-gray-900 mb-1">
                   {completionDate.toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
                   year: 'numeric'
                 })}
                 </div>
-                <p className="text-xs md:text-sm text-muted-foreground font-medium">Completed</p>
+                <p className="text-xs md:text-sm text-gray-600 font-medium">Completed</p>
               </div>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="border-t border-border/30 pt-4 mt-4">
-            <div className="text-center mb-4 text-sky-400">
-              <p className="text-xs md:text-sm text-muted-foreground mb-1">
-                Certificate ID: <span className="font-mono font-medium">{certificateId}</span>
+          <div className="border-t border-gray-200 pt-4 mt-4">
+            <div className="text-center mb-4">
+              <p className="text-xs md:text-sm text-gray-600 mb-1">
+                Certificate ID: <span className="font-mono font-medium text-gray-800">{certificateId}</span>
               </p>
-              <p className="text-xs text-muted-foreground/70">
-                Verified by Programming Platform
+              <p className="text-xs text-gray-500">
+                Verified by CodeCert Labs Programming Platform
               </p>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-2 justify-center no-print">
-              <Button onClick={downloadAsImage} disabled={isDownloading} variant="outline" size="sm" className="border-primary/20 hover:bg-primary/5 flex-1 sm:flex-none">
+              <Button onClick={downloadAsImage} disabled={isDownloading} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700 flex-1 sm:flex-none">
                 <FileImage className="h-3 w-3 mr-1" />
                 PNG
               </Button>
               
-              <Button onClick={downloadAsPDF} disabled={isDownloading} variant="outline" size="sm" className="border-primary/20 hover:bg-primary/5 flex-1 sm:flex-none">
+              <Button onClick={downloadAsPDF} disabled={isDownloading} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700 flex-1 sm:flex-none">
                 <FileText className="h-3 w-3 mr-1" />
                 PDF
               </Button>
               
-              <Button onClick={downloadBatch} disabled={isDownloading} size="sm" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 flex-1 sm:flex-none">
+              <Button onClick={downloadBatch} disabled={isDownloading} size="sm" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 flex-1 sm:flex-none">
                 <Download className="h-3 w-3 mr-1" />
                 {isDownloading ? "..." : "Both"}
               </Button>
