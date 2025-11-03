@@ -161,7 +161,46 @@ const Notes = () => {
 
     toast({
       title: "Export successful",
-      description: "Your notes have been exported successfully.",
+      description: "Your notes have been exported as JSON.",
+    });
+  };
+
+  const handleExportAsText = () => {
+    const textContent = notes.map((note, index) => {
+      const separator = "=".repeat(60);
+      return `${separator}
+NOTE ${index + 1}: ${note.title}
+${separator}
+
+Created: ${new Date(note.created_at).toLocaleString()}
+Updated: ${new Date(note.updated_at).toLocaleString()}
+${note.video_title ? `Video: ${note.video_title}` : ""}
+
+Content:
+${note.content}
+
+`;
+    }).join("\n");
+
+    const fullText = `MY NOTES EXPORT
+Generated: ${new Date().toLocaleString()}
+Total Notes: ${notes.length}
+
+${textContent}`;
+
+    const blob = new Blob([fullText], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `notes-export-${new Date().toISOString().split("T")[0]}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "Export successful",
+      description: "Your notes have been exported as text file.",
     });
   };
 
@@ -186,7 +225,11 @@ const Notes = () => {
           <div className="flex gap-3">
             <Button onClick={handleExport} variant="outline" className="gap-2">
               <Download className="h-4 w-4" />
-              Export All
+              Export JSON
+            </Button>
+            <Button onClick={handleExportAsText} variant="outline" className="gap-2">
+              <FileText className="h-4 w-4" />
+              Export Text
             </Button>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
