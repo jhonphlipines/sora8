@@ -2165,7 +2165,7 @@ const postSchema = new mongoose.Schema({
 
           <Card className="bg-card border-2 border-border min-h-[700px] shadow-2xl">
             <CardHeader className="text-center pb-8">
-              <CardTitle className="text-4xl font-bold text-foreground mb-4">
+              <CardTitle className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-4">
                 {selectedLang.slides[currentSlide].title}
               </CardTitle>
               <Badge variant="outline" className="text-lg px-4 py-2">
@@ -2183,14 +2183,13 @@ const postSchema = new mongoose.Schema({
               {/* Key Points Section */}
               {selectedLang.slides[currentSlide].keyPoints && (
                 <div className="bg-muted border border-border rounded-xl p-6">
-                  <h4 className="text-2xl font-semibold mb-6 text-blue-400 flex items-center">
+                  <h4 className="text-2xl font-semibold mb-6 text-primary flex items-center">
                     🎯 Key Learning Points
                   </h4>
-                  <ul className="space-y-4">
+                  <ul className="space-y-4 list-disc list-inside marker:text-primary">
                     {selectedLang.slides[currentSlide].keyPoints!.map((point, index) => (
-                      <li key={index} className="flex items-start space-x-4">
-                        <div className="w-3 h-3 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-lg text-muted-foreground">{point}</span>
+                      <li key={index} className="text-lg text-foreground pl-2">
+                        {point}
                       </li>
                     ))}
                   </ul>
@@ -2207,7 +2206,7 @@ const postSchema = new mongoose.Schema({
                   </div>
                   <div className="p-6">
                     <pre className="text-sm overflow-x-auto bg-background p-4 rounded-lg border border-border">
-                      <code className="text-green-400 whitespace-pre-wrap">
+                      <code className="text-primary whitespace-pre-wrap">
                         {selectedLang.slides[currentSlide].codeExample}
                       </code>
                     </pre>
@@ -2218,7 +2217,7 @@ const postSchema = new mongoose.Schema({
               {/* Exercise Section */}
               {selectedLang.slides[currentSlide].exercise && (
                 <div className="bg-muted border-2 border-border rounded-xl p-6">
-                  <h4 className="text-xl font-semibold mb-4 text-green-400 flex items-center">
+                  <h4 className="text-xl font-semibold mb-4 text-primary flex items-center">
                     💡 Try It Yourself
                   </h4>
                   <p className="text-lg text-muted-foreground">
@@ -2251,7 +2250,7 @@ const postSchema = new mongoose.Schema({
                   <Button 
                     onClick={goToQuiz} 
                     size="lg"
-                    className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-lg px-6 py-3"
+                    className="text-lg px-6 py-3"
                   >
                     🎯 Take Quiz
                     <ArrowRight className="h-5 w-5 ml-2" />
@@ -2351,9 +2350,9 @@ const postSchema = new mongoose.Schema({
                        onClick={() => setSelectedLanguage(course.id)}
                      >
                        <CardHeader className="text-center p-4">
-                         <div className={`w-12 h-12 mx-auto bg-gradient-to-r ${course.color} rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                           {course.icon}
-                         </div>
+                       <div className="w-12 h-12 mx-auto bg-gradient-primary rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-lg text-primary-foreground">
+                            {course.icon}
+                          </div>
                          <CardTitle className="text-lg text-foreground">
                            {course.level}
                          </CardTitle>
@@ -2368,11 +2367,11 @@ const postSchema = new mongoose.Schema({
                          >
                            {course.slides.length} Lessons
                          </Badge>
-                         {completedLanguages.has(course.id) && (
-                           <Badge variant="default" className="ml-2 bg-green-500 text-xs">
-                             ✅ Done
-                           </Badge>
-                         )}
+                          {completedLanguages.has(course.id) && (
+                            <Badge variant="default" className="ml-2 text-xs">
+                              ✅ Done
+                            </Badge>
+                          )}
                        </CardContent>
                      </Card>
                   ))}

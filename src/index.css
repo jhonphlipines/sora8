@@ -43,6 +43,9 @@ All colors MUST be HSL.
     --gradient-primary: linear-gradient(135deg, hsl(263, 70%, 50%), hsl(220, 70%, 50%));
     --gradient-secondary: linear-gradient(135deg, hsl(220, 70%, 50%), hsl(200, 70%, 50%));
     --gradient-success: linear-gradient(135deg, hsl(142, 76%, 36%), hsl(158, 64%, 52%));
+    --gradient-accent: linear-gradient(135deg, hsl(280, 70%, 50%), hsl(240, 70%, 60%));
+    --gradient-warning: linear-gradient(135deg, hsl(45, 93%, 47%), hsl(35, 91%, 53%));
+    --gradient-info: linear-gradient(135deg, hsl(200, 98%, 39%), hsl(220, 90%, 56%));
     --gradient-card: linear-gradient(135deg, hsl(0, 0%, 100%), hsl(240, 4.8%, 95.9%));
     --gradient-background: linear-gradient(180deg, hsl(0, 0%, 100%), hsl(240, 4.8%, 97%));
     
@@ -102,6 +105,9 @@ All colors MUST be HSL.
     --gradient-primary: linear-gradient(135deg, hsl(263, 70%, 50%), hsl(220, 70%, 50%));
     --gradient-secondary: linear-gradient(135deg, hsl(220, 70%, 50%), hsl(200, 70%, 50%));
     --gradient-success: linear-gradient(135deg, hsl(142, 76%, 36%), hsl(158, 64%, 52%));
+    --gradient-accent: linear-gradient(135deg, hsl(280, 70%, 50%), hsl(240, 70%, 60%));
+    --gradient-warning: linear-gradient(135deg, hsl(45, 93%, 47%), hsl(35, 91%, 53%));
+    --gradient-info: linear-gradient(135deg, hsl(200, 98%, 39%), hsl(220, 90%, 56%));
     --gradient-card: linear-gradient(135deg, hsl(240, 10%, 5%), hsl(240, 10%, 8%));
     --gradient-background: linear-gradient(180deg, hsl(240, 10%, 3.9%), hsl(240, 8%, 6%));
     
