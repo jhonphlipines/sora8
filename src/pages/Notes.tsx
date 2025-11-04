@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,9 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Download, Trash2, Edit, Plus, Search, Calendar } from "lucide-react";
+import { FileText, Download, Trash2, Edit, Plus, Search, Calendar, Type } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Note {
   id: string;
@@ -26,6 +27,7 @@ const Notes = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -204,6 +206,40 @@ ${textContent}`;
     });
   };
 
+  const applyFormatting = (type: 'color' | 'size', value: string) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+
+    if (!selectedText) {
+      toast({
+        title: "No text selected",
+        description: "Please select text to format.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    let formattedText = '';
+    if (type === 'color') {
+      formattedText = `<span style="color: ${value}">${selectedText}</span>`;
+    } else if (type === 'size') {
+      formattedText = `<span style="font-size: ${value}">${selectedText}</span>`;
+    }
+
+    const newContent = 
+      textarea.value.substring(0, start) +
+      formattedText +
+      textarea.value.substring(end);
+
+    textarea.value = newContent;
+    textarea.focus();
+    textarea.setSelectionRange(start, start + formattedText.length);
+  };
+
   const filteredNotes = notes.filter(
     (note) =>
       note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -258,11 +294,68 @@ ${textContent}`;
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Content</label>
+                      <div className="flex gap-2 mb-2 flex-wrap">
+                        <div className="flex gap-1">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => applyFormatting('color', '#ef4444')}
+                            className="h-8 w-8 p-0 bg-red-500 hover:bg-red-600"
+                            title="Red"
+                          />
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => applyFormatting('color', '#3b82f6')}
+                            className="h-8 w-8 p-0 bg-blue-500 hover:bg-blue-600"
+                            title="Blue"
+                          />
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => applyFormatting('color', '#22c55e')}
+                            className="h-8 w-8 p-0 bg-green-500 hover:bg-green-600"
+                            title="Green"
+                          />
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => applyFormatting('color', '#eab308')}
+                            className="h-8 w-8 p-0 bg-yellow-500 hover:bg-yellow-600"
+                            title="Yellow"
+                          />
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => applyFormatting('color', '#a855f7')}
+                            className="h-8 w-8 p-0 bg-purple-500 hover:bg-purple-600"
+                            title="Purple"
+                          />
+                        </div>
+                        <Select onValueChange={(value) => applyFormatting('size', value)}>
+                          <SelectTrigger className="w-[120px] h-8">
+                            <Type className="h-4 w-4 mr-2" />
+                            <SelectValue placeholder="Size" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="12px">Small</SelectItem>
+                            <SelectItem value="14px">Normal</SelectItem>
+                            <SelectItem value="18px">Large</SelectItem>
+                            <SelectItem value="24px">Extra Large</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                       <Textarea
+                        ref={textareaRef}
                         name="content"
-                        placeholder="Write your note here..."
+                        placeholder="Write your note here... Select text to apply formatting."
                         defaultValue={editingNote?.content || ""}
-                        className="min-h-[200px]"
+                        className="min-h-[200px] font-mono text-sm"
                         required
                       />
                     </div>
@@ -350,9 +443,10 @@ ${textContent}`;
                 </CardHeader>
                 <CardContent>
                   <ScrollArea className="h-32">
-                    <CardDescription className="whitespace-pre-wrap">
-                      {note.content}
-                    </CardDescription>
+                    <CardDescription 
+                      className="whitespace-pre-wrap"
+                      dangerouslySetInnerHTML={{ __html: note.content }}
+                    />
                   </ScrollArea>
                   <div className="flex items-center gap-2 mt-4 text-xs text-muted-foreground">
                     <Calendar className="h-3 w-3" />
