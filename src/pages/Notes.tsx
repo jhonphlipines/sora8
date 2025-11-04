@@ -284,7 +284,7 @@ ${textContent}`;
                   New Note
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <form onSubmit={handleSaveNote}>
                   <DialogHeader>
                     <DialogTitle>{editingNote ? "Edit Note" : "Create New Note"}</DialogTitle>
@@ -364,7 +364,7 @@ ${textContent}`;
                         id="note-content-editor"
                         ref={textareaRef as any}
                         contentEditable
-                        className="min-h-[200px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                        className="min-h-[200px] max-h-[400px] overflow-y-auto w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         dangerouslySetInnerHTML={{ __html: editingNote?.content || "" }}
                         suppressContentEditableWarning
                         onBlur={(e) => {
