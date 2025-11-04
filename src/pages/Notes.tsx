@@ -425,7 +425,14 @@ ${textContent}`;
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredNotes.map((note) => (
-              <Card key={note.id} className="hover:shadow-lg transition-shadow">
+              <Card 
+                key={note.id} 
+                className="hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => {
+                  setEditingNote(note);
+                  setIsDialogOpen(true);
+                }}
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
@@ -440,7 +447,8 @@ ${textContent}`;
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           setEditingNote(note);
                           setIsDialogOpen(true);
                         }}
@@ -451,7 +459,10 @@ ${textContent}`;
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleDelete(note.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(note.id);
+                        }}
                         className="h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
                       >
                         <Trash2 className="h-4 w-4" />
