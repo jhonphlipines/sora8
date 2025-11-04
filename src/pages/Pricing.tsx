@@ -26,7 +26,7 @@ const Pricing = () => {
     },
     {
       name: "Pro",
-      price: "$15", 
+      price: "$12", 
       period: "/month",
       description: "Best value for active learners",
       popular: true,
