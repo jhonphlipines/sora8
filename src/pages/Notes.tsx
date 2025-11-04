@@ -80,7 +80,10 @@ const Notes = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const title = formData.get("title") as string;
-    const content = formData.get("content") as string;
+    
+    // Get content from contentEditable div
+    const contentDiv = document.getElementById('note-content-editor');
+    const content = contentDiv?.innerHTML || "";
 
     if (!title.trim() || !content.trim()) {
       toast({
@@ -207,13 +210,19 @@ ${textContent}`;
   };
 
   const applyFormatting = (type: 'color' | 'size', value: string) => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) {
+      toast({
+        title: "No text selected",
+        description: "Please select text to format.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = textarea.value.substring(start, end);
-
+    const range = selection.getRangeAt(0);
+    const selectedText = range.toString();
+    
     if (!selectedText) {
       toast({
         title: "No text selected",
@@ -223,21 +232,22 @@ ${textContent}`;
       return;
     }
 
-    let formattedText = '';
+    const span = document.createElement('span');
     if (type === 'color') {
-      formattedText = `<span style="color: ${value}">${selectedText}</span>`;
+      span.style.color = value;
     } else if (type === 'size') {
-      formattedText = `<span style="font-size: ${value}">${selectedText}</span>`;
+      span.style.fontSize = value;
     }
+    span.textContent = selectedText;
 
-    const newContent = 
-      textarea.value.substring(0, start) +
-      formattedText +
-      textarea.value.substring(end);
-
-    textarea.value = newContent;
-    textarea.focus();
-    textarea.setSelectionRange(start, start + formattedText.length);
+    range.deleteContents();
+    range.insertNode(span);
+    
+    // Move cursor after the inserted span
+    range.setStartAfter(span);
+    range.setEndAfter(span);
+    selection.removeAllRanges();
+    selection.addRange(range);
   };
 
   const filteredNotes = notes.filter(
@@ -301,7 +311,7 @@ ${textContent}`;
                             size="sm"
                             variant="outline"
                             onClick={() => applyFormatting('color', '#ef4444')}
-                            className="h-8 w-8 p-0 bg-red-500 hover:bg-red-600"
+                            className="h-8 w-8 p-0 bg-red-500 hover:bg-red-600 border-0"
                             title="Red"
                           />
                           <Button
@@ -309,7 +319,7 @@ ${textContent}`;
                             size="sm"
                             variant="outline"
                             onClick={() => applyFormatting('color', '#3b82f6')}
-                            className="h-8 w-8 p-0 bg-blue-500 hover:bg-blue-600"
+                            className="h-8 w-8 p-0 bg-blue-500 hover:bg-blue-600 border-0"
                             title="Blue"
                           />
                           <Button
@@ -317,7 +327,7 @@ ${textContent}`;
                             size="sm"
                             variant="outline"
                             onClick={() => applyFormatting('color', '#22c55e')}
-                            className="h-8 w-8 p-0 bg-green-500 hover:bg-green-600"
+                            className="h-8 w-8 p-0 bg-green-500 hover:bg-green-600 border-0"
                             title="Green"
                           />
                           <Button
@@ -325,7 +335,7 @@ ${textContent}`;
                             size="sm"
                             variant="outline"
                             onClick={() => applyFormatting('color', '#eab308')}
-                            className="h-8 w-8 p-0 bg-yellow-500 hover:bg-yellow-600"
+                            className="h-8 w-8 p-0 bg-yellow-500 hover:bg-yellow-600 border-0"
                             title="Yellow"
                           />
                           <Button
@@ -333,7 +343,7 @@ ${textContent}`;
                             size="sm"
                             variant="outline"
                             onClick={() => applyFormatting('color', '#a855f7')}
-                            className="h-8 w-8 p-0 bg-purple-500 hover:bg-purple-600"
+                            className="h-8 w-8 p-0 bg-purple-500 hover:bg-purple-600 border-0"
                             title="Purple"
                           />
                         </div>
@@ -350,14 +360,22 @@ ${textContent}`;
                           </SelectContent>
                         </Select>
                       </div>
-                      <Textarea
-                        ref={textareaRef}
-                        name="content"
-                        placeholder="Write your note here... Select text to apply formatting."
-                        defaultValue={editingNote?.content || ""}
-                        className="min-h-[200px] font-mono text-sm"
-                        required
+                      <div
+                        id="note-content-editor"
+                        ref={textareaRef as any}
+                        contentEditable
+                        className="min-h-[200px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                        dangerouslySetInnerHTML={{ __html: editingNote?.content || "" }}
+                        suppressContentEditableWarning
+                        onBlur={(e) => {
+                          if (!e.currentTarget.textContent?.trim()) {
+                            e.currentTarget.innerHTML = "";
+                          }
+                        }}
                       />
+                      <p className="text-xs text-muted-foreground">
+                        Select text and use the formatting buttons above to change color or size
+                      </p>
                     </div>
                   </div>
                   <DialogFooter>
