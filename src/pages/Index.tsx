@@ -76,13 +76,7 @@ const Index = () => {
 
               {/* Stats */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 md:gap-6 pt-4 sm:pt-8 border-t border-border/50">
-                {stats.map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <stat.icon className="h-4 w-4 sm:h-5 sm:w-5 mx-auto mb-1 sm:mb-2 text-primary" />
-                    <p className="text-base sm:text-lg md:text-xl font-bold text-foreground">{stat.value}</p>
-                    <p className="text-xs sm:text-sm text-muted-foreground">{stat.label}</p>
-                  </div>
-                ))}
+                {stats.map((stat, index) => {})}
               </div>
             </div>
 
