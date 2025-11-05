@@ -43,13 +43,17 @@ export const Certificate = ({
     setIsDownloading(true);
     try {
       console.log("Starting image download...");
+      
+      // Wait for images to be fully rendered
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       const canvas = await html2canvas(certificateRef.current, {
         scale: 2,
         backgroundColor: "#ffffff",
         useCORS: true,
-        allowTaint: false,
+        allowTaint: true,
         foreignObjectRendering: false,
-        logging: false,
+        logging: true,
         x: 0,
         y: 0,
         height: certificateRef.current.offsetHeight,
@@ -103,13 +107,17 @@ export const Certificate = ({
     setIsDownloading(true);
     try {
       console.log("Starting PDF download...");
+      
+      // Wait for images to be fully rendered
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       const canvas = await html2canvas(certificateRef.current, {
         scale: 2,
         backgroundColor: "#ffffff",
         useCORS: true,
-        allowTaint: false,
+        allowTaint: true,
         foreignObjectRendering: false,
-        logging: false,
+        logging: true,
         x: 0,
         y: 0,
         height: certificateRef.current.offsetHeight,
