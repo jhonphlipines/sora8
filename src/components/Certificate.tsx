@@ -241,11 +241,9 @@ export const Certificate = ({
         <div className="relative z-10 p-3 md:p-4 h-full flex flex-col justify-between">
           {/* Logo at Top */}
           <div className="absolute top-4 left-4 flex items-center gap-2">
-            <img 
-              src={certificateLogo} 
-              alt="Certificate Logo" 
-              className="w-12 h-12 rounded-full object-cover shadow-lg"
-            />
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+              <Code className="h-6 w-6 text-white" />
+            </div>
             <div className="text-left">
               <p className="text-sm font-bold text-gray-800 leading-none">CodeCert</p>
               <p className="text-xs text-gray-600 leading-none">Labs</p>
@@ -254,8 +252,12 @@ export const Certificate = ({
 
           {/* Header Section */}
           <div className="text-center pt-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl shadow-lg mb-4 transform rotate-3">
-              <Award className="h-8 w-8 md:h-10 md:w-10 text-white" />
+            <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full shadow-lg mb-4 overflow-hidden">
+              <img 
+                src={certificateLogo} 
+                alt="Certificate Logo" 
+                className="w-full h-full object-cover"
+              />
             </div>
             
             <div className="space-y-1">
