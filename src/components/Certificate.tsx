@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import certificateLogo from "@/assets/certificate-logo.jpg";
 interface CertificateProps {
   studentName: string;
   score: number;
@@ -240,9 +241,11 @@ export const Certificate = ({
         <div className="relative z-10 p-3 md:p-4 h-full flex flex-col justify-between">
           {/* Logo at Top */}
           <div className="absolute top-4 left-4 flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-              <Code className="h-6 w-6 text-white" />
-            </div>
+            <img 
+              src={certificateLogo} 
+              alt="Certificate Logo" 
+              className="w-12 h-12 rounded-full object-cover shadow-lg"
+            />
             <div className="text-left">
               <p className="text-sm font-bold text-gray-800 leading-none">CodeCert</p>
               <p className="text-xs text-gray-600 leading-none">Labs</p>
