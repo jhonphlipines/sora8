@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BookOpen, Trophy, Settings, Code, Database, Globe, Smartphone, Target, Award, DollarSign, BarChart3, ChevronRight, FileText } from "lucide-react";
+import { Home, BookOpen, Trophy, Settings, Code, Database, Globe, Smartphone, Target, Award, DollarSign, BarChart3, ChevronRight, FileText, GraduationCap } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, useSidebar } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -28,6 +28,10 @@ const labItems = [{
   title: "Courses",
   icon: BookOpen,
   subItems: [{
+    title: "Interactive Courses",
+    url: "/interactive-courses",
+    icon: GraduationCap
+  }, {
     title: "courses",
     url: "/learn",
     icon: Code
