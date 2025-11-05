@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import certificateLogo from "@/assets/certificate-logo.jpg";
 interface CertificateProps {
   studentName: string;
   score: number;
@@ -26,23 +27,33 @@ export const Certificate = ({
   } = useToast();
   const certificateRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const percentage = Math.round(score / totalQuestions * 100);
   const isPassed = percentage >= 70;
   const downloadAsImage = async () => {
-    if (!certificateRef.current) {
-      console.error("Certificate ref not found");
+    if (!certificateRef.current || !imageLoaded) {
+      console.error("Certificate ref not found or image not loaded");
+      toast({
+        title: "Please wait",
+        description: "Certificate is still loading...",
+        variant: "destructive"
+      });
       return;
     }
     setIsDownloading(true);
     try {
       console.log("Starting image download...");
+      
+      // Wait for images to be fully rendered
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       const canvas = await html2canvas(certificateRef.current, {
         scale: 2,
         backgroundColor: "#ffffff",
         useCORS: true,
-        allowTaint: false,
+        allowTaint: true,
         foreignObjectRendering: false,
-        logging: false,
+        logging: true,
         x: 0,
         y: 0,
         height: certificateRef.current.offsetHeight,
@@ -84,20 +95,29 @@ export const Certificate = ({
     }
   };
   const downloadAsPDF = async () => {
-    if (!certificateRef.current) {
-      console.error("Certificate ref not found");
+    if (!certificateRef.current || !imageLoaded) {
+      console.error("Certificate ref not found or image not loaded");
+      toast({
+        title: "Please wait",
+        description: "Certificate is still loading...",
+        variant: "destructive"
+      });
       return;
     }
     setIsDownloading(true);
     try {
       console.log("Starting PDF download...");
+      
+      // Wait for images to be fully rendered
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       const canvas = await html2canvas(certificateRef.current, {
         scale: 2,
         backgroundColor: "#ffffff",
         useCORS: true,
-        allowTaint: false,
+        allowTaint: true,
         foreignObjectRendering: false,
-        logging: false,
+        logging: true,
         x: 0,
         y: 0,
         height: certificateRef.current.offsetHeight,
@@ -251,8 +271,18 @@ export const Certificate = ({
 
           {/* Header Section */}
           <div className="text-center pt-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl shadow-lg mb-4 transform rotate-3">
-              <Award className="h-8 w-8 md:h-10 md:w-10 text-white" />
+            <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full shadow-lg mb-4 overflow-hidden">
+              <img 
+                src={certificateLogo} 
+                alt="Certificate Logo" 
+                className="w-full h-full object-cover"
+                crossOrigin="anonymous"
+                onLoad={() => setImageLoaded(true)}
+                onError={() => {
+                  console.error("Failed to load certificate logo");
+                  setImageLoaded(true); // Allow download even if image fails
+                }}
+              />
             </div>
             
             <div className="space-y-1">
@@ -334,19 +364,19 @@ export const Certificate = ({
             </div>
             
             <div className="flex flex-col sm:flex-row gap-2 justify-center no-print">
-              <Button onClick={downloadAsImage} disabled={isDownloading} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700 flex-1 sm:flex-none">
+              <Button onClick={downloadAsImage} disabled={isDownloading || !imageLoaded} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700 flex-1 sm:flex-none">
                 <FileImage className="h-3 w-3 mr-1" />
                 PNG
               </Button>
               
-              <Button onClick={downloadAsPDF} disabled={isDownloading} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700 flex-1 sm:flex-none">
+              <Button onClick={downloadAsPDF} disabled={isDownloading || !imageLoaded} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700 flex-1 sm:flex-none">
                 <FileText className="h-3 w-3 mr-1" />
                 PDF
               </Button>
               
-              <Button onClick={downloadBatch} disabled={isDownloading} size="sm" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 flex-1 sm:flex-none">
+              <Button onClick={downloadBatch} disabled={isDownloading || !imageLoaded} size="sm" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 flex-1 sm:flex-none">
                 <Download className="h-3 w-3 mr-1" />
-                {isDownloading ? "..." : "Both"}
+                {isDownloading ? "..." : !imageLoaded ? "Loading..." : "Both"}
               </Button>
             </div>
           </div>
