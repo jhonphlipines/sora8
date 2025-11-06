@@ -42,7 +42,7 @@ export const Certificate = ({
     }
     setIsDownloading(true);
     try {
-      console.log("Starting image download...");
+      console.log("Starting PNG download...");
       
       // Wait for images to be fully rendered
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -64,7 +64,7 @@ export const Certificate = ({
           return element.classList.contains('no-print');
         }
       });
-      console.log("Canvas created, converting to blob...");
+      console.log("Canvas created, converting to PNG blob...");
       canvas.toBlob(blob => {
         if (!blob) {
           throw new Error("Failed to create image blob");
@@ -77,12 +77,77 @@ export const Certificate = ({
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
-        console.log("Image download completed");
+        console.log("PNG download completed");
         toast({
           title: "Certificate Downloaded",
-          description: "Your certificate has been saved as an image."
+          description: "Your certificate has been saved as PNG."
         });
       }, 'image/png', 1.0);
+    } catch (error) {
+      console.error("Download error:", error);
+      toast({
+        title: "Download Failed",
+        description: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        variant: "destructive"
+      });
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const downloadAsJPG = async () => {
+    if (!certificateRef.current || !imageLoaded) {
+      console.error("Certificate ref not found or image not loaded");
+      toast({
+        title: "Please wait",
+        description: "Certificate is still loading...",
+        variant: "destructive"
+      });
+      return;
+    }
+    setIsDownloading(true);
+    try {
+      console.log("Starting JPG download...");
+      
+      // Wait for images to be fully rendered
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const canvas = await html2canvas(certificateRef.current, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true,
+        allowTaint: true,
+        foreignObjectRendering: false,
+        logging: true,
+        x: 0,
+        y: 0,
+        height: certificateRef.current.offsetHeight,
+        width: certificateRef.current.offsetWidth,
+        scrollX: 0,
+        scrollY: 0,
+        ignoreElements: (element) => {
+          return element.classList.contains('no-print');
+        }
+      });
+      console.log("Canvas created, converting to JPG blob...");
+      canvas.toBlob(blob => {
+        if (!blob) {
+          throw new Error("Failed to create image blob");
+        }
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = `certificate-${studentName.replace(/\s+/g, '-').toLowerCase()}-${certificateId}.jpg`;
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        console.log("JPG download completed");
+        toast({
+          title: "Certificate Downloaded",
+          description: "Your certificate has been saved as JPG."
+        });
+      }, 'image/jpeg', 0.95);
     } catch (error) {
       console.error("Download error:", error);
       toast({
@@ -369,6 +434,11 @@ export const Certificate = ({
                 PNG
               </Button>
               
+              <Button onClick={downloadAsJPG} disabled={isDownloading || !imageLoaded} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700 flex-1 sm:flex-none">
+                <FileImage className="h-3 w-3 mr-1" />
+                JPG
+              </Button>
+              
               <Button onClick={downloadAsPDF} disabled={isDownloading || !imageLoaded} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700 flex-1 sm:flex-none">
                 <FileText className="h-3 w-3 mr-1" />
                 PDF
@@ -376,7 +446,7 @@ export const Certificate = ({
               
               <Button onClick={downloadBatch} disabled={isDownloading || !imageLoaded} size="sm" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 flex-1 sm:flex-none">
                 <Download className="h-3 w-3 mr-1" />
-                {isDownloading ? "..." : !imageLoaded ? "Loading..." : "Both"}
+                {isDownloading ? "..." : !imageLoaded ? "Loading..." : "All"}
               </Button>
             </div>
           </div>
