@@ -1,9 +1,28 @@
-import { useState } from "react";
-import { BookOpen, Beaker, Globe, Calculator, GraduationCap, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { BookOpen, Beaker, Globe, Calculator, GraduationCap, ChevronRight, Play, ArrowLeft } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+const YOUTUBE_API_KEY = "AIzaSyAYIZFLc4DU7o219ImEiCKqLjH10x7Nm_I";
+
+interface YouTubeVideo {
+  id: { videoId: string };
+  snippet: {
+    title: string;
+    description: string;
+    thumbnails: {
+      medium: { url: string };
+      high: { url: string };
+    };
+    channelTitle: string;
+    publishedAt: string;
+  };
+}
 
 const subjects = [
   {
@@ -47,6 +66,11 @@ const classes = [
 const InteractiveCourses = () => {
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
   const [selectedClass, setSelectedClass] = useState<number | null>(null);
+  const [showVideos, setShowVideos] = useState(false);
+  const [videos, setVideos] = useState<YouTubeVideo[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSubjectSelect = (subjectId: string) => {
     setSelectedSubject(subjectId);
@@ -57,13 +81,228 @@ const InteractiveCourses = () => {
     setSelectedClass(classLevel);
   };
 
-  const handleStartCourse = () => {
-    if (selectedSubject && selectedClass) {
-      // Navigate to course content
-      console.log(`Starting ${selectedSubject} for Class ${selectedClass}`);
-      // You can add navigation logic here
+  const getVideoSearchQuery = () => {
+    const subject = subjects.find(s => s.id === selectedSubject);
+    return `${subject?.name} class ${selectedClass} tutorial educational`;
+  };
+
+  const searchYouTubeVideos = async (query: string) => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=12&q=${encodeURIComponent(
+          query
+        )}&type=video&key=${YOUTUBE_API_KEY}&order=relevance&videoDuration=medium`
+      );
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch videos');
+      }
+      
+      const data = await response.json();
+      setVideos(data.items || []);
+    } catch (error) {
+      console.error("Error fetching YouTube videos:", error);
+      setVideos([]);
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (showVideos) {
+      searchYouTubeVideos(getVideoSearchQuery());
+    }
+  }, [showVideos]);
+
+  const handleStartCourse = () => {
+    if (selectedSubject && selectedClass) {
+      setShowVideos(true);
+    }
+  };
+
+  const handleBackToSelection = () => {
+    setShowVideos(false);
+    setSelectedVideo(null);
+    setVideos([]);
+  };
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      searchYouTubeVideos(searchQuery);
+    }
+  };
+
+  const truncateText = (text: string, maxLength: number) => {
+    return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+  };
+
+  // Video Player View
+  if (selectedVideo) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted p-6">
+        <div className="max-w-6xl mx-auto">
+          <Button 
+            onClick={() => setSelectedVideo(null)} 
+            variant="outline" 
+            className="mb-6"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Videos
+          </Button>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="line-clamp-2">
+                    {videos.find(v => v.id.videoId === selectedVideo)?.snippet.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="aspect-video rounded-lg overflow-hidden bg-black">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      src={`https://www.youtube.com/embed/${selectedVideo}?autoplay=1`}
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <div className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Play className="h-5 w-5" />
+                    Related Videos
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[600px]">
+                    <div className="space-y-3 pr-4">
+                      {videos.slice(0, 8).map((video) => (
+                        <div
+                          key={video.id.videoId}
+                          className="flex gap-3 cursor-pointer hover:bg-muted/50 p-2 rounded-lg transition-colors"
+                          onClick={() => setSelectedVideo(video.id.videoId)}
+                        >
+                          <img
+                            src={video.snippet.thumbnails.medium.url}
+                            alt={video.snippet.title}
+                            className="w-24 h-16 object-cover rounded flex-shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium line-clamp-2 mb-1">
+                              {truncateText(video.snippet.title, 60)}
+                            </p>
+                            <p className="text-xs text-muted-foreground line-clamp-1">
+                              {video.snippet.channelTitle}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Videos List View
+  if (showVideos) {
+    const subject = subjects.find(s => s.id === selectedSubject);
+    const Icon = subject?.icon || BookOpen;
+    
+    return (
+      <div className="container mx-auto p-6 space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className={`w-12 h-12 rounded-lg ${subject?.color} flex items-center justify-center`}>
+              <Icon className="h-6 w-6" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold">
+                {subject?.name} - Class {selectedClass}
+              </h1>
+              <p className="text-muted-foreground">Educational Videos</p>
+            </div>
+          </div>
+          <Button variant="outline" onClick={handleBackToSelection}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Button>
+        </div>
+
+        <div className="flex gap-2">
+          <Input
+            placeholder="Search for specific topics..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            className="flex-1"
+          />
+          <Button onClick={handleSearch}>Search</Button>
+        </div>
+
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <Card key={i}>
+                <CardContent className="p-0">
+                  <Skeleton className="w-full aspect-video rounded-t-lg" />
+                  <div className="p-4 space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-3/4" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {videos.map((video) => (
+              <Card 
+                key={video.id.videoId}
+                className="cursor-pointer transition-all hover:shadow-lg hover:scale-[1.02]"
+                onClick={() => setSelectedVideo(video.id.videoId)}
+              >
+                <CardContent className="p-0">
+                  <div className="relative group">
+                    <img
+                      src={video.snippet.thumbnails.high.url}
+                      alt={video.snippet.title}
+                      className="w-full aspect-video object-cover rounded-t-lg"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-t-lg">
+                      <Play className="h-16 w-16 text-white" />
+                    </div>
+                  </div>
+                  <div className="p-4 space-y-2">
+                    <h3 className="font-semibold line-clamp-2 min-h-[48px]">
+                      {video.snippet.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground line-clamp-1">
+                      {video.snippet.channelTitle}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6 space-y-8">
