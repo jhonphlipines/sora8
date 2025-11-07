@@ -25,7 +25,7 @@ const Pricing = () => {
         body: { 
           action: 'createOrder',
           amount: amount,
-          currency: 'INR'
+          currency: 'USD'
         }
       });
 
