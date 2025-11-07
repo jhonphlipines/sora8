@@ -89,9 +89,7 @@ export function AppSidebar() {
       <SidebarContent className="bg-sidebar-background">
         {/* Brand Section */}
         {!isCollapsed && <div className="p-4 border-b border-sidebar-border">
-            <h2 className="text-lg font-bold text-sidebar-foreground">
-              🧪 CodeCert Labs
-            </h2>
+            <h2 className="text-lg font-bold text-sidebar-foreground">🧪 LINTERMAN</h2>
             <p className="text-xs text-sidebar-foreground/70">Development Environment</p>
           </div>}
 
