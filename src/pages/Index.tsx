@@ -77,17 +77,9 @@ const Index = () => {
               {/* Stats */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 md:gap-6 pt-4 sm:pt-8 border-t border-border/50">
                 {stats.map((stat, index) => {
-                  const Icon = stat.icon;
-                  return (
-                    <div key={index} className="text-center space-y-1 sm:space-y-2">
-                      <div className="flex justify-center mb-1 sm:mb-2">
-                        <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                      </div>
-                      <div className="text-lg sm:text-xl md:text-2xl font-bold text-foreground">{stat.value}</div>
-                      <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>
-                    </div>
-                  );
-                })}
+                const Icon = stat.icon;
+                return;
+              })}
               </div>
             </div>
 
