@@ -4,9 +4,86 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, CheckCircle, Award, Clock, BookOpen } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
 
 const Pricing = () => {
   const navigate = useNavigate();
+
+  const handlePayment = async (planName: string, amount: number) => {
+    try {
+      toast.loading("Initiating payment...");
+
+      // Create order
+      const { data: orderData, error: orderError } = await supabase.functions.invoke('razorpay-payment', {
+        body: { 
+          action: 'createOrder',
+          amount: amount,
+          currency: 'INR'
+        }
+      });
+
+      if (orderError) throw orderError;
+
+      const options = {
+        key: "rzp_test_RcfTGDZo0SqZz1",
+        amount: orderData.order.amount,
+        currency: orderData.order.currency,
+        name: "EDU SKILL",
+        description: `${planName} Plan`,
+        order_id: orderData.order.id,
+        handler: async function (response: any) {
+          try {
+            toast.loading("Verifying payment...");
+
+            // Verify payment
+            const { data: verifyData, error: verifyError } = await supabase.functions.invoke('razorpay-payment', {
+              body: {
+                action: 'verifyPayment',
+                orderId: response.razorpay_order_id,
+                paymentId: response.razorpay_payment_id,
+                signature: response.razorpay_signature
+              }
+            });
+
+            if (verifyError) throw verifyError;
+
+            if (verifyData.verified) {
+              toast.success("Payment successful! 🎉");
+              navigate('/tests');
+            } else {
+              toast.error("Payment verification failed");
+            }
+          } catch (error) {
+            console.error('Payment verification error:', error);
+            toast.error("Payment verification failed");
+          }
+        },
+        prefill: {
+          name: "",
+          email: "",
+          contact: ""
+        },
+        theme: {
+          color: "#0EA5E9"
+        }
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+
+      toast.dismiss();
+    } catch (error) {
+      console.error('Payment error:', error);
+      toast.error("Failed to initiate payment");
+    }
+  };
 
   const plans = [
     {
@@ -128,7 +205,10 @@ const Pricing = () => {
                       ? 'bg-[var(--gradient-primary)] border-0 shadow-[var(--glow-primary)]' 
                       : 'bg-[var(--gradient-primary)] border-0'
                   }`}
-                  onClick={() => navigate('/tests')}
+                  onClick={() => {
+                    const priceNum = parseInt(plan.price.replace('$', ''));
+                    handlePayment(plan.name, priceNum);
+                  }}
                 >
                   {plan.buttonText}
                 </Button>
