@@ -93,7 +93,7 @@ const Pricing = () => {
       description: "Perfect for trying out our platform",
       popular: false,
       features: [
-        "5 Certification Test",
+        "1 Certification Test",
         "Professional Certificate",
         "Instant Results",
         "30-day Certificate Access"
@@ -108,7 +108,7 @@ const Pricing = () => {
       description: "Best value for active learners",
       popular: true,
       features: [
-        "20 Certification Tests",
+        "5 Certification Tests",
         "Professional Certificates",
         "Priority Support",
         "Lifetime Certificate Access",
