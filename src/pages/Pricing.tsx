@@ -88,7 +88,7 @@ const Pricing = () => {
   const plans = [
     {
       name: "Basic",
-      price: "₹250",
+      price: "250",
       period: "/test",
       description: "Perfect for trying out our platform",
       popular: false,
@@ -103,7 +103,7 @@ const Pricing = () => {
     },
     {
       name: "Pro",
-      price: "₹899", 
+      price: "899", 
       period: "/month",
       description: "Best value for active learners",
       popular: true,
@@ -119,7 +119,7 @@ const Pricing = () => {
     },
     {
       name: "Enterprise",
-      price: "₹2999",
+      price: "2999",
       period: "/month", 
       description: "For teams and organizations",
       popular: false,
