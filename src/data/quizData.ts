@@ -4160,6 +4160,215 @@ const javaQuestions: QuizQuestion[] = [
     ],
     explanation: "The 'public' access modifier makes class members accessible from any other class."
   }
+  {
+    "id": "java4",
+    "question": "Which of the following is NOT a primitive data type in Java?",
+    "options": [
+      { "id": "a", "text": "int", "isCorrect": false },
+      { "id": "b", "text": "String", "isCorrect": true },
+      { "id": "c", "text": "boolean", "isCorrect": false },
+      { "id": "d", "text": "char", "isCorrect": false }
+    ],
+    "explanation": "The primitive data types in Java are `byte`, `short`, `int`, `long`, `float`, `double`, `boolean`, and `char`. **String** is a class (an object type) in Java, not a primitive data type."
+  },
+  {
+    "id": "java5",
+    "question": "What is the size of an 'int' variable in Java?",
+    "options": [
+      { "id": "a", "text": "8 bits", "isCorrect": false },
+      { "id": "b", "text": "16 bits", "isCorrect": false },
+      { "id": "c", "text": "32 bits", "isCorrect": true },
+      { "id": "d", "text": "64 bits", "isCorrect": false }
+    ],
+    "explanation": "An **int** data type is a 32-bit signed two's complement integer. This is a common fundamental question in Java."
+  },
+  {
+    "id": "java6",
+    "question": "Which keyword is used to prevent a class from being inherited?",
+    "options": [
+      { "id": "a", "text": "static", "isCorrect": false },
+      { "id": "b", "text": "abstract", "isCorrect": false },
+      { "id": "c", "text": "final", "isCorrect": true },
+      { "id": "d", "text": "private", "isCorrect": false }
+    ],
+    "explanation": "The **final** keyword, when applied to a class, prevents it from being subclassed (inherited). When applied to a method, it prevents overriding, and when applied to a variable, it makes it a constant."
+  },
+  {
+    "id": "java7",
+    "question": "How do you correctly declare and initialize an array of 5 integers in Java?",
+    "options": [
+      { "id": "a", "text": "int[] arr = new int(5);", "isCorrect": false },
+      { "id": "b", "text": "int arr[] = new int[5];", "isCorrect": true },
+      { "id": "c", "text": "int arr[5];", "isCorrect": false },
+      { "id": "d", "text": "array int[5];", "isCorrect": false }
+    ],
+    "explanation": "The correct syntax to declare and instantiate an array in Java is `dataType[] arrayName = new dataType[size];`. Option B uses the valid alternative notation `dataType arrayName[]`."
+  }
+  {
+    "id": "java8",
+    "question": "Which of these is used for multi-line comments in Java?",
+    "options": [
+      { "id": "a", "text": "// comment", "isCorrect": false },
+      { "id": "b", "text": "/* comment */", "isCorrect": true },
+      { "id": "c", "text": "# comment", "isCorrect": false },
+      { "id": "d", "text": "", "isCorrect": false }
+    ],
+    "explanation": "Multi-line comments in Java are enclosed between **/* and */**. The `//` is used for single-line comments."
+  },
+  {
+    "id": "java9",
+    "question": "What is method overloading in Java?",
+    "options": [
+      { "id": "a", "text": "Defining a subclass method with the same name and arguments as a superclass method.", "isCorrect": false },
+      { "id": "b", "text": "Defining two or more methods in the same class with the same name but different parameters.", "isCorrect": true },
+      { "id": "c", "text": "Defining methods in an interface.", "isCorrect": false },
+      { "id": "d", "text": "Using the 'final' keyword on a method.", "isCorrect": false }
+    ],
+    "explanation": "**Method Overloading** is a feature that allows a class to have more than one method with the same name, provided their parameter lists (argument types or number of arguments) are different. This is a form of **Polymorphism**."
+  },
+  {
+    "id": "java10",
+    "question": "Which operator is used to check if two object references are equal (point to the same object)?",
+    "options": [
+      { "id": "a", "text": ".equals()", "isCorrect": false },
+      { "id": "b", "text": "==", "isCorrect": true },
+      { "id": "c", "text": ".compare()", "isCorrect": false },
+      { "id": "d", "text": "!==", "isCorrect": false }
+    ],
+    "explanation": "The **==** operator compares the **references** for objects. The `.equals()` method is used to compare the **content** of the objects (though it must be properly overridden for custom classes)."
+  },
+  {
+    "id": "java11",
+    "question": "Which statement is used to execute a block of code at least once, then repeatedly as long as a condition is true?",
+    "options": [
+      { "id": "a", "text": "while loop", "isCorrect": false },
+      { "id": "b", "text": "for loop", "isCorrect": false },
+      { "id": "c", "text": "do-while loop", "isCorrect": true },
+      { "id": "d", "text": "if-else statement", "isCorrect": false }
+    ],
+    "explanation": "The **do-while loop** is an exit-controlled loop. It executes the body once before checking the condition, guaranteeing at least one execution."
+  },
+  {
+    "id": "java12",
+    "question": "What is the base class for all classes in Java?",
+    "options": [
+      { "id": "a", "text": "Main", "isCorrect": false },
+      { "id": "b", "text": "System", "isCorrect": false },
+      { "id": "c", "text": "Object", "isCorrect": true },
+      { "id": "d", "text": "Class", "isCorrect": false }
+    ],
+    "explanation": "The **java.lang.Object** class is the root of the class hierarchy. Every class has `Object` as a superclass. All objects, including arrays, implement the methods of this class."
+  },
+  {
+    "id": "java13",
+    "question": "Which keyword is used to explicitly call a constructor of the superclass?",
+    "options": [
+      { "id": "a", "text": "this", "isCorrect": false },
+      { "id": "b", "text": "super", "isCorrect": true },
+      { "id": "c", "text": "parent", "isCorrect": false },
+      { "id": "d", "text": "new", "isCorrect": false }
+    ],
+    "explanation": "The **super** keyword is used to refer to immediate superclass members, including calling a superclass's constructor (e.g., `super(args);`) which must be the first statement in the subclass constructor."
+  },
+  {
+    "id": "java14",
+    "question": "Which block is *always* executed regardless of whether an exception is thrown or caught?",
+    "options": [
+      { "id": "a", "text": "try", "isCorrect": false },
+      { "id": "b", "text": "catch", "isCorrect": false },
+      { "id": "c", "text": "throws", "isCorrect": false },
+      { "id": "d", "text": "finally", "isCorrect": true }
+    ],
+    "explanation": "The **finally** block is executed after the `try` block and any associated `catch` blocks have finished, whether or not an exception was thrown."
+  },
+  {
+    "id": "java15",
+    "question": "What is the default value of a local variable of type 'int'?",
+    "options": [
+      { "id": "a", "text": "0", "isCorrect": false },
+      { "id": "b", "text": "null", "isCorrect": false },
+      { "id": "c", "text": "undefined", "isCorrect": true },
+      { "id": "d", "text": "Java automatically initializes it to 0", "isCorrect": false }
+    ],
+    "explanation": "Unlike instance variables, **local variables** are not automatically initialized by Java. The compiler will report an error if you attempt to use an uninitialized local variable. Therefore, its default value is considered **undefined** or unassigned."
+  },
+  {
+    "id": "java16",
+    "question": "In Java, objects are created using the 'new' keyword. Where is the memory for the object allocated?",
+    "options": [
+      { "id": "a", "text": "Stack", "isCorrect": false },
+      { "id": "b", "text": "Heap", "isCorrect": true },
+      { "id": "c", "text": "Permanent Generation (PermGen)", "isCorrect": false },
+      { "id": "d", "text": "Registers", "isCorrect": false }
+    ],
+    "explanation": "In Java, all objects and arrays are allocated on the **Heap** memory. Primitive data types and object references are typically stored on the **Stack**."
+  },
+  {
+    "id": "java17",
+    "question": "Which interface must be implemented by a class whose objects are intended to be executed by a thread?",
+    "options": [
+      { "id": "a", "text": "Startable", "isCorrect": false },
+      { "id": "b", "text": "Runnable", "isCorrect": true },
+      { "id": "c", "d": "Threadable", "isCorrect": false },
+      { "id": "d", "text": "Serializable", "isCorrect": false }
+    ],
+    "explanation": "The **Runnable** interface defines a single method, `run()`, which contains the code executed by the thread. This is one of the two primary ways to create a thread (the other being subclassing `Thread`)."
+  },
+  {
+    "id": "java18",
+    "question": "What is **Encapsulation** in Object-Oriented Programming?",
+    "options": [
+      { "id": "a", "text": "The ability of an object to take on many forms.", "isCorrect": false },
+      { "id": "b", "text": "The mechanism of creating new classes from existing classes.", "isCorrect": false },
+      { "id": "c", "text": "Binding data (variables) and code (methods) together into a single unit and hiding the internal details.", "isCorrect": true },
+      { "id": "d", "text": "Defining two methods with the same name but different parameters.", "isCorrect": false }
+    ],
+    "explanation": "**Encapsulation** involves wrapping the data and the methods that operate on the data into a single unit (a class). It is often achieved by making variables `private` and providing public getter/setter methods."
+  },
+  {
+    "id": "java19",
+    "question": "Which of the following classes is thread-safe for string manipulation?",
+    "options": [
+      { "id": "a", "text": "String", "isCorrect": false },
+      { "id": "b", "text": "StringBuilder", "isCorrect": false },
+      { "id": "c", "text": "StringBuffer", "isCorrect": true },
+      { "id": "d", "text": "CharBuffer", "isCorrect": false }
+    ],
+    "explanation": "**StringBuffer** is synchronized (thread-safe) and ensures sequential access in a multi-threaded environment. **StringBuilder** is faster but not thread-safe."
+  },
+  {
+    "id": "java20",
+    "question": "A class that is declared with the `abstract` keyword and may have abstract methods is called an:",
+    "options": [
+      { "id": "a", "text": "Interface", "isCorrect": false },
+      { "id": "b", "text": "Concrete Class", "isCorrect": false },
+      { "id": "c", "text": "Abstract Class", "isCorrect": true },
+      { "id": "d", "text": "Final Class", "isCorrect": false }
+    ],
+    "explanation": "An **Abstract Class** cannot be instantiated and may contain both concrete (implemented) and abstract (unimplemented) methods. Subclasses must implement all abstract methods to become concrete."
+  },
+  {
+    "id": "java21",
+    "question": "What is the purpose of the `break` statement inside a loop?",
+    "options": [
+      { "id": "a", "text": "To skip the current iteration and proceed to the next.", "isCorrect": false },
+      { "id": "b", "text": "To terminate the loop and transfer execution to the statement immediately following the loop.", "isCorrect": true },
+      { "id": "c", "text": "To stop the program execution.", "isCorrect": false },
+      { "id": "d", "text": "To return a value from the loop.", "isCorrect": false }
+    ],
+    "explanation": "The **break** statement is used to exit the nearest encompassing loop (for, while, do-while) or switch statement, regardless of the loop's condition."
+  },
+  {
+    "id": "java22",
+    "question": "Which concept allows a child class to provide a specific implementation for a method that is already provided by its parent class?",
+    "options": [
+      { "id": "a", "text": "Method Overloading", "isCorrect": false },
+      { "id": "b", "text": "Method Hiding", "isCorrect": false },
+      { "id": "c", "text": "Method Overriding", "isCorrect": true },
+      { "id": "d", "text": "Abstraction", "isCorrect": false }
+    ],
+    "explanation": "**Method Overriding** occurs when a subclass defines a method with the exact same name, return type, and parameter list as a method defined in its superclass. This is a key aspect of **Polymorphism**."
+  }
 ];
 
 // Git Test Questions
