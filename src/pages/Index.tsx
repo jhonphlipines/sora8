@@ -60,9 +60,9 @@ const Index = () => {
                     Master Programming
                   </span>
                   <br />
-                  <span className="text-foreground">Get Certified</span>
+                  <span className="text-background">Get Certified</span>
                 </h1>
-                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-muted-foreground leading-relaxed">
+                <p className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed text-secondary">
                   Test your programming knowledge with our comprehensive certification quiz. 
                   Cover essential topics from JavaScript and React to Python and algorithms.
                 </p>
