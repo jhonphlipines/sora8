@@ -4159,7 +4159,7 @@ const javaQuestions: QuizQuestion[] = [
       { id: "d", text: "default", isCorrect: false }
     ],
     explanation: "The 'public' access modifier makes class members accessible from any other class."
-  }
+  },
   {
     "id": "java4",
     "question": "Which of the following is NOT a primitive data type in Java?",
@@ -4203,7 +4203,7 @@ const javaQuestions: QuizQuestion[] = [
       { "id": "d", "text": "array int[5];", "isCorrect": false }
     ],
     "explanation": "The correct syntax to declare and instantiate an array in Java is `dataType[] arrayName = new dataType[size];`. Option B uses the valid alternative notation `dataType arrayName[]`."
-  }
+  },
   {
     "id": "java8",
     "question": "Which of these is used for multi-line comments in Java?",
@@ -4309,7 +4309,7 @@ const javaQuestions: QuizQuestion[] = [
     "options": [
       { "id": "a", "text": "Startable", "isCorrect": false },
       { "id": "b", "text": "Runnable", "isCorrect": true },
-      { "id": "c", "d": "Threadable", "isCorrect": false },
+      { "id": "c", "text": "Threadable", "isCorrect": false },
       { "id": "d", "text": "Serializable", "isCorrect": false }
     ],
     "explanation": "The **Runnable** interface defines a single method, `run()`, which contains the code executed by the thread. This is one of the two primary ways to create a thread (the other being subclassing `Thread`)."
