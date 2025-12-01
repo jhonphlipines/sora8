@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Award, Clock, CheckCircle, BookOpen, Users, Trophy, ArrowRight, Star } from "lucide-react";
 import heroImage from "@/assets/hero-programming.jpg";
+import { VantaBackground } from "@/components/VantaBackground";
 const Index = () => {
   const navigate = useNavigate();
   const features = [{
@@ -40,9 +41,12 @@ const Index = () => {
     label: "Average Score",
     value: "78%"
   }];
-  return <div className="min-h-screen bg-[var(--gradient-background)]">
+  return <div className="min-h-screen bg-[var(--gradient-background)] relative">
+      {/* Vanta.js Background Animation */}
+      <VantaBackground effect="net" />
+      
       {/* Hero Section */}
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden z-10">
         <div className="absolute inset-0 bg-[var(--gradient-primary)] opacity-10"></div>
         <div className="relative max-w-7xl mx-auto px-3 sm:px-6 py-8 sm:py-12 md:py-16 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-center">
@@ -87,7 +91,7 @@ const Index = () => {
       </div>
 
       {/* Features Section */}
-      <div className="py-8 sm:py-12 md:py-16 lg:py-24 bg-background-secondary">
+      <div className="py-8 sm:py-12 md:py-16 lg:py-24 bg-background-secondary/80 backdrop-blur-sm relative z-10">
         <div className="max-w-7xl mx-auto px-3 sm:px-6">
           <div className="text-center mb-4 sm:mb-8 md:mb-12 lg:mb-16">
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-foreground mb-2 sm:mb-3 md:mb-4">
@@ -117,7 +121,7 @@ const Index = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="py-8 sm:py-12 md:py-16 lg:py-24">
+      <div className="py-8 sm:py-12 md:py-16 lg:py-24 relative z-10">
         <div className="max-w-4xl mx-auto text-center px-3 sm:px-6">
           <div className="bg-[var(--gradient-card)] rounded-lg sm:rounded-xl md:rounded-2xl lg:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12 border border-border/50 shadow-2xl">
             <h3 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-bold text-foreground mb-2 sm:mb-4 md:mb-6">
@@ -134,7 +138,7 @@ const Index = () => {
       </div>
 
       {/* Student Ratings Section */}
-      <div className="py-8 sm:py-12 md:py-16 lg:py-24 bg-background-tertiary">
+      <div className="py-8 sm:py-12 md:py-16 lg:py-24 bg-background-tertiary/80 backdrop-blur-sm relative z-10">
         <div className="max-w-7xl mx-auto px-3 sm:px-6">
           <div className="text-center mb-4 sm:mb-8 md:mb-12 lg:mb-16">
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-foreground mb-2 sm:mb-3 md:mb-4">
