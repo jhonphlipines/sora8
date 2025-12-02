@@ -179,7 +179,7 @@ const Pricing = () => {
                   {plan.name}
                 </CardTitle>
                 <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 sm:mb-4">
-                  {plan.price}
+                  ₹{plan.price}
                   <span className="text-sm sm:text-base md:text-lg text-muted-foreground font-normal">
                     {plan.period}
                   </span>
