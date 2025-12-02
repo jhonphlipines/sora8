@@ -15,7 +15,7 @@ serve(async (req) => {
   try {
     const { action, orderId, amount, currency, paymentId, signature } = await req.json();
 
-    const RAZORPAY_KEY_ID = "rzp_test_RcfTGDZo0SqZz1";
+    const RAZORPAY_KEY_ID = "rzp_live_RmkssLbXJRxtd6";
     const RAZORPAY_KEY_SECRET = Deno.env.get('RAZORPAY_KEY_SECRET');
 
     if (!RAZORPAY_KEY_SECRET) {
