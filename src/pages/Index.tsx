@@ -69,7 +69,7 @@ const Index = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4">
-                <Button onClick={() => navigate('/tests')} className="bg-primary hover:bg-primary/90 text-primary-foreground border-0 shadow-[var(--glow-primary)] text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-5 w-full sm:w-auto">
+                <Button onClick={() => navigate('/interactive-courses')} className="bg-primary hover:bg-primary/90 text-primary-foreground border-0 shadow-[var(--glow-primary)] text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-5 w-full sm:w-auto">
                   ​Code learning 
                   <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
