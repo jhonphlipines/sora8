@@ -74,7 +74,8 @@ const Index = () => {
                   <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
                 <Button variant="outline" className="text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-5 border-border hover:bg-accent w-full sm:w-auto" onClick={() => navigate('/interactive-courses')}>
-                  Video Learning
+                  ​Subject
+
                 </Button>
               </div>
 
