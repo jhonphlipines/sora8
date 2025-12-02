@@ -24,6 +24,8 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Notes from "./pages/Notes";
 import InteractiveCourses from "./pages/InteractiveCourses";
+import AI from "./pages/AI";
+import Books from "./pages/Books";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +53,8 @@ const App = () => (
                   <Route path="/notes" element={<ProtectedRoute><Notes /></ProtectedRoute>} />
                   <Route path="/data-analysis" element={<ProtectedRoute><DataAnalysis /></ProtectedRoute>} />
                   <Route path="/interactive-courses" element={<ProtectedRoute><InteractiveCourses /></ProtectedRoute>} />
+                  <Route path="/ai" element={<ProtectedRoute><AI /></ProtectedRoute>} />
+                  <Route path="/books" element={<ProtectedRoute><Books /></ProtectedRoute>} />
                   <Route path="/tests" element={<ProtectedRoute><TestSelection /></ProtectedRoute>} />
                   <Route path="/levels" element={<ProtectedRoute><LevelSelection /></ProtectedRoute>} />
                   <Route path="/level-quiz/:levelId" element={<ProtectedRoute><LevelQuiz /></ProtectedRoute>} />

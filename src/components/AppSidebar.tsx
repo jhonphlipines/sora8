@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BookOpen, Trophy, Settings, Code, Database, Globe, Smartphone, Target, Award, DollarSign, BarChart3, ChevronRight, FileText, GraduationCap } from "lucide-react";
+import { Home, BookOpen, Trophy, Settings, Code, Database, Globe, Smartphone, Target, Award, DollarSign, BarChart3, ChevronRight, FileText, GraduationCap, Bot, Library } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, useSidebar } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -7,6 +7,14 @@ const mainItems = [{
   title: "Home",
   url: "/",
   icon: Home
+}, {
+  title: "AI Assistant",
+  url: "/ai",
+  icon: Bot
+}, {
+  title: "Books",
+  url: "/books",
+  icon: Library
 }, {
   title: "My Notes",
   url: "/notes",
