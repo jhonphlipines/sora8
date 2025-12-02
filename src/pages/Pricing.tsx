@@ -32,7 +32,7 @@ const Pricing = () => {
       if (orderError) throw orderError;
 
       const options = {
-        key: "rzp_test_RcfTGDZo0SqZz1",
+        key: "rzp_live_RmkssLbXJRxtd6",
         amount: orderData.order.amount,
         currency: orderData.order.currency,
         name: "EDU SKILL",
