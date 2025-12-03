@@ -257,30 +257,30 @@ ${textContent}`;
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted p-6">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted p-3 sm:p-6 pb-24 md:pb-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
+            <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-1 sm:mb-2">
               My Notes
             </h1>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground text-sm sm:text-lg">
               Manage and organize your learning notes
             </p>
           </div>
-          <div className="flex gap-3">
-            <Button onClick={handleExport} variant="outline" className="gap-2">
-              <Download className="h-4 w-4" />
-              Export JSON
+          <div className="flex flex-wrap gap-2 sm:gap-3">
+            <Button onClick={handleExport} variant="outline" size="sm" className="gap-1 sm:gap-2 text-xs sm:text-sm">
+              <Download className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden xs:inline">Export</span> JSON
             </Button>
-            <Button onClick={handleExportAsText} variant="outline" className="gap-2">
-              <FileText className="h-4 w-4" />
-              Export Text
+            <Button onClick={handleExportAsText} variant="outline" size="sm" className="gap-1 sm:gap-2 text-xs sm:text-sm">
+              <FileText className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden xs:inline">Export</span> Text
             </Button>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="gap-2" onClick={() => setEditingNote(null)}>
-                  <Plus className="h-4 w-4" />
+                <Button size="sm" className="gap-1 sm:gap-2 text-xs sm:text-sm" onClick={() => setEditingNote(null)}>
+                  <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
                   New Note
                 </Button>
               </DialogTrigger>
@@ -392,8 +392,8 @@ ${textContent}`;
           </div>
         </div>
 
-        <div className="mb-6">
-          <div className="relative max-w-md">
+        <div className="mb-4 sm:mb-6">
+          <div className="relative w-full sm:max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder="Search notes..."
@@ -405,25 +405,25 @@ ${textContent}`;
         </div>
 
         {loading ? (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">Loading notes...</p>
+          <div className="text-center py-8 sm:py-12">
+            <p className="text-muted-foreground text-sm sm:text-base">Loading notes...</p>
           </div>
         ) : filteredNotes.length === 0 ? (
-          <div className="text-center py-12">
-            <FileText className="h-16 w-16 mx-auto text-muted-foreground mb-4 opacity-50" />
-            <h3 className="text-xl font-semibold mb-2">No notes found</h3>
-            <p className="text-muted-foreground mb-6">
+          <div className="text-center py-8 sm:py-12">
+            <FileText className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-muted-foreground mb-3 sm:mb-4 opacity-50" />
+            <h3 className="text-lg sm:text-xl font-semibold mb-2">No notes found</h3>
+            <p className="text-muted-foreground text-sm sm:text-base mb-4 sm:mb-6">
               {searchQuery ? "Try a different search term" : "Start by creating your first note"}
             </p>
             {!searchQuery && (
-              <Button onClick={() => setIsDialogOpen(true)} className="gap-2">
+              <Button onClick={() => setIsDialogOpen(true)} size="sm" className="gap-2">
                 <Plus className="h-4 w-4" />
                 Create Note
               </Button>
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
             {filteredNotes.map((note) => (
               <Card 
                 key={note.id} 
@@ -433,12 +433,12 @@ ${textContent}`;
                   setIsDialogOpen(true);
                 }}
               >
-                <CardHeader>
+                <CardHeader className="p-3 sm:p-6">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
-                      <CardTitle className="text-lg line-clamp-1">{note.title}</CardTitle>
+                      <CardTitle className="text-base sm:text-lg line-clamp-1">{note.title}</CardTitle>
                       {note.video_title && (
-                        <Badge variant="secondary" className="mt-2">
+                        <Badge variant="secondary" className="mt-2 text-xs">
                           {note.video_title}
                         </Badge>
                       )}
@@ -452,9 +452,9 @@ ${textContent}`;
                           setEditingNote(note);
                           setIsDialogOpen(true);
                         }}
-                        className="h-8 w-8 p-0"
+                        className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                       >
-                        <Edit className="h-4 w-4" />
+                        <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
                       </Button>
                       <Button
                         variant="ghost"
@@ -463,21 +463,21 @@ ${textContent}`;
                           e.stopPropagation();
                           handleDelete(note.id);
                         }}
-                        className="h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
+                        className="h-7 w-7 sm:h-8 sm:w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                       </Button>
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <ScrollArea className="h-32">
+                <CardContent className="p-3 sm:p-6 pt-0">
+                  <ScrollArea className="h-24 sm:h-32">
                     <CardDescription 
-                      className="whitespace-pre-wrap"
+                      className="whitespace-pre-wrap text-xs sm:text-sm"
                       dangerouslySetInnerHTML={{ __html: note.content }}
                     />
                   </ScrollArea>
-                  <div className="flex items-center gap-2 mt-4 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2 mt-3 sm:mt-4 text-xs text-muted-foreground">
                     <Calendar className="h-3 w-3" />
                     <span>{new Date(note.updated_at).toLocaleDateString()}</span>
                   </div>
