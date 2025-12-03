@@ -26,6 +26,7 @@ import Notes from "./pages/Notes";
 import InteractiveCourses from "./pages/InteractiveCourses";
 import AI from "./pages/AI";
 import Books from "./pages/Books";
+import MobileFooter from "./components/MobileFooter";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +67,7 @@ const App = () => (
                   <Route path="*" element={<ProtectedRoute><NotFound /></ProtectedRoute>} />
                 </Routes>
               </div>
+              <MobileFooter />
             </main>
           </div>
         </SidebarProvider>
