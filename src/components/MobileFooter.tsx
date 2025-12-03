@@ -7,8 +7,8 @@ const MobileFooter = () => {
   const location = useLocation();
 
   const navItems = [
-    { icon: Code, label: "Code", path: "/interactive-courses" },
-    { icon: BookOpen, label: "Subject", path: "/learn" },
+    { icon: Code, label: "Code", path: "/learn" },
+    { icon: BookOpen, label: "Subject", path: "/interactive-courses" },
     { icon: Bot, label: "AI", path: "/ai" },
     { icon: FileText, label: "Notes", path: "/notes" },
   ];
