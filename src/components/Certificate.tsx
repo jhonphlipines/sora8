@@ -325,8 +325,13 @@ export const Certificate = ({
         <div className="relative z-10 p-3 md:p-4 h-full flex flex-col justify-between">
           {/* Logo at Top */}
           <div className="absolute top-4 left-4 flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-              <Code className="h-6 w-6 text-white" />
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-lg overflow-hidden">
+              <img 
+                src="https://img.icons8.com/color/480/vimeo.png" 
+                alt="Logo" 
+                className="w-full h-full object-cover"
+                crossOrigin="anonymous"
+              />
             </div>
             <div className="text-left">
               <p className="text-sm font-bold text-gray-800 leading-none">CodeCert</p>
