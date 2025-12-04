@@ -432,30 +432,31 @@ export const Certificate = ({
                 Verified by CodeCert Labs Programming Platform
               </p>
             </div>
-            
-            <div className="flex flex-col sm:flex-row gap-2 justify-center no-print">
-              <Button onClick={downloadAsImage} disabled={isDownloading || !imageLoaded} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700 flex-1 sm:flex-none">
-                <FileImage className="h-3 w-3 mr-1" />
-                PNG
-              </Button>
-              
-              <Button onClick={downloadAsJPG} disabled={isDownloading || !imageLoaded} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700 flex-1 sm:flex-none">
-                <FileImage className="h-3 w-3 mr-1" />
-                JPG
-              </Button>
-              
-              <Button onClick={downloadAsPDF} disabled={isDownloading || !imageLoaded} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700 flex-1 sm:flex-none">
-                <FileText className="h-3 w-3 mr-1" />
-                PDF
-              </Button>
-              
-              <Button onClick={downloadBatch} disabled={isDownloading || !imageLoaded} size="sm" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 flex-1 sm:flex-none">
-                <Download className="h-3 w-3 mr-1" />
-                {isDownloading ? "..." : !imageLoaded ? "Loading..." : "All"}
-              </Button>
-            </div>
           </div>
         </div>
+      </div>
+      
+      {/* Download Buttons - Outside certificate for mobile visibility */}
+      <div className="flex flex-wrap gap-2 justify-center mt-6 px-4 pb-20 md:pb-4">
+        <Button onClick={downloadAsImage} disabled={isDownloading || !imageLoaded} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700">
+          <FileImage className="h-3 w-3 mr-1" />
+          PNG
+        </Button>
+        
+        <Button onClick={downloadAsJPG} disabled={isDownloading || !imageLoaded} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700">
+          <FileImage className="h-3 w-3 mr-1" />
+          JPG
+        </Button>
+        
+        <Button onClick={downloadAsPDF} disabled={isDownloading || !imageLoaded} variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50 text-purple-700">
+          <FileText className="h-3 w-3 mr-1" />
+          PDF
+        </Button>
+        
+        <Button onClick={downloadBatch} disabled={isDownloading || !imageLoaded} size="sm" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+          <Download className="h-3 w-3 mr-1" />
+          {isDownloading ? "..." : !imageLoaded ? "Loading..." : "All"}
+        </Button>
       </div>
     </div>;
 };
