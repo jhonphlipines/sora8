@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BookOpen, Trophy, Settings, Code, Database, Globe, Smartphone, Target, Award, DollarSign, BarChart3, ChevronRight, FileText, GraduationCap, Bot, Library } from "lucide-react";
+import { Home, BookOpen, Trophy, Settings, Code, Database, Globe, Smartphone, Target, Award, DollarSign, BarChart3, ChevronRight, FileText, GraduationCap, Bot, Library, Share2 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, useSidebar } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -172,6 +172,35 @@ export function AppSidebar() {
                     
                   </SidebarMenuButton>
                 </SidebarMenuItem>)}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Share Section */}
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  className="hover:bg-sidebar-accent/50 text-sidebar-foreground"
+                  onClick={() => {
+                    const shareData = {
+                      title: 'VILVER.xyz - CodeCert Labs',
+                      text: 'Check out this amazing coding learning platform!',
+                      url: window.location.origin
+                    };
+                    if (navigator.share) {
+                      navigator.share(shareData);
+                    } else {
+                      navigator.clipboard.writeText(window.location.origin);
+                      alert('Link copied to clipboard!');
+                    }
+                  }}
+                >
+                  <Share2 className="h-4 w-4" />
+                  {!isCollapsed && <span>Share Website</span>}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
