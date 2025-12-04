@@ -343,14 +343,14 @@ export const Certificate = ({
           <div className="text-center pt-8">
             <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full shadow-lg mb-4 overflow-hidden">
               <img 
-                src={certificateLogo} 
+                src="https://img.icons8.com/color/480/vimeo.png" 
                 alt="Certificate Logo" 
                 className="w-full h-full object-cover"
                 crossOrigin="anonymous"
                 onLoad={() => setImageLoaded(true)}
                 onError={() => {
                   console.error("Failed to load certificate logo");
-                  setImageLoaded(true); // Allow download even if image fails
+                  setImageLoaded(true);
                 }}
               />
             </div>
