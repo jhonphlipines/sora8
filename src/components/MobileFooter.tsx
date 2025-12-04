@@ -1,4 +1,4 @@
-import { Code, BookOpen, Bot, FileText } from "lucide-react";
+import { Code, BookOpen, Bot, FileText, Library } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +9,7 @@ const MobileFooter = () => {
   const navItems = [
     { icon: Code, label: "Code", path: "/learn" },
     { icon: BookOpen, label: "Subject", path: "/interactive-courses" },
+    { icon: Library, label: "Books", path: "/books" },
     { icon: Bot, label: "AI", path: "/ai" },
     { icon: FileText, label: "Notes", path: "/notes" },
   ];
