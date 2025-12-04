@@ -65,8 +65,15 @@ export function Header() {
       <SidebarTrigger className="mr-2 sm:mr-4" />
       
       <div className="flex items-center justify-between flex-1">
-        <div className="text-base sm:text-xl font-bold bg-[var(--gradient-primary)] bg-clip-text text-transparent">
-          CodeCert
+        <div className="flex items-center gap-2">
+          <img 
+            src="https://img.icons8.com/color/480/vimeo.png" 
+            alt="Logo" 
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg"
+          />
+          <span className="text-base sm:text-xl font-bold bg-[var(--gradient-primary)] bg-clip-text text-transparent">
+            CodeCert
+          </span>
         </div>
         
         <div className="flex items-center gap-1 sm:gap-2 md:gap-4">

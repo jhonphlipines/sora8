@@ -97,10 +97,17 @@ export function AppSidebar() {
       <SidebarContent className="bg-sidebar-background">
         {/* Brand Section */}
         {!isCollapsed && <div className="p-4 border-b border-sidebar-border">
-            <h2 className="text-lg font-bold text-sidebar-foreground">
-              🧪 VILVER.xyz    
-            </h2>
-            <p className="text-xs text-sidebar-foreground/70">Development Environment</p>
+            <div className="flex items-center gap-2">
+              <img 
+                src="https://img.icons8.com/color/480/vimeo.png" 
+                alt="Logo" 
+                className="w-8 h-8 rounded-lg"
+              />
+              <h2 className="text-lg font-bold text-sidebar-foreground">
+                VILVER.xyz    
+              </h2>
+            </div>
+            <p className="text-xs text-sidebar-foreground/70 mt-1">Development Environment</p>
           </div>}
 
         {/* Main Navigation */}
