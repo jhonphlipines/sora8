@@ -2,7 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, CheckCircle, Award, Clock, BookOpen, CreditCard } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, CheckCircle, Award, Clock, BookOpen, CreditCard, Bot, Video, Calendar } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -38,7 +39,7 @@ const Pricing = () => {
     fetchUserCredits();
   }, []);
 
-  const handlePayment = async () => {
+  const handlePayment = async (amount: number, credits: number, planName: string) => {
     try {
       if (!userId) {
         toast.error("Please login to purchase credits");
@@ -48,11 +49,10 @@ const Pricing = () => {
 
       toast.loading("Initiating payment...");
 
-      // Create order for ₹250
       const { data: orderData, error: orderError } = await supabase.functions.invoke('razorpay-payment', {
         body: { 
           action: 'createOrder',
-          amount: 250,
+          amount: amount,
           currency: 'INR'
         }
       });
@@ -64,13 +64,12 @@ const Pricing = () => {
         amount: orderData.order.amount,
         currency: orderData.order.currency,
         name: "EDU SKILL",
-        description: "5 Certificate Credits",
+        description: `${planName} - ${credits} Certificate Credits`,
         order_id: orderData.order.id,
         handler: async function (response: any) {
           try {
             toast.loading("Verifying payment...");
 
-            // Verify payment and add credits
             const { data: verifyData, error: verifyError } = await supabase.functions.invoke('razorpay-payment', {
               body: {
                 action: 'verifyPayment',
@@ -78,16 +77,16 @@ const Pricing = () => {
                 paymentId: response.razorpay_payment_id,
                 signature: response.razorpay_signature,
                 userId: userId,
-                creditsPurchased: 5,
-                amount: 250
+                creditsPurchased: credits,
+                amount: amount
               }
             });
 
             if (verifyError) throw verifyError;
 
             if (verifyData.verified) {
-              toast.success("Payment successful! 5 credits added 🎉");
-              setUserCredits((prev) => (prev ?? 0) + 5);
+              toast.success(`Payment successful! ${credits} credits added 🎉`);
+              setUserCredits((prev) => (prev ?? 0) + credits);
               navigate('/tests');
             } else {
               toast.error("Payment verification failed");
@@ -119,7 +118,7 @@ const Pricing = () => {
 
   return (
     <div className="min-h-screen bg-background py-4 sm:py-8 px-3 sm:px-4">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <Button
@@ -149,59 +148,123 @@ const Pricing = () => {
           </div>
         </div>
 
-        {/* Main Pricing Card */}
-        <Card className="bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300 max-w-md mx-auto mb-8 sm:mb-12">
-          <CardHeader className="text-center pb-4 sm:pb-6 p-4 sm:p-6">
-            <div className="w-16 h-16 mx-auto bg-[var(--gradient-primary)] rounded-full flex items-center justify-center mb-4">
-              <Award className="h-8 w-8 text-white" />
-            </div>
-            <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-2">
-              Certificate Pack
-            </CardTitle>
-            <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-2">
-              ₹250
-            </div>
-            <CardDescription className="text-muted-foreground text-sm sm:text-base">
-              Get 5 certificate credits
-            </CardDescription>
-          </CardHeader>
-          
-          <CardContent className="space-y-4 p-4 sm:p-6 pt-0">
-            <ul className="space-y-3 text-sm sm:text-base">
-              <li className="flex items-center gap-3">
-                <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <span className="text-muted-foreground">5 Professional Certificates</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <span className="text-muted-foreground">Download in PNG, PDF, JPG</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <span className="text-muted-foreground">Instant Results</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <span className="text-muted-foreground">Lifetime Access</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <span className="text-muted-foreground">11+ Technologies Available</span>
-              </li>
-            </ul>
+        {/* Pricing Cards */}
+        <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-8 sm:mb-12">
+          {/* Basic Pack - ₹250 */}
+          <Card className="bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300">
+            <CardHeader className="text-center pb-4 sm:pb-6 p-4 sm:p-6">
+              <div className="w-14 h-14 mx-auto bg-blue-600 rounded-full flex items-center justify-center mb-4">
+                <Award className="h-7 w-7 text-white" />
+              </div>
+              <CardTitle className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2">
+                Basic Pack
+              </CardTitle>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
+                ₹250
+              </div>
+              <CardDescription className="text-muted-foreground text-sm">
+                Get 5 certificate credits
+              </CardDescription>
+            </CardHeader>
             
-            <Button 
-              className="w-full mt-6 bg-blue-600 hover:bg-blue-700 border-0 text-base py-6 text-white"
-              onClick={handlePayment}
-            >
-              Buy Now - ₹250
-            </Button>
+            <CardContent className="space-y-4 p-4 sm:p-6 pt-0">
+              <ul className="space-y-2.5 text-sm">
+                <li className="flex items-center gap-2.5">
+                  <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                  <span className="text-muted-foreground">5 Professional Certificates</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                  <span className="text-muted-foreground">Download in PNG, PDF, JPG</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                  <span className="text-muted-foreground">Instant Results</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                  <span className="text-muted-foreground">Lifetime Access</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                  <span className="text-muted-foreground">11+ Technologies Available</span>
+                </li>
+              </ul>
+              
+              <Button 
+                className="w-full mt-4 bg-blue-600 hover:bg-blue-700 border-0 text-sm py-5 text-white"
+                onClick={() => handlePayment(250, 5, "Basic Pack")}
+              >
+                Buy Now - ₹250
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Pro Pack - ₹799 */}
+          <Card className="bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300 ring-2 ring-primary/30 relative">
+            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+              <Badge className="bg-primary text-primary-foreground text-xs px-3">Best Value</Badge>
+            </div>
+            <CardHeader className="text-center pb-4 sm:pb-6 p-4 sm:p-6 pt-6">
+              <div className="w-14 h-14 mx-auto bg-[var(--gradient-primary)] rounded-full flex items-center justify-center mb-4">
+                <Award className="h-7 w-7 text-white" />
+              </div>
+              <CardTitle className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2">
+                Pro Pack
+              </CardTitle>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
+                ₹799
+              </div>
+              <CardDescription className="text-muted-foreground text-sm">
+                Get 10 certificate credits + extras
+              </CardDescription>
+            </CardHeader>
             
-            <p className="text-xs text-center text-muted-foreground mt-2">
-              Secure payment via Razorpay
-            </p>
-          </CardContent>
-        </Card>
+            <CardContent className="space-y-4 p-4 sm:p-6 pt-0">
+              <ul className="space-y-2.5 text-sm">
+                <li className="flex items-center gap-2.5">
+                  <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                  <span className="text-muted-foreground">10 Professional Certificates</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                  <span className="text-muted-foreground">Download in PNG, PDF, JPG</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                  <span className="text-muted-foreground">Instant Results</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                  <span className="text-muted-foreground">Lifetime Access</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                  <span className="text-muted-foreground">11+ Technologies Available</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Bot className="h-4 w-4 text-purple-500 flex-shrink-0" />
+                  <span className="text-muted-foreground">AI Assistant Access</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Video className="h-4 w-4 text-purple-500 flex-shrink-0" />
+                  <span className="text-muted-foreground">AI Video Summarizer</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Calendar className="h-4 w-4 text-purple-500 flex-shrink-0" />
+                  <span className="text-muted-foreground">Monthly 1 Free Exam</span>
+                </li>
+              </ul>
+              
+              <Button 
+                className="w-full mt-4 bg-[var(--gradient-primary)] border-0 text-sm py-5 text-white"
+                onClick={() => handlePayment(799, 10, "Pro Pack")}
+              >
+                Buy Now - ₹799
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Features Section */}
         <Card className="bg-[var(--gradient-card)] border-border/50 mb-8 sm:mb-12">
@@ -281,15 +344,19 @@ const Pricing = () => {
 
               <div>
                 <h4 className="font-semibold text-foreground mb-2">
-                  Can I purchase more credits later?
+                  What's included in the Pro Pack?
                 </h4>
                 <p className="text-sm text-muted-foreground">
-                  Yes, you can purchase additional credit packs anytime. Credits are cumulative.
+                  The Pro Pack includes 10 certificate credits plus access to AI Assistant, AI Video Summarizer, and 1 free exam every month.
                 </p>
               </div>
             </div>
           </CardContent>
         </Card>
+
+        <p className="text-xs text-center text-muted-foreground mt-6">
+          Secure payment via Razorpay
+        </p>
       </div>
       
       {/* AI Assistant */}
