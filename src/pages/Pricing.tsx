@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, CheckCircle, Award, Clock, BookOpen } from "lucide-react";
+import { ArrowLeft, CheckCircle, Award, Clock, BookOpen, CreditCard } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -15,16 +15,44 @@ declare global {
 
 const Pricing = () => {
   const navigate = useNavigate();
+  const [userCredits, setUserCredits] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
 
-  const handlePayment = async (planName: string, amount: number) => {
+  useEffect(() => {
+    const fetchUserCredits = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+        const { data } = await supabase
+          .from('user_credits')
+          .select('credits')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        setUserCredits(data?.credits ?? 0);
+      }
+      setLoading(false);
+    };
+
+    fetchUserCredits();
+  }, []);
+
+  const handlePayment = async () => {
     try {
+      if (!userId) {
+        toast.error("Please login to purchase credits");
+        navigate('/auth');
+        return;
+      }
+
       toast.loading("Initiating payment...");
 
-      // Create order
+      // Create order for ₹250
       const { data: orderData, error: orderError } = await supabase.functions.invoke('razorpay-payment', {
         body: { 
           action: 'createOrder',
-          amount: amount,
+          amount: 250,
           currency: 'INR'
         }
       });
@@ -36,26 +64,30 @@ const Pricing = () => {
         amount: orderData.order.amount,
         currency: orderData.order.currency,
         name: "EDU SKILL",
-        description: `${planName} Plan`,
+        description: "5 Certificate Credits",
         order_id: orderData.order.id,
         handler: async function (response: any) {
           try {
             toast.loading("Verifying payment...");
 
-            // Verify payment
+            // Verify payment and add credits
             const { data: verifyData, error: verifyError } = await supabase.functions.invoke('razorpay-payment', {
               body: {
                 action: 'verifyPayment',
                 orderId: response.razorpay_order_id,
                 paymentId: response.razorpay_payment_id,
-                signature: response.razorpay_signature
+                signature: response.razorpay_signature,
+                userId: userId,
+                creditsPurchased: 5,
+                amount: 250
               }
             });
 
             if (verifyError) throw verifyError;
 
             if (verifyData.verified) {
-              toast.success("Payment successful! 🎉");
+              toast.success("Payment successful! 5 credits added 🎉");
+              setUserCredits((prev) => (prev ?? 0) + 5);
               navigate('/tests');
             } else {
               toast.error("Payment verification failed");
@@ -85,59 +117,9 @@ const Pricing = () => {
     }
   };
 
-  const plans = [
-    {
-      name: "Basic",
-      price: "250",
-      period: "/test",
-      description: "Perfect for trying out our platform",
-      popular: false,
-      features: [
-        "5 Certification Test",
-        "Professional Certificate",
-        "Instant Results",
-        "30-day Certificate Access"
-      ],
-      buttonText: "Get Started",
-      buttonVariant: "default" as const
-    },
-    {
-      name: "Pro",
-      price: "899", 
-      period: "/month",
-      description: "Best value for active learners",
-      popular: true,
-      features: [
-        "5 Certification Tests",
-        "Professional Certificates",
-        "Priority Support",
-        "Lifetime Certificate Access",
-        "Progress Analytics"
-      ],
-      buttonText: "Start Pro Plan",
-      buttonVariant: "default" as const
-    },
-    {
-      name: "Enterprise",
-      price: "2999",
-      period: "/month", 
-      description: "For teams and organizations",
-      popular: false,
-      features: [
-        "Unlimited Tests",
-        "Team Management",
-        "Custom Certificates",
-        "Advanced Analytics",
-        "Dedicated Support"
-      ],
-      buttonText: "Contact Sales",
-      buttonVariant: "default" as const
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-background py-4 sm:py-8 px-3 sm:px-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <Button
@@ -151,154 +133,163 @@ const Pricing = () => {
           
           <div className="text-center">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-[var(--gradient-primary)] bg-clip-text text-transparent mb-3 sm:mb-4">
-              Choose Your Plan
+              Get Certificates
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-3xl mx-auto mb-6 sm:mb-8 px-2">
-              Select the perfect plan for your certification needs. All plans include professional certificates and instant results.
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-3xl mx-auto mb-4 sm:mb-6 px-2">
+              Purchase certificate credits and showcase your programming expertise with professional certificates.
             </p>
+
+            {/* User Credits Display */}
+            {!loading && userId && (
+              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-6">
+                <CreditCard className="h-4 w-4" />
+                <span className="font-semibold">Your Credits: {userCredits ?? 0}</span>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-5xl mx-auto mb-8 sm:mb-16">
-          {plans.map((plan, index) => (
-            <Card 
-              key={index}
-              className={`bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300 relative ${
-                plan.popular ? 'ring-2 ring-primary/20' : ''
-              }`}
+        {/* Main Pricing Card */}
+        <Card className="bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300 max-w-md mx-auto mb-8 sm:mb-12">
+          <CardHeader className="text-center pb-4 sm:pb-6 p-4 sm:p-6">
+            <div className="w-16 h-16 mx-auto bg-[var(--gradient-primary)] rounded-full flex items-center justify-center mb-4">
+              <Award className="h-8 w-8 text-white" />
+            </div>
+            <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-2">
+              Certificate Pack
+            </CardTitle>
+            <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-2">
+              ₹250
+            </div>
+            <CardDescription className="text-muted-foreground text-sm sm:text-base">
+              Get 5 certificate credits
+            </CardDescription>
+          </CardHeader>
+          
+          <CardContent className="space-y-4 p-4 sm:p-6 pt-0">
+            <ul className="space-y-3 text-sm sm:text-base">
+              <li className="flex items-center gap-3">
+                <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
+                <span className="text-muted-foreground">5 Professional Certificates</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
+                <span className="text-muted-foreground">Download in PNG, PDF, JPG</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
+                <span className="text-muted-foreground">Instant Results</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
+                <span className="text-muted-foreground">Lifetime Access</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
+                <span className="text-muted-foreground">11+ Technologies Available</span>
+              </li>
+            </ul>
+            
+            <Button 
+              className="w-full mt-6 bg-[var(--gradient-primary)] border-0 text-base py-6"
+              onClick={handlePayment}
             >
-              {plan.popular && (
-                <div className="absolute -top-2 sm:-top-3 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-primary text-primary-foreground text-xs">Most Popular</Badge>
-                </div>
-              )}
-              
-              <CardHeader className={`text-center pb-4 sm:pb-6 p-4 sm:p-6 ${plan.popular ? 'pt-6 sm:pt-8' : ''}`}>
-                <CardTitle className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2">
-                  {plan.name}
-                </CardTitle>
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 sm:mb-4">
-                  ₹{plan.price}
-                  <span className="text-sm sm:text-base md:text-lg text-muted-foreground font-normal">
-                    {plan.period}
-                  </span>
-                </div>
-                <CardDescription className="text-muted-foreground text-xs sm:text-sm">
-                  {plan.description}
-                </CardDescription>
-              </CardHeader>
-              
-              <CardContent className="space-y-3 sm:space-y-4 p-4 sm:p-6 pt-0">
-                <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center gap-2">
-                      <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500 flex-shrink-0" />
-                      <span className="text-muted-foreground">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <Button 
-                  className={`w-full mt-4 sm:mt-6 text-xs sm:text-sm ${
-                    plan.popular 
-                      ? 'bg-[var(--gradient-primary)] border-0 shadow-[var(--glow-primary)]' 
-                      : 'bg-[var(--gradient-primary)] border-0'
-                  }`}
-                  onClick={() => {
-                    const priceNum = parseInt(plan.price.replace('$', ''));
-                    handlePayment(plan.name, priceNum);
-                  }}
-                >
-                  {plan.buttonText}
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+              Buy Now - ₹250
+            </Button>
+            
+            <p className="text-xs text-center text-muted-foreground mt-2">
+              Secure payment via Razorpay
+            </p>
+          </CardContent>
+        </Card>
 
-        {/* Features Comparison */}
-        <div className="mb-16">
-          <Card className="max-w-4xl mx-auto bg-[var(--gradient-card)] border-border/50">
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl font-bold text-foreground">
-                Why Choose Our Certification Platform?
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-3 gap-8 text-center">
-                <div>
-                  <div className="w-12 h-12 mx-auto bg-[var(--gradient-primary)] rounded-full flex items-center justify-center mb-4">
-                    <BookOpen className="h-6 w-6 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-2">11+ Technologies</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Comprehensive coverage of popular programming languages and frameworks
-                  </p>
+        {/* Features Section */}
+        <Card className="bg-[var(--gradient-card)] border-border/50 mb-8 sm:mb-12">
+          <CardHeader className="text-center">
+            <CardTitle className="text-xl sm:text-2xl font-bold text-foreground">
+              Why Choose Our Certification Platform?
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid sm:grid-cols-3 gap-6 sm:gap-8 text-center">
+              <div>
+                <div className="w-12 h-12 mx-auto bg-[var(--gradient-primary)] rounded-full flex items-center justify-center mb-4">
+                  <BookOpen className="h-6 w-6 text-white" />
                 </div>
-                <div>
-                  <div className="w-12 h-12 mx-auto bg-[var(--gradient-primary)] rounded-full flex items-center justify-center mb-4">
-                    <Clock className="h-6 w-6 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-2">Timed Assessment</h3>
-                  <p className="text-sm text-muted-foreground">
-                    30-minute time limit to test your knowledge under realistic conditions
-                  </p>
-                </div>
-                <div>
-                  <div className="w-12 h-12 mx-auto bg-[var(--gradient-primary)] rounded-full flex items-center justify-center mb-4">
-                    <Award className="h-6 w-6 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-2">Professional Certificates</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Earn beautiful certificates to showcase your programming expertise
-                  </p>
-                </div>
+                <h3 className="font-semibold text-foreground mb-2">11+ Technologies</h3>
+                <p className="text-sm text-muted-foreground">
+                  Comprehensive coverage of popular programming languages and frameworks
+                </p>
               </div>
-            </CardContent>
-          </Card>
-        </div>
+              <div>
+                <div className="w-12 h-12 mx-auto bg-[var(--gradient-primary)] rounded-full flex items-center justify-center mb-4">
+                  <Clock className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2">Timed Assessment</h3>
+                <p className="text-sm text-muted-foreground">
+                  30-minute time limit to test your knowledge under realistic conditions
+                </p>
+              </div>
+              <div>
+                <div className="w-12 h-12 mx-auto bg-[var(--gradient-primary)] rounded-full flex items-center justify-center mb-4">
+                  <Award className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2">Professional Certificates</h3>
+                <p className="text-sm text-muted-foreground">
+                  Earn beautiful certificates to showcase your programming expertise
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* FAQ Section */}
-        <div className="max-w-4xl mx-auto">
-          <Card className="bg-[var(--gradient-card)] border-border/50">
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl font-bold text-foreground">
-                Frequently Asked Questions
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">
-                    What happens if I fail a test?
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    You can retake tests at any time. We recommend reviewing the topics covered and trying again when you feel more confident.
-                  </p>
-                </div>
-                
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">
-                    Are the certificates recognized by employers?
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Our certificates demonstrate your knowledge and skills. While recognition varies by employer, they serve as excellent portfolio additions.
-                  </p>
-                </div>
-                
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">
-                    Can I cancel my subscription anytime?
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Yes, you can cancel your Pro or Enterprise subscription at any time. You'll retain access until the end of your billing period.
-                  </p>
-                </div>
+        <Card className="bg-[var(--gradient-card)] border-border/50">
+          <CardHeader className="text-center">
+            <CardTitle className="text-xl sm:text-2xl font-bold text-foreground">
+              Frequently Asked Questions
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold text-foreground mb-2">
+                  How do credits work?
+                </h4>
+                <p className="text-sm text-muted-foreground">
+                  Each credit allows you to take one certification test. If you pass (70% or above), you earn a professional certificate.
+                </p>
               </div>
-            </CardContent>
-          </Card>
-        </div>
+              
+              <div>
+                <h4 className="font-semibold text-foreground mb-2">
+                  What happens if I fail a test?
+                </h4>
+                <p className="text-sm text-muted-foreground">
+                  If you don't pass, your credit is still used. We recommend reviewing the topics before attempting again.
+                </p>
+              </div>
+              
+              <div>
+                <h4 className="font-semibold text-foreground mb-2">
+                  Do credits expire?
+                </h4>
+                <p className="text-sm text-muted-foreground">
+                  No, your purchased credits never expire. Use them whenever you're ready.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-foreground mb-2">
+                  Can I purchase more credits later?
+                </h4>
+                <p className="text-sm text-muted-foreground">
+                  Yes, you can purchase additional credit packs anytime. Credits are cumulative.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
       
       {/* AI Assistant */}

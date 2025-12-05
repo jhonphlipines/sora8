@@ -13,10 +13,12 @@ serve(async (req) => {
   }
 
   try {
-    const { action, orderId, amount, currency, paymentId, signature } = await req.json();
+    const { action, orderId, amount, currency, paymentId, signature, userId, creditsPurchased } = await req.json();
 
     const RAZORPAY_KEY_ID = "rzp_live_RmkssLbXJRxtd6";
     const RAZORPAY_KEY_SECRET = Deno.env.get('RAZORPAY_KEY_SECRET');
+    const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
     if (!RAZORPAY_KEY_SECRET) {
       throw new Error('Razorpay key secret not configured');
@@ -54,7 +56,7 @@ serve(async (req) => {
       );
     }
 
-    // Verify Payment
+    // Verify Payment and Add Credits
     if (action === 'verifyPayment') {
       const crypto = await import("https://deno.land/std@0.177.0/node/crypto.ts");
       
@@ -66,6 +68,43 @@ serve(async (req) => {
       const isValid = generatedSignature === signature;
       
       console.log('Payment verification:', isValid ? 'SUCCESS' : 'FAILED');
+
+      // If payment is valid and we have user info, add credits
+      if (isValid && userId && creditsPurchased && SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY) {
+        const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+
+        // Record payment history
+        await supabase.from('payment_history').insert({
+          user_id: userId,
+          amount: amount,
+          credits_purchased: creditsPurchased,
+          razorpay_order_id: orderId,
+          razorpay_payment_id: paymentId,
+          status: 'completed'
+        });
+
+        // Check if user has existing credits
+        const { data: existingCredits } = await supabase
+          .from('user_credits')
+          .select('credits')
+          .eq('user_id', userId)
+          .maybeSingle();
+
+        if (existingCredits) {
+          // Update existing credits
+          await supabase
+            .from('user_credits')
+            .update({ credits: existingCredits.credits + creditsPurchased })
+            .eq('user_id', userId);
+        } else {
+          // Insert new credits record
+          await supabase
+            .from('user_credits')
+            .insert({ user_id: userId, credits: creditsPurchased });
+        }
+
+        console.log(`Added ${creditsPurchased} credits to user ${userId}`);
+      }
 
       return new Response(
         JSON.stringify({ 
