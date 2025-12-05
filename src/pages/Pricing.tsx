@@ -191,7 +191,7 @@ const Pricing = () => {
             </ul>
             
             <Button 
-              className="w-full mt-6 bg-[var(--gradient-primary)] border-0 text-base py-6"
+              className="w-full mt-6 bg-blue-600 hover:bg-blue-700 border-0 text-base py-6 text-white"
               onClick={handlePayment}
             >
               Buy Now - ₹250
