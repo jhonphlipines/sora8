@@ -6,7 +6,6 @@ import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import certificateLogo from "@/assets/certificate-logo.jpg";
-
 interface CertificateProps {
   studentName: string;
   score: number;
@@ -15,7 +14,6 @@ interface CertificateProps {
   completionDate: Date;
   certificateId: string;
 }
-
 export const Certificate = ({
   studentName,
   score,
@@ -24,13 +22,14 @@ export const Certificate = ({
   completionDate,
   certificateId
 }: CertificateProps) => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const certificateRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const percentage = Math.round((score / totalQuestions) * 100);
+  const percentage = Math.round(score / totalQuestions * 100);
   const isPassed = percentage >= 70;
-
   const captureCanvas = async () => {
     if (!certificateRef.current) throw new Error("Certificate ref not found");
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -40,13 +39,16 @@ export const Certificate = ({
       useCORS: true,
       allowTaint: true,
       foreignObjectRendering: false,
-      logging: false,
+      logging: false
     });
   };
-
   const downloadAsImage = async () => {
     if (!certificateRef.current || !imageLoaded) {
-      toast({ title: "Please wait", description: "Certificate is still loading...", variant: "destructive" });
+      toast({
+        title: "Please wait",
+        description: "Certificate is still loading...",
+        variant: "destructive"
+      });
       return;
     }
     setIsDownloading(true);
@@ -62,18 +64,28 @@ export const Certificate = ({
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
-        toast({ title: "Certificate Downloaded", description: "Your certificate has been saved as PNG." });
+        toast({
+          title: "Certificate Downloaded",
+          description: "Your certificate has been saved as PNG."
+        });
       }, 'image/png', 1.0);
     } catch (error) {
-      toast({ title: "Download Failed", description: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`, variant: "destructive" });
+      toast({
+        title: "Download Failed",
+        description: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        variant: "destructive"
+      });
     } finally {
       setIsDownloading(false);
     }
   };
-
   const downloadAsJPG = async () => {
     if (!certificateRef.current || !imageLoaded) {
-      toast({ title: "Please wait", description: "Certificate is still loading...", variant: "destructive" });
+      toast({
+        title: "Please wait",
+        description: "Certificate is still loading...",
+        variant: "destructive"
+      });
       return;
     }
     setIsDownloading(true);
@@ -89,25 +101,39 @@ export const Certificate = ({
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
-        toast({ title: "Certificate Downloaded", description: "Your certificate has been saved as JPG." });
+        toast({
+          title: "Certificate Downloaded",
+          description: "Your certificate has been saved as JPG."
+        });
       }, 'image/jpeg', 0.95);
     } catch (error) {
-      toast({ title: "Download Failed", description: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`, variant: "destructive" });
+      toast({
+        title: "Download Failed",
+        description: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        variant: "destructive"
+      });
     } finally {
       setIsDownloading(false);
     }
   };
-
   const downloadAsPDF = async () => {
     if (!certificateRef.current || !imageLoaded) {
-      toast({ title: "Please wait", description: "Certificate is still loading...", variant: "destructive" });
+      toast({
+        title: "Please wait",
+        description: "Certificate is still loading...",
+        variant: "destructive"
+      });
       return;
     }
     setIsDownloading(true);
     try {
       const canvas = await captureCanvas();
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: 'a4'
+      });
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       const imgAspectRatio = canvas.width / canvas.height;
@@ -121,22 +147,26 @@ export const Certificate = ({
       const yOffset = (pageHeight - imgHeight) / 2;
       pdf.addImage(imgData, 'PNG', xOffset, yOffset, imgWidth, imgHeight);
       pdf.save(`certificate-${studentName.replace(/\s+/g, '-').toLowerCase()}-${certificateId}.pdf`);
-      toast({ title: "Certificate Downloaded", description: "Your certificate has been saved as PDF." });
+      toast({
+        title: "Certificate Downloaded",
+        description: "Your certificate has been saved as PDF."
+      });
     } catch (error) {
-      toast({ title: "Download Failed", description: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`, variant: "destructive" });
+      toast({
+        title: "Download Failed",
+        description: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        variant: "destructive"
+      });
     } finally {
       setIsDownloading(false);
     }
   };
-
   const downloadAll = async () => {
     await downloadAsImage();
     setTimeout(() => downloadAsPDF(), 1000);
   };
-
   if (!isPassed) {
-    return (
-      <Card className="w-full max-w-2xl mx-auto bg-card border-border/50 shadow-2xl">
+    return <Card className="w-full max-w-2xl mx-auto bg-card border-border/50 shadow-2xl">
         <CardContent className="text-center py-12">
           <div className="mb-6">
             <div className="w-20 h-20 mx-auto bg-destructive/20 rounded-full flex items-center justify-center mb-4">
@@ -151,18 +181,13 @@ export const Certificate = ({
           </div>
           <Button onClick={() => window.location.reload()} className="bg-primary">Retake Quiz</Button>
         </CardContent>
-      </Card>
-    );
+      </Card>;
   }
-
-  return (
-    <div className="w-full max-w-5xl mx-auto px-4">
+  return <div className="w-full max-w-5xl mx-auto px-4">
       {/* Professional Certificate - Landscape A4 ratio */}
-      <div
-        ref={certificateRef}
-        className="relative bg-white overflow-hidden shadow-2xl"
-        style={{ aspectRatio: '1.414/1' }}
-      >
+      <div ref={certificateRef} className="relative bg-white overflow-hidden shadow-2xl" style={{
+      aspectRatio: '1.414/1'
+    }}>
         {/* Outer Gold Border */}
         <div className="absolute inset-0 p-2">
           <div className="absolute inset-2 border-4 border-amber-600"></div>
@@ -201,14 +226,7 @@ export const Certificate = ({
           {/* Header with Logo */}
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-amber-500 shadow-lg overflow-hidden bg-white mb-4">
-              <img
-                src={certificateLogo}
-                alt="Certificate Logo"
-                className="w-full h-full object-cover"
-                crossOrigin="anonymous"
-                onLoad={() => setImageLoaded(true)}
-                onError={() => setImageLoaded(true)}
-              />
+              <img alt="Certificate Logo" className="w-full h-full object-cover" crossOrigin="anonymous" onLoad={() => setImageLoaded(true)} onError={() => setImageLoaded(true)} src="https://img.icons8.com/color/480/vimeo.png" />
             </div>
             <h1 className="text-3xl md:text-5xl font-serif font-bold text-gray-800 tracking-wide">
               CERTIFICATE
@@ -254,7 +272,11 @@ export const Certificate = ({
               <div className="text-center md:text-left">
                 <p className="text-xs text-gray-500 uppercase tracking-wider">Date of Issue</p>
                 <p className="text-sm md:text-base font-semibold text-gray-800">
-                  {completionDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                  {completionDate.toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
                 </p>
               </div>
               
@@ -280,45 +302,25 @@ export const Certificate = ({
 
       {/* Download Buttons */}
       <div className="flex flex-wrap gap-3 justify-center mt-8 pb-20 md:pb-8">
-        <Button
-          onClick={downloadAsImage}
-          disabled={isDownloading || !imageLoaded}
-          variant="outline"
-          className="border-amber-300 hover:bg-amber-50 text-amber-700"
-        >
+        <Button onClick={downloadAsImage} disabled={isDownloading || !imageLoaded} variant="outline" className="border-amber-300 hover:bg-amber-50 text-amber-700">
           <FileImage className="h-4 w-4 mr-2" />
           Download PNG
         </Button>
         
-        <Button
-          onClick={downloadAsJPG}
-          disabled={isDownloading || !imageLoaded}
-          variant="outline"
-          className="border-amber-300 hover:bg-amber-50 text-amber-700"
-        >
+        <Button onClick={downloadAsJPG} disabled={isDownloading || !imageLoaded} variant="outline" className="border-amber-300 hover:bg-amber-50 text-amber-700">
           <FileImage className="h-4 w-4 mr-2" />
           Download JPG
         </Button>
         
-        <Button
-          onClick={downloadAsPDF}
-          disabled={isDownloading || !imageLoaded}
-          variant="outline"
-          className="border-amber-300 hover:bg-amber-50 text-amber-700"
-        >
+        <Button onClick={downloadAsPDF} disabled={isDownloading || !imageLoaded} variant="outline" className="border-amber-300 hover:bg-amber-50 text-amber-700">
           <FileText className="h-4 w-4 mr-2" />
           Download PDF
         </Button>
         
-        <Button
-          onClick={downloadAll}
-          disabled={isDownloading || !imageLoaded}
-          className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white shadow-lg"
-        >
+        <Button onClick={downloadAll} disabled={isDownloading || !imageLoaded} className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white shadow-lg">
           <Download className="h-4 w-4 mr-2" />
           {isDownloading ? "Downloading..." : !imageLoaded ? "Loading..." : "Download All"}
         </Button>
       </div>
-    </div>
-  );
+    </div>;
 };
