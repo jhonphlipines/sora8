@@ -132,69 +132,69 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-x-hidden">
       {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5"></div>
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-primary/10 rounded-full blur-[120px] opacity-50"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5 pointer-events-none"></div>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[600px] h-[400px] bg-primary/10 rounded-full blur-[120px] opacity-50 pointer-events-none"></div>
       
       {/* Grid Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none"></div>
 
       {/* Hero Section */}
-      <section className="relative z-10 pt-8 sm:pt-16 lg:pt-24 pb-16 sm:pb-24 lg:pb-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 pt-6 sm:pt-12 lg:pt-20 pb-12 sm:pb-16 lg:pb-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             {/* Left Column - Text Content */}
-            <div className="space-y-6 sm:space-y-8">
+            <div className="space-y-5 sm:space-y-6">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-4 py-2 animate-fade-in" style={{ animationDelay: '0.1s' }}>
-                <Flame className="h-4 w-4 text-primary animate-pulse" />
-                <span className="text-primary font-medium text-sm">Learn. Code. Conquer.</span>
+              <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-3 py-1.5 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+                <Flame className="h-3.5 w-3.5 text-primary animate-pulse" />
+                <span className="text-primary font-medium text-xs sm:text-sm">Learn. Code. Conquer.</span>
               </div>
 
               {/* Headline */}
-              <div className="space-y-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] tracking-tight">
+              <div className="space-y-3 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black leading-[1.1] tracking-tight">
                   <span className="text-foreground">Build </span>
                   <span className="gradient-text">Epic</span>
                   <br />
                   <span className="text-foreground">Code Skills</span>
                 </h1>
-                <p className="text-muted-foreground text-lg sm:text-xl max-w-xl leading-relaxed">
-                  Master programming with bite-sized lessons, hands-on quizzes, and earn certificates that prove your skills.
+                <p className="text-muted-foreground text-base sm:text-lg max-w-md leading-relaxed">
+                  Master programming with bite-sized lessons, hands-on quizzes, and earn certificates.
                 </p>
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+              <div className="flex flex-col sm:flex-row gap-3 animate-fade-in" style={{ animationDelay: '0.3s' }}>
                 <Button 
                   onClick={() => navigate('/learn')}
-                  size="lg"
-                  className="btn-fire group text-lg px-8 py-6 rounded-xl"
+                  size="default"
+                  className="btn-fire group text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg"
                 >
-                  <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+                  <Play className="mr-1.5 h-4 w-4 group-hover:scale-110 transition-transform" />
                   Start Learning
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-1.5 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
                 <Button 
                   onClick={() => navigate('/tests')}
                   variant="outline"
-                  size="lg"
-                  className="text-lg px-8 py-6 rounded-xl border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-all"
+                  size="default"
+                  className="text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-all"
                 >
-                  <Trophy className="mr-2 h-5 w-5 text-primary" />
+                  <Trophy className="mr-1.5 h-4 w-4 text-primary" />
                   Get Certified
                 </Button>
               </div>
 
               {/* Stats Row */}
-              <div className="flex flex-wrap gap-6 sm:gap-8 pt-4 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-4 pt-2 animate-fade-in" style={{ animationDelay: '0.4s' }}>
                 {stats.map((stat, index) => (
                   <div key={index} className="flex items-center gap-2">
-                    <stat.icon className="h-5 w-5 text-primary" />
+                    <stat.icon className="h-4 w-4 text-primary flex-shrink-0" />
                     <div>
-                      <p className="text-xl sm:text-2xl font-bold text-foreground">{stat.value}</p>
-                      <p className="text-xs text-muted-foreground">{stat.label}</p>
+                      <p className="text-lg sm:text-xl font-bold text-foreground">{stat.value}</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">{stat.label}</p>
                     </div>
                   </div>
                 ))}
@@ -255,16 +255,16 @@ const Index = () => {
       </section>
 
       {/* Technologies Marquee */}
-      <section className="relative z-10 py-8 border-y border-border/30 bg-muted/30 backdrop-blur-sm overflow-hidden">
-        <div className="flex animate-marquee">
-          <div className="flex gap-8 px-4 items-center">
+      <section className="relative z-10 py-4 sm:py-6 border-y border-border/30 bg-muted/30 backdrop-blur-sm overflow-hidden">
+        <div className="flex animate-marquee w-max">
+          <div className="flex gap-4 sm:gap-6 px-2 items-center">
             {[...technologies, ...technologies].map((tech, index) => (
               <div 
                 key={index}
-                className="flex items-center gap-3 px-6 py-3 bg-background/50 rounded-xl border border-border/30 whitespace-nowrap hover:border-primary/50 transition-colors cursor-pointer"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-background/50 rounded-lg border border-border/30 whitespace-nowrap hover:border-primary/50 transition-colors cursor-pointer"
               >
                 <tech.Logo />
-                <span className="font-medium text-foreground">{tech.name}</span>
+                <span className="font-medium text-sm text-foreground">{tech.name}</span>
               </div>
             ))}
           </div>
@@ -275,84 +275,85 @@ const Index = () => {
             100% { transform: translateX(-50%); }
           }
           .animate-marquee {
-            animation: marquee 30s linear infinite;
+            animation: marquee 25s linear infinite;
           }
           @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
           }
         `}</style>
       </section>
 
       {/* Featured Courses */}
-      <section className="relative z-10 py-16 sm:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 py-10 sm:py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
             <div>
-              <Badge className="bg-accent/20 text-accent border-accent/30 mb-4">
+              <Badge className="bg-accent/20 text-accent border-accent/30 mb-2 text-xs">
                 <Sparkles className="h-3 w-3 mr-1" />
                 Popular
               </Badge>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground">
                 Featured <span className="gradient-text">Courses</span>
               </h2>
-              <p className="text-muted-foreground mt-2 max-w-lg">
+              <p className="text-muted-foreground text-sm mt-1 max-w-md">
                 Master in-demand skills with our most popular certifications
               </p>
             </div>
             <Button 
               variant="ghost" 
+              size="sm"
               className="text-primary hover:text-primary hover:bg-primary/10 self-start sm:self-auto"
               onClick={() => navigate('/interactive-courses')}
             >
               View All
-              <ChevronRight className="ml-1 h-4 w-4" />
+              <ChevronRight className="ml-1 h-3.5 w-3.5" />
             </Button>
           </div>
 
           {/* Course Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {courses.map((course, index) => (
               <div 
                 key={index}
-                className={`group relative bg-gradient-to-br ${course.gradient} rounded-2xl border ${course.borderColor} p-6 hover:scale-[1.02] transition-all duration-300 cursor-pointer`}
+                className={`group relative bg-gradient-to-br ${course.gradient} rounded-xl border ${course.borderColor} p-4 sm:p-5 hover:scale-[1.02] transition-all duration-300 cursor-pointer`}
                 onClick={() => navigate('/tests')}
               >
                 {/* Card Content */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-start justify-between">
-                    <div className="p-3 bg-background/50 rounded-xl">
-                      <Terminal className="h-6 w-6 text-primary" />
+                    <div className="p-2 bg-background/50 rounded-lg">
+                      <Terminal className="h-5 w-5 text-primary" />
                     </div>
-                    <Badge variant="secondary" className="bg-background/50">
+                    <Badge variant="secondary" className="bg-background/50 text-xs">
                       {course.level}
                     </Badge>
                   </div>
 
                   <div>
-                    <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                    <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                       {course.title}
                     </h3>
-                    <p className="text-muted-foreground text-sm mt-1">
+                    <p className="text-muted-foreground text-sm mt-0.5">
                       {course.description}
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
+                      <Clock className="h-3.5 w-3.5" />
                       {course.duration}
                     </span>
                     <span className="flex items-center gap-1">
-                      <Users className="h-4 w-4" />
+                      <Users className="h-3.5 w-3.5" />
                       {course.students}
                     </span>
                   </div>
 
-                  <Button className="w-full bg-background/50 hover:bg-primary hover:text-primary-foreground border border-border/50 group-hover:border-primary/50 transition-all">
+                  <Button size="sm" className="w-full bg-background/50 hover:bg-primary hover:text-primary-foreground border border-border/50 group-hover:border-primary/50 transition-all text-sm">
                     Start Quiz
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="ml-1.5 h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </div>
               </div>
@@ -362,33 +363,33 @@ const Index = () => {
       </section>
 
       {/* Features Grid */}
-      <section className="relative z-10 py-16 sm:py-24 bg-background-secondary/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+      <section className="relative z-10 py-10 sm:py-14 bg-muted/30 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2">
               Why <span className="gradient-text">Vilver</span>?
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-muted-foreground text-sm max-w-xl mx-auto">
               The fastest way to prove your programming skills and level up your career
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {[
-              { icon: Zap, title: "Fast Learning", desc: "Bite-sized lessons designed for busy developers", color: "text-yellow-500" },
-              { icon: Code2, title: "Real Code", desc: "Practice with actual programming challenges", color: "text-cyan-500" },
-              { icon: Award, title: "Certificates", desc: "Earn verified certificates for your portfolio", color: "text-purple-500" },
-              { icon: Rocket, title: "Career Boost", desc: "Skills that employers actually want", color: "text-primary" },
+              { icon: Zap, title: "Fast Learning", desc: "Bite-sized lessons for busy developers", color: "text-yellow-500" },
+              { icon: Code2, title: "Real Code", desc: "Practice with actual challenges", color: "text-cyan-500" },
+              { icon: Award, title: "Certificates", desc: "Earn verified certificates", color: "text-purple-500" },
+              { icon: Rocket, title: "Career Boost", desc: "Skills employers want", color: "text-primary" },
             ].map((feature, index) => (
               <div 
                 key={index}
-                className="group p-6 bg-card/50 rounded-2xl border border-border/50 hover:border-primary/30 transition-all duration-300"
+                className="group p-4 bg-card/50 rounded-xl border border-border/50 hover:border-primary/30 transition-all duration-300"
               >
-                <div className={`w-12 h-12 rounded-xl bg-background flex items-center justify-center mb-4 group-hover:scale-110 transition-transform ${feature.color}`}>
-                  <feature.icon className="h-6 w-6" />
+                <div className={`w-10 h-10 rounded-lg bg-background flex items-center justify-center mb-3 group-hover:scale-110 transition-transform ${feature.color}`}>
+                  <feature.icon className="h-5 w-5" />
                 </div>
-                <h3 className="text-lg font-bold text-foreground mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground text-sm">{feature.desc}</p>
+                <h3 className="text-sm sm:text-base font-bold text-foreground mb-1">{feature.title}</h3>
+                <p className="text-muted-foreground text-xs sm:text-sm">{feature.desc}</p>
               </div>
             ))}
           </div>
@@ -396,40 +397,40 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="relative z-10 py-16 sm:py-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20 rounded-3xl border border-primary/30 p-8 sm:p-12 lg:p-16 text-center">
+      <section className="relative z-10 py-10 sm:py-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20 rounded-2xl border border-primary/30 p-6 sm:p-8 lg:p-10 text-center">
             {/* Glow */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10 blur-3xl"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10 blur-3xl pointer-events-none"></div>
             
             <div className="relative z-10">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/20 rounded-2xl mb-6 pulse-glow">
-                <Flame className="h-8 w-8 text-primary" />
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-primary/20 rounded-xl mb-4 pulse-glow">
+                <Flame className="h-6 w-6 text-primary" />
               </div>
               
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2">
                 Ready to <span className="gradient-text">Level Up</span>?
               </h2>
-              <p className="text-muted-foreground text-lg max-w-xl mx-auto mb-8">
-                Join millions of developers who've certified their skills with Vilver. Start your journey today.
+              <p className="text-muted-foreground text-sm sm:text-base max-w-md mx-auto mb-6">
+                Join millions of developers who've certified their skills with Vilver.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button 
                   onClick={() => navigate('/learn')}
-                  size="lg"
-                  className="btn-fire text-lg px-8 py-6 rounded-xl"
+                  size="default"
+                  className="btn-fire text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg"
                 >
-                  <Rocket className="mr-2 h-5 w-5" />
+                  <Rocket className="mr-1.5 h-4 w-4" />
                   Start Free
                 </Button>
                 <Button 
                   onClick={() => navigate('/tests')}
                   variant="outline"
-                  size="lg"
-                  className="text-lg px-8 py-6 rounded-xl border-border/50 hover:border-primary/50"
+                  size="default"
+                  className="text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg border-border/50 hover:border-primary/50"
                 >
-                  <Star className="mr-2 h-5 w-5 text-primary" />
+                  <Star className="mr-1.5 h-4 w-4 text-primary" />
                   Take a Quiz
                 </Button>
               </div>
@@ -439,14 +440,14 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 py-8 border-t border-border/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <footer className="relative z-10 py-6 border-t border-border/30">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Flame className="h-6 w-6 text-primary" />
-              <span className="font-bold text-lg">Vilver</span>
+              <Flame className="h-5 w-5 text-primary" />
+              <span className="font-bold text-base">Vilver</span>
             </div>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted-foreground text-xs sm:text-sm">
               © 2025 Vilver Learning. Learn. Code. Conquer.
             </p>
           </div>
