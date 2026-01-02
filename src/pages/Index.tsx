@@ -1,216 +1,383 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Award, Clock, CheckCircle, BookOpen, Users, Trophy, ArrowRight, Star } from "lucide-react";
-import heroImage from "@/assets/hero-programming.jpg";
+import { 
+  Flame, Play, Zap, Code2, Trophy, Rocket, 
+  ArrowRight, BookOpen, Terminal, Sparkles,
+  ChevronRight, Clock, Award, Users, Star
+} from "lucide-react";
 import { VantaBackground } from "@/components/VantaBackground";
+
 const Index = () => {
   const navigate = useNavigate();
-  const features = [{
-    icon: BookOpen,
-    title: "11+ Technologies",
-    description: "Python, JavaScript, Java, C/C++, HTML, Node.js, Git, Flutter, Swift, Next.js and more"
-  }, {
-    icon: Clock,
-    title: "Timed Assessment",
-    description: "30-minute time limit to test your knowledge under pressure"
-  }, {
-    icon: Award,
-    title: "Professional Certificate",
-    description: "Earn a beautiful certificate upon passing with 70% or higher"
-  }, {
-    icon: CheckCircle,
-    title: "Instant Results",
-    description: "Get immediate feedback with detailed explanations for each question"
-  }];
-  const stats = [{
-    icon: Users,
-    label: "Monthly Active Learners",
-    value: "12 million+"
-  }, {
-    icon: Trophy,
-    label: "Certified",
-    value: "7 million+"
-  }, {
-    icon: Star,
-    label: "Success Rate",
-    value: "85%"
-  }, {
-    icon: CheckCircle,
-    label: "Average Score",
-    value: "78%"
-  }];
-  return <div className="min-h-screen bg-[var(--gradient-background)] relative">
-      {/* Vanta.js Background Animation */}
+
+  const technologies = [
+    { name: "JavaScript", color: "from-yellow-400 to-yellow-600", icon: "JS" },
+    { name: "Python", color: "from-blue-400 to-green-500", icon: "PY" },
+    { name: "React", color: "from-cyan-400 to-blue-500", icon: "⚛️" },
+    { name: "Java", color: "from-red-500 to-orange-500", icon: "☕" },
+    { name: "Node.js", color: "from-green-500 to-green-700", icon: "🟢" },
+    { name: "TypeScript", color: "from-blue-500 to-blue-700", icon: "TS" },
+    { name: "C++", color: "from-blue-600 to-purple-600", icon: "C+" },
+    { name: "Swift", color: "from-orange-500 to-red-500", icon: "🔶" },
+  ];
+
+  const courses = [
+    {
+      title: "JavaScript Masterclass",
+      description: "From zero to hero in modern JS",
+      duration: "30 min",
+      level: "Beginner",
+      students: "45K+",
+      gradient: "from-yellow-500/20 to-orange-500/20",
+      borderColor: "border-yellow-500/30",
+    },
+    {
+      title: "Python Deep Dive",
+      description: "Master Python programming",
+      duration: "25 min",
+      level: "Intermediate",
+      students: "32K+",
+      gradient: "from-blue-500/20 to-green-500/20",
+      borderColor: "border-blue-500/30",
+    },
+    {
+      title: "React in 100 Seconds",
+      description: "Fast-track React mastery",
+      duration: "20 min",
+      level: "Advanced",
+      students: "28K+",
+      gradient: "from-cyan-500/20 to-blue-500/20",
+      borderColor: "border-cyan-500/30",
+    },
+  ];
+
+  const stats = [
+    { value: "12M+", label: "Learners", icon: Users },
+    { value: "50+", label: "Courses", icon: BookOpen },
+    { value: "95%", label: "Pass Rate", icon: Trophy },
+    { value: "24/7", label: "Access", icon: Clock },
+  ];
+
+  return (
+    <div className="min-h-screen bg-background relative overflow-hidden">
       <VantaBackground effect="net" />
       
+      {/* Tech Grid Background */}
+      <div className="absolute inset-0 tech-grid opacity-50"></div>
+
       {/* Hero Section */}
-      <div className="relative overflow-hidden z-10">
-        <div className="absolute inset-0 bg-[var(--gradient-primary)] opacity-10"></div>
-        <div className="relative max-w-7xl mx-auto px-3 sm:px-6 py-8 sm:py-12 md:py-16 lg:py-24">
-          <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-center">
-            <div className="space-y-4 sm:space-y-6 md:space-y-8">
-               <div className="space-y-2 sm:space-y-3 md:space-y-4">
-                <Badge className="bg-primary/10 text-primary border-primary/20 text-[10px] sm:text-xs md:text-sm px-2 py-0.5 sm:px-3 sm:py-1">
-                  Programming Certification
-                </Badge>
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight">
-                  <span className="bg-[var(--gradient-primary)] bg-clip-text text-transparent">
-                    Master Programming
-                  </span>
+      <section className="relative z-10 pt-8 sm:pt-16 lg:pt-24 pb-16 sm:pb-24 lg:pb-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+            {/* Left Column - Text Content */}
+            <div className="space-y-6 sm:space-y-8">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-4 py-2 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+                <Flame className="h-4 w-4 text-primary animate-pulse" />
+                <span className="text-primary font-medium text-sm">Learn. Code. Conquer.</span>
+              </div>
+
+              {/* Headline */}
+              <div className="space-y-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] tracking-tight">
+                  <span className="text-foreground">Build </span>
+                  <span className="gradient-text">Epic</span>
                   <br />
-                  <span className="text-white">Get Certified</span>
+                  <span className="text-foreground">Code Skills</span>
                 </h1>
-                <p className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed text-white">
-                  Test your programming knowledge with our comprehensive certification quiz. 
-                  Cover essential topics from JavaScript and React to Python and algorithms.
+                <p className="text-muted-foreground text-lg sm:text-xl max-w-xl leading-relaxed">
+                  Master programming with bite-sized lessons, hands-on quizzes, and earn certificates that prove your skills.
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4">
-                <Button onClick={() => navigate('/learn')} className="bg-primary hover:bg-primary/90 text-primary-foreground border-0 shadow-[var(--glow-primary)] text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-5 w-full sm:w-auto">
-                  Code learning 
-                  <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                <Button 
+                  onClick={() => navigate('/learn')}
+                  size="lg"
+                  className="btn-fire group text-lg px-8 py-6 rounded-xl"
+                >
+                  <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+                  Start Learning
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
-                <Button variant="outline" className="text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-5 border-border hover:bg-accent w-full sm:w-auto" onClick={() => navigate('/interactive-courses')}>
-                  Subject
+                <Button 
+                  onClick={() => navigate('/tests')}
+                  variant="outline"
+                  size="lg"
+                  className="text-lg px-8 py-6 rounded-xl border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-all"
+                >
+                  <Trophy className="mr-2 h-5 w-5 text-primary" />
+                  Get Certified
                 </Button>
               </div>
 
-              {/* Stats */}
-              
+              {/* Stats Row */}
+              <div className="flex flex-wrap gap-6 sm:gap-8 pt-4 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                {stats.map((stat, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <stat.icon className="h-5 w-5 text-primary" />
+                    <div>
+                      <p className="text-xl sm:text-2xl font-bold text-foreground">{stat.value}</p>
+                      <p className="text-xs text-muted-foreground">{stat.label}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="relative hidden lg:block">
-              <div className="absolute inset-0 bg-[var(--gradient-primary)] rounded-3xl blur-3xl opacity-20"></div>
-              <img src={heroImage} alt="Programming certification platform" className="relative rounded-3xl shadow-2xl w-full" />
+            {/* Right Column - Code Preview */}
+            <div className="relative hidden lg:block animate-fade-in" style={{ animationDelay: '0.5s' }}>
+              <div className="relative">
+                {/* Glow Effect */}
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary/30 via-accent/20 to-primary/30 rounded-3xl blur-3xl opacity-50"></div>
+                
+                {/* Code Window */}
+                <div className="relative bg-background-tertiary rounded-2xl border border-border/50 overflow-hidden shadow-2xl">
+                  {/* Window Header */}
+                  <div className="flex items-center gap-2 px-4 py-3 bg-background-secondary border-b border-border/50">
+                    <div className="flex gap-2">
+                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <span className="text-muted-foreground text-sm font-mono ml-4">vilver.js</span>
+                  </div>
+                  
+                  {/* Code Content */}
+                  <div className="p-6 font-mono text-sm leading-relaxed">
+                    <div className="space-y-2">
+                      <p><span className="text-purple-400">const</span> <span className="text-cyan-400">developer</span> <span className="text-foreground">=</span> <span className="text-foreground">{'{'}</span></p>
+                      <p className="pl-4"><span className="text-cyan-400">skills</span><span className="text-foreground">:</span> <span className="text-green-400">"leveling up"</span><span className="text-foreground">,</span></p>
+                      <p className="pl-4"><span className="text-cyan-400">mindset</span><span className="text-foreground">:</span> <span className="text-green-400">"growth"</span><span className="text-foreground">,</span></p>
+                      <p className="pl-4"><span className="text-cyan-400">coffee</span><span className="text-foreground">:</span> <span className="text-orange-400">Infinity</span><span className="text-foreground">,</span></p>
+                      <p className="pl-4"><span className="text-purple-400">async</span> <span className="text-yellow-400">learn</span><span className="text-foreground">()</span> <span className="text-foreground">{'{'}</span></p>
+                      <p className="pl-8"><span className="text-purple-400">return</span> <span className="text-green-400">"🚀 certified!"</span></p>
+                      <p className="pl-4"><span className="text-foreground">{'}'}</span></p>
+                      <p><span className="text-foreground">{'}'};</span></p>
+                      <p className="mt-4">
+                        <span className="text-muted-foreground">// Start your journey</span>
+                      </p>
+                      <p>
+                        <span className="text-cyan-400">developer</span><span className="text-foreground">.</span><span className="text-yellow-400">learn</span><span className="text-foreground">();</span>
+                        <span className="animate-pulse text-primary ml-1">▋</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating Tech Icons */}
+                <div className="absolute -top-6 -right-6 w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center text-2xl font-bold text-background float shadow-lg">
+                  JS
+                </div>
+                <div className="absolute -bottom-4 -left-4 w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center text-xl float shadow-lg" style={{ animationDelay: '1s' }}>
+                  ⚛️
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Features Section */}
-      <div className="py-8 sm:py-12 md:py-16 lg:py-24 bg-background-secondary/80 backdrop-blur-sm relative z-10">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6">
-          <div className="text-center mb-4 sm:mb-8 md:mb-12 lg:mb-16">
-            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-foreground mb-2 sm:mb-3 md:mb-4">
-              Multiple Technology Certifications
+      {/* Technologies Marquee */}
+      <section className="relative z-10 py-8 border-y border-border/30 bg-background-secondary/50 backdrop-blur-sm overflow-hidden">
+        <div className="flex animate-marquee">
+          <div className="flex gap-8 px-4 items-center">
+            {[...technologies, ...technologies].map((tech, index) => (
+              <div 
+                key={index}
+                className="flex items-center gap-3 px-6 py-3 bg-background/50 rounded-xl border border-border/30 whitespace-nowrap hover:border-primary/50 transition-colors cursor-pointer"
+              >
+                <span className={`w-8 h-8 bg-gradient-to-br ${tech.color} rounded-lg flex items-center justify-center text-sm font-bold text-white`}>
+                  {tech.icon}
+                </span>
+                <span className="font-medium text-foreground">{tech.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <style>{`
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .animate-marquee {
+            animation: marquee 30s linear infinite;
+          }
+        `}</style>
+      </section>
+
+      {/* Featured Courses */}
+      <section className="relative z-10 py-16 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
+            <div>
+              <Badge className="bg-accent/20 text-accent border-accent/30 mb-4">
+                <Sparkles className="h-3 w-3 mr-1" />
+                Popular
+              </Badge>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground">
+                Featured <span className="gradient-text">Courses</span>
+              </h2>
+              <p className="text-muted-foreground mt-2 max-w-lg">
+                Master in-demand skills with our most popular certifications
+              </p>
+            </div>
+            <Button 
+              variant="ghost" 
+              className="text-primary hover:text-primary hover:bg-primary/10 self-start sm:self-auto"
+              onClick={() => navigate('/interactive-courses')}
+            >
+              View All
+              <ChevronRight className="ml-1 h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* Course Cards */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {courses.map((course, index) => (
+              <div 
+                key={index}
+                className={`group relative bg-gradient-to-br ${course.gradient} rounded-2xl border ${course.borderColor} p-6 hover:scale-[1.02] transition-all duration-300 cursor-pointer`}
+                onClick={() => navigate('/tests')}
+              >
+                {/* Card Content */}
+                <div className="space-y-4">
+                  <div className="flex items-start justify-between">
+                    <div className="p-3 bg-background/50 rounded-xl">
+                      <Terminal className="h-6 w-6 text-primary" />
+                    </div>
+                    <Badge variant="secondary" className="bg-background/50">
+                      {course.level}
+                    </Badge>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                      {course.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm mt-1">
+                      {course.description}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      {course.duration}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Users className="h-4 w-4" />
+                      {course.students}
+                    </span>
+                  </div>
+
+                  <Button className="w-full bg-background/50 hover:bg-primary hover:text-primary-foreground border border-border/50 group-hover:border-primary/50 transition-all">
+                    Start Quiz
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="relative z-10 py-16 sm:py-24 bg-background-secondary/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              Why <span className="gradient-text">Vilver</span>?
             </h2>
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
-              Choose from 11 different programming languages and technologies with professional-grade questions.
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              The fastest way to prove your programming skills and level up your career
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
-            {features.map((feature, index) => <Card key={index} className="bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300">
-                <CardHeader className="text-center pb-2 sm:pb-3 md:pb-4 p-3 sm:p-4 md:p-6">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-2 sm:mb-3 md:mb-4">
-                    <feature.icon className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-primary" />
-                  </div>
-                  <CardTitle className="text-xs sm:text-sm md:text-base">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="p-3 sm:p-4 md:p-6 pt-0">
-                  <CardDescription className="text-center text-[10px] sm:text-xs md:text-sm">
-                    {feature.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>)}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: Zap, title: "Fast Learning", desc: "Bite-sized lessons designed for busy developers", color: "text-yellow-500" },
+              { icon: Code2, title: "Real Code", desc: "Practice with actual programming challenges", color: "text-cyan-500" },
+              { icon: Award, title: "Certificates", desc: "Earn verified certificates for your portfolio", color: "text-purple-500" },
+              { icon: Rocket, title: "Career Boost", desc: "Skills that employers actually want", color: "text-primary" },
+            ].map((feature, index) => (
+              <div 
+                key={index}
+                className="group p-6 bg-card/50 rounded-2xl border border-border/50 hover:border-primary/30 transition-all duration-300"
+              >
+                <div className={`w-12 h-12 rounded-xl bg-background flex items-center justify-center mb-4 group-hover:scale-110 transition-transform ${feature.color}`}>
+                  <feature.icon className="h-6 w-6" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground text-sm">{feature.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* CTA Section */}
-      <div className="py-8 sm:py-12 md:py-16 lg:py-24 relative z-10">
-        <div className="max-w-4xl mx-auto text-center px-3 sm:px-6">
-          <div className="bg-[var(--gradient-card)] rounded-lg sm:rounded-xl md:rounded-2xl lg:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12 border border-border/50 shadow-2xl">
-            <h3 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-bold text-foreground mb-2 sm:mb-4 md:mb-6">
-              Ready to Test Your Skills?
-            </h3>
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-muted-foreground mb-4 sm:mb-6 md:mb-8">
-              Take our comprehensive programming quiz and earn your certification today.
-            </p>
-            <Button onClick={() => navigate('/tests')} className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-[var(--glow-primary)] text-xs sm:text-sm md:text-base px-4 sm:px-8 md:px-12 py-3 sm:py-4 md:py-5 w-full sm:w-auto">
-              Choose Your Test
-              <Award className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
-            </Button>
-        </div>
-      </div>
-
-      {/* Student Ratings Section */}
-      <div className="py-8 sm:py-12 md:py-16 lg:py-24 bg-background-tertiary/80 backdrop-blur-sm relative z-10">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6">
-          <div className="text-center mb-4 sm:mb-8 md:mb-12 lg:mb-16">
-            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-foreground mb-2 sm:mb-3 md:mb-4">
-              What Our Students Say
-            </h2>
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
-              Over 12 million developers trust CodeCert for their programming certification needs.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
-            {[{
-              name: "Sarah Chen",
-              role: "Full Stack Developer",
-              company: "TechCorp",
-              rating: 5,
-              review: "CodeCert helped me validate my JavaScript skills and land my dream job. The questions were challenging but fair, exactly what you'd expect in real interviews."
-            }, {
-              name: "Marcus Rodriguez",
-              role: "Python Developer",
-              company: "DataFlow Inc",
-              rating: 5,
-              review: "The Python certification was comprehensive and well-structured. I gained confidence in my abilities and got promoted within 3 months of completing it."
-            }, {
-              name: "Emily Johnson",
-              role: "React Developer",
-              company: "StartupXYZ",
-              rating: 4,
-              review: "Great platform for testing React knowledge. The instant feedback and detailed explanations helped me understand concepts I was struggling with."
-            }, {
-              name: "David Kim",
-              role: "Backend Engineer",
-              company: "CloudTech",
-              rating: 5,
-              review: "The Node.js certification was exactly what I needed to prove my backend skills. The certificate looks professional and is recognized by employers."
-            }, {
-              name: "Lisa Thompson",
-              role: "Software Engineer",
-              company: "InnovateLab",
-              rating: 5,
-              review: "I completed 5 different certifications on CodeCert. Each one helped me identify knowledge gaps and improve my coding skills significantly."
-            }, {
-              name: "Alex Patel",
-              role: "Frontend Developer",
-              company: "DesignStudio",
-              rating: 4,
-              review: "The HTML/CSS certification was thorough and helped me brush up on fundamentals. The timed format really tests your knowledge under pressure."
-            }].map((testimonial, index) => <Card key={index} className="bg-card hover:shadow-xl transition-all duration-300 border-border/50">
-                <CardHeader className="pb-2 sm:pb-3 md:pb-4 p-3 sm:p-4 md:p-6">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2 mb-1 sm:mb-2">
-                    <div>
-                      <CardTitle className="text-xs sm:text-sm md:text-base font-semibold">{testimonial.name}</CardTitle>
-                      <p className="text-[10px] sm:text-xs text-muted-foreground">{testimonial.role} at {testimonial.company}</p>
-                    </div>
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => <Star key={i} className={`h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-4 md:w-4 ${i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-muted-foreground'}`} />)}
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-3 sm:p-4 md:p-6 pt-0">
-                  <p className="text-[10px] sm:text-xs md:text-sm text-muted-foreground italic">"{testimonial.review}"</p>
-                </CardContent>
-              </Card>)}
-          </div>
-
-          {/* Overall Stats */}
-          <div className="mt-8 sm:mt-12 md:mt-16 text-center">
+      <section className="relative z-10 py-16 sm:py-24">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20 rounded-3xl border border-primary/30 p-8 sm:p-12 lg:p-16 text-center">
+            {/* Glow */}
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10 blur-3xl"></div>
             
+            <div className="relative z-10">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/20 rounded-2xl mb-6 pulse-glow">
+                <Flame className="h-8 w-8 text-primary" />
+              </div>
+              
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+                Ready to <span className="gradient-text">Level Up</span>?
+              </h2>
+              <p className="text-muted-foreground text-lg max-w-xl mx-auto mb-8">
+                Join millions of developers who've certified their skills with Vilver. Start your journey today.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  onClick={() => navigate('/learn')}
+                  size="lg"
+                  className="btn-fire text-lg px-8 py-6 rounded-xl"
+                >
+                  <Rocket className="mr-2 h-5 w-5" />
+                  Start Free
+                </Button>
+                <Button 
+                  onClick={() => navigate('/tests')}
+                  variant="outline"
+                  size="lg"
+                  className="text-lg px-8 py-6 rounded-xl border-border/50 hover:border-primary/50"
+                >
+                  <Star className="mr-2 h-5 w-5 text-primary" />
+                  Take a Quiz
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="relative z-10 py-8 border-t border-border/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <Flame className="h-6 w-6 text-primary" />
+              <span className="font-bold text-lg">Vilver</span>
+            </div>
+            <p className="text-muted-foreground text-sm">
+              © 2025 Vilver Learning. Learn. Code. Conquer.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
-    </div>;
+  );
 };
+
 export default Index;
