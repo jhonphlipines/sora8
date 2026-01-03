@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Flame, Play, Zap, Code2, Trophy, Rocket, ArrowRight, BookOpen, Terminal, Sparkles, ChevronRight, Clock, Award, Users, Star } from "lucide-react";
+import { Flame, Play, Zap, Code2, Trophy, Rocket, ArrowRight, BookOpen, Terminal, Sparkles, ChevronRight, Clock, Award, Users, Star, Layers } from "lucide-react";
 
 // Programming language logos as SVG components
 const JSLogo = () => <svg viewBox="0 0 128 128" className="w-8 h-8">
@@ -395,7 +395,7 @@ const Index = () => {
         <div className="w-full max-w-5xl mx-auto px-3 sm:px-4 lg:px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Flame className="h-5 w-5 text-primary" />
+              <Layers className="h-5 w-5 text-primary" />
               <span className="font-bold text-base">Vilver</span>
             </div>
             <p className="text-muted-foreground text-xs sm:text-sm">
