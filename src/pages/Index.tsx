@@ -162,7 +162,7 @@ const Index = () => {
               <div className="flex flex-col sm:flex-row gap-3 animate-fade-in" style={{
               animationDelay: '0.3s'
             }}>
-                <Button onClick={() => navigate('/learn')} size="default" className="btn-fire group text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg">
+                <Button onClick={() => navigate('/learn')} size="default" className="btn-fire group text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg bg-primary">
                   <Play className="mr-1.5 h-4 w-4 group-hover:scale-110 transition-transform" />
                   Start Learning
                   <ArrowRight className="ml-1.5 h-4 w-4 group-hover:translate-x-1 transition-transform" />
