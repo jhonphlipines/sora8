@@ -103,7 +103,7 @@ export function AppSidebar() {
                 VILVER.xyz    
               </h2>
             </div>
-            <p className="text-xs text-sidebar-foreground/70 mt-1">Development Environment</p>
+            
           </div>}
 
         {/* Main Navigation */}
