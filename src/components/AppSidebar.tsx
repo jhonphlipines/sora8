@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BookOpen, Trophy, Settings, Code, Database, Globe, Smartphone, Target, Award, DollarSign, BarChart3, ChevronRight, FileText, GraduationCap, Bot, Library, Share2 } from "lucide-react";
+import { Home, BookOpen, Trophy, Settings, Code, Database, Globe, Smartphone, Target, Award, DollarSign, BarChart3, ChevronRight, FileText, GraduationCap, Bot, Library, Share2, Box } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, useSidebar } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -98,11 +98,7 @@ export function AppSidebar() {
         {/* Brand Section */}
         {!isCollapsed && <div className="p-4 border-b border-sidebar-border">
             <div className="flex items-center gap-2">
-              <img 
-                src="https://img.icons8.com/color/480/vimeo.png" 
-                alt="Logo" 
-                className="w-8 h-8 rounded-lg"
-              />
+              <img src="https://img.icons8.com/color/480/vimeo.png" alt="Logo" className="w-8 h-8 rounded-lg" />
               <h2 className="text-lg font-bold text-sidebar-foreground">
                 VILVER.xyz    
               </h2>
@@ -181,22 +177,19 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton 
-                  className="hover:bg-sidebar-accent/50 text-sidebar-foreground"
-                  onClick={() => {
-                    const shareData = {
-                      title: 'VILVER.xyz - CodeCert Labs',
-                      text: 'Check out this amazing coding learning platform!',
-                      url: window.location.origin
-                    };
-                    if (navigator.share) {
-                      navigator.share(shareData);
-                    } else {
-                      navigator.clipboard.writeText(window.location.origin);
-                      alert('Link copied to clipboard!');
-                    }
-                  }}
-                >
+                <SidebarMenuButton className="hover:bg-sidebar-accent/50 text-sidebar-foreground" onClick={() => {
+                const shareData = {
+                  title: 'VILVER.xyz - CodeCert Labs',
+                  text: 'Check out this amazing coding learning platform!',
+                  url: window.location.origin
+                };
+                if (navigator.share) {
+                  navigator.share(shareData);
+                } else {
+                  navigator.clipboard.writeText(window.location.origin);
+                  alert('Link copied to clipboard!');
+                }
+              }}>
                   <Share2 className="h-4 w-4" />
                   {!isCollapsed && <span>Share Website</span>}
                 </SidebarMenuButton>
