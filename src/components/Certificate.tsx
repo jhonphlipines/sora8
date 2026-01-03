@@ -5,7 +5,6 @@ import { useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-
 interface CertificateProps {
   studentName: string;
   score: number;
@@ -14,7 +13,6 @@ interface CertificateProps {
   completionDate: Date;
   certificateId: string;
 }
-
 export const Certificate = ({
   studentName,
   score,
@@ -23,12 +21,13 @@ export const Certificate = ({
   completionDate,
   certificateId
 }: CertificateProps) => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const certificateRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const percentage = Math.round(score / totalQuestions * 100);
   const isPassed = percentage >= 60;
-
   const getMedalInfo = (percent: number) => {
     if (percent >= 90) {
       return {
@@ -38,7 +37,7 @@ export const Certificate = ({
         border: "#facc15",
         fill: "#fbbf24",
         textColor: "#ca8a04",
-        bgColor: "#fef3c7",
+        bgColor: "#fef3c7"
       };
     } else if (percent >= 70) {
       return {
@@ -48,7 +47,7 @@ export const Certificate = ({
         border: "#9ca3af",
         fill: "#d1d5db",
         textColor: "#4b5563",
-        bgColor: "#f3f4f6",
+        bgColor: "#f3f4f6"
       };
     } else {
       return {
@@ -58,13 +57,11 @@ export const Certificate = ({
         border: "#d97706",
         fill: "#f59e0b",
         textColor: "#92400e",
-        bgColor: "#fef3c7",
+        bgColor: "#fef3c7"
       };
     }
   };
-
   const medalInfo = getMedalInfo(percentage);
-
   const captureCanvas = async () => {
     if (!certificateRef.current) throw new Error("Certificate ref not found");
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -77,7 +74,6 @@ export const Certificate = ({
       logging: false
     });
   };
-
   const downloadAsImage = async () => {
     if (!certificateRef.current) {
       toast({
@@ -115,7 +111,6 @@ export const Certificate = ({
       setIsDownloading(false);
     }
   };
-
   const downloadAsJPG = async () => {
     if (!certificateRef.current) {
       toast({
@@ -153,7 +148,6 @@ export const Certificate = ({
       setIsDownloading(false);
     }
   };
-
   const downloadAsPDF = async () => {
     if (!certificateRef.current) {
       toast({
@@ -199,15 +193,12 @@ export const Certificate = ({
       setIsDownloading(false);
     }
   };
-
   const downloadAll = async () => {
     await downloadAsImage();
     setTimeout(() => downloadAsPDF(), 1000);
   };
-
   if (!isPassed) {
-    return (
-      <Card className="w-full max-w-2xl mx-auto bg-card border-border/50 shadow-2xl">
+    return <Card className="w-full max-w-2xl mx-auto bg-card border-border/50 shadow-2xl">
         <CardContent className="text-center py-12">
           <div className="mb-6">
             <div className="w-20 h-20 mx-auto bg-destructive/20 rounded-full flex items-center justify-center mb-4">
@@ -222,18 +213,14 @@ export const Certificate = ({
           </div>
           <Button onClick={() => window.location.reload()} className="bg-primary">Retake Quiz</Button>
         </CardContent>
-      </Card>
-    );
+      </Card>;
   }
-
-  return (
-    <div className="w-full max-w-4xl mx-auto">
+  return <div className="w-full max-w-4xl mx-auto">
       {/* Certificate with Medal Layout */}
-      <div 
-        ref={certificateRef} 
-        className="relative bg-white overflow-hidden shadow-2xl w-full" 
-        style={{ aspectRatio: '1.414/1', minHeight: '280px' }}
-      >
+      <div ref={certificateRef} className="relative bg-white overflow-hidden shadow-2xl w-full" style={{
+      aspectRatio: '1.414/1',
+      minHeight: '280px'
+    }}>
         {/* Decorative Border */}
         <div className="absolute inset-2 sm:inset-3 md:inset-4 border-2 border-gray-300"></div>
         <div className="absolute inset-3 sm:inset-4 md:inset-5 border border-gray-200"></div>
@@ -263,10 +250,10 @@ export const Certificate = ({
               {/* Date */}
               <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500">
                 {completionDate.toLocaleDateString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric'
-                })}
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+              })}
               </p>
 
               {/* This certifies */}
@@ -310,60 +297,29 @@ export const Certificate = ({
           <div className="w-[35%] sm:w-[30%] flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 border-l border-gray-200">
             {/* Medal SVG */}
             <div className="relative mb-2 sm:mb-4">
-              <svg 
-                viewBox="0 0 120 160" 
-                className="w-16 h-20 sm:w-20 sm:h-26 md:w-28 md:h-36 lg:w-32 lg:h-44"
-              >
+              <svg viewBox="0 0 120 160" className="w-16 h-20 sm:w-20 sm:h-26 md:w-28 md:h-36 lg:w-32 lg:h-44">
                 {/* Ribbon */}
-                <polygon 
-                  points="35,0 50,50 60,0" 
-                  fill={medalInfo.border}
-                  opacity="0.8"
-                />
-                <polygon 
-                  points="85,0 70,50 60,0" 
-                  fill={medalInfo.border}
-                  opacity="0.9"
-                />
+                <polygon points="35,0 50,50 60,0" fill={medalInfo.border} opacity="0.8" />
+                <polygon points="85,0 70,50 60,0" fill={medalInfo.border} opacity="0.9" />
                 
                 {/* Medal Circle Shadow */}
                 <circle cx="60" cy="95" r="48" fill="rgba(0,0,0,0.1)" />
                 
                 {/* Medal Circle Outer */}
-                <circle 
-                  cx="60" 
-                  cy="92" 
-                  r="45" 
-                  fill={medalInfo.fill}
-                  stroke={medalInfo.border}
-                  strokeWidth="4"
-                />
+                <circle cx="60" cy="92" r="45" fill={medalInfo.fill} stroke={medalInfo.border} strokeWidth="4" />
                 
                 {/* Medal Inner Circle */}
-                <circle 
-                  cx="60" 
-                  cy="92" 
-                  r="35" 
-                  fill="none"
-                  stroke={medalInfo.border}
-                  strokeWidth="2"
-                  opacity="0.6"
-                />
+                <circle cx="60" cy="92" r="35" fill="none" stroke={medalInfo.border} strokeWidth="2" opacity="0.6" />
                 
                 {/* Star in Medal */}
-                <polygon 
-                  points="60,55 67,78 92,78 72,92 79,115 60,102 41,115 48,92 28,78 53,78"
-                  fill="white"
-                  opacity="0.9"
-                />
+                <polygon points="60,55 67,78 92,78 72,92 79,115 60,102 41,115 48,92 28,78 53,78" fill="white" opacity="0.9" />
               </svg>
             </div>
 
             {/* Medal Type */}
-            <p 
-              className="text-sm sm:text-base md:text-xl lg:text-2xl font-bold mb-1"
-              style={{ color: medalInfo.textColor }}
-            >
+            <p className="text-sm sm:text-base md:text-xl lg:text-2xl font-bold mb-1" style={{
+            color: medalInfo.textColor
+          }}>
               {medalInfo.type}
             </p>
 
@@ -373,33 +329,19 @@ export const Certificate = ({
             </p>
 
             {/* Score Badge */}
-            <div 
-              className="px-2 py-1 sm:px-3 sm:py-1.5 rounded-full border-2 mb-2 sm:mb-4"
-              style={{ 
-                backgroundColor: medalInfo.bgColor,
-                borderColor: medalInfo.border 
-              }}
-            >
-              <p 
-                className="text-sm sm:text-base md:text-lg font-bold"
-                style={{ color: medalInfo.textColor }}
-              >
+            <div className="px-2 py-1 sm:px-3 sm:py-1.5 rounded-full border-2 mb-2 sm:mb-4" style={{
+            backgroundColor: medalInfo.bgColor,
+            borderColor: medalInfo.border
+          }}>
+              <p className="text-sm sm:text-base md:text-lg font-bold" style={{
+              color: medalInfo.textColor
+            }}>
                 {percentage}%
               </p>
             </div>
 
             {/* Score Range Legend */}
-            <div className="text-center space-y-0.5 sm:space-y-1">
-              <p className={`text-[6px] sm:text-[8px] md:text-[10px] ${percentage >= 90 ? 'font-bold' : ''}`} style={{ color: percentage >= 90 ? '#ca8a04' : '#9ca3af' }}>
-                🥇 90-100 Gold
-              </p>
-              <p className={`text-[6px] sm:text-[8px] md:text-[10px] ${percentage >= 70 && percentage < 90 ? 'font-bold' : ''}`} style={{ color: percentage >= 70 && percentage < 90 ? '#4b5563' : '#9ca3af' }}>
-                🥈 70-89 Silver
-              </p>
-              <p className={`text-[6px] sm:text-[8px] md:text-[10px] ${percentage >= 60 && percentage < 70 ? 'font-bold' : ''}`} style={{ color: percentage >= 60 && percentage < 70 ? '#92400e' : '#9ca3af' }}>
-                🥉 60-69 Bronze
-              </p>
-            </div>
+            
           </div>
         </div>
 
@@ -415,49 +357,25 @@ export const Certificate = ({
 
       {/* Download Buttons */}
       <div className="flex flex-wrap gap-2 sm:gap-3 justify-center mt-4 sm:mt-6 pb-20 sm:pb-16 md:pb-8 px-2">
-        <Button 
-          onClick={downloadAsImage} 
-          disabled={isDownloading} 
-          variant="outline" 
-          size="sm"
-          className="border-gray-300 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm"
-        >
+        <Button onClick={downloadAsImage} disabled={isDownloading} variant="outline" size="sm" className="border-gray-300 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm">
           <FileImage className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
           PNG
         </Button>
         
-        <Button 
-          onClick={downloadAsJPG} 
-          disabled={isDownloading} 
-          variant="outline" 
-          size="sm"
-          className="border-gray-300 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm"
-        >
+        <Button onClick={downloadAsJPG} disabled={isDownloading} variant="outline" size="sm" className="border-gray-300 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm">
           <FileImage className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
           JPG
         </Button>
         
-        <Button 
-          onClick={downloadAsPDF} 
-          disabled={isDownloading} 
-          variant="outline" 
-          size="sm"
-          className="border-gray-300 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm"
-        >
+        <Button onClick={downloadAsPDF} disabled={isDownloading} variant="outline" size="sm" className="border-gray-300 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm">
           <FileText className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
           PDF
         </Button>
         
-        <Button 
-          onClick={downloadAll} 
-          disabled={isDownloading} 
-          size="sm"
-          className="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white shadow-lg text-xs sm:text-sm"
-        >
+        <Button onClick={downloadAll} disabled={isDownloading} size="sm" className="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white shadow-lg text-xs sm:text-sm">
           <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
           {isDownloading ? "Downloading..." : "Download All"}
         </Button>
       </div>
-    </div>
-  );
+    </div>;
 };
