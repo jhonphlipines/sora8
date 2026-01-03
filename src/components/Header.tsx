@@ -76,42 +76,45 @@ export function Header() {
           </span>
         </div>
         
-        <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
-          {/* Desktop Navigation - Hidden on mobile */}
+        <div className="flex items-center gap-1 sm:gap-2">
+          {/* Desktop Navigation - Hidden on smaller screens */}
           <Button 
             variant="ghost" 
+            size="sm"
             onClick={() => navigate('/learn')} 
-            className="hidden md:flex text-foreground hover:text-primary"
+            className="hidden lg:flex text-foreground hover:text-primary text-sm px-2"
           >
-            <BookOpen className="h-4 w-4 mr-2" />
+            <BookOpen className="h-4 w-4 mr-1" />
             Learn
           </Button>
           <Button 
             variant="ghost" 
+            size="sm"
             onClick={() => navigate('/pricing')} 
-            className="hidden md:flex text-foreground hover:text-primary"
+            className="hidden lg:flex text-foreground hover:text-primary text-sm px-2"
           >
             Pricing
           </Button>
           
-          {/* Test Button - Visible on all screens */}
+          {/* Test Button - Compact on mobile */}
           <Button 
             variant="default" 
+            size="sm"
             onClick={() => navigate('/tests')} 
-            className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs sm:text-sm px-2 sm:px-4"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs px-2 sm:px-3"
           >
-            <Trophy className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
-            <span className="hidden sm:inline">Test</span>
+            <Trophy className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden sm:inline ml-1">Test</span>
           </Button>
           
           <ThemeToggle />
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Avatar className="h-7 w-7 sm:h-8 sm:w-8 ml-1 sm:ml-2 cursor-pointer hover:opacity-80 transition-opacity">
+              <Avatar className="h-7 w-7 cursor-pointer hover:opacity-80 transition-opacity">
                 <AvatarImage src={profile?.avatar_url || ""} alt="Profile" />
-                <AvatarFallback className="bg-primary/10 text-primary text-xs sm:text-sm">
-                  {profile?.display_name?.[0]?.toUpperCase() || <User className="h-3 w-3 sm:h-4 sm:w-4" />}
+                <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                  {profile?.display_name?.[0]?.toUpperCase() || <User className="h-3 w-3" />}
                 </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
