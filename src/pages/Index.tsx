@@ -132,17 +132,17 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background relative overflow-x-hidden">
+    <div className="min-h-screen w-full bg-background relative overflow-hidden">
       {/* Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5 pointer-events-none"></div>
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[600px] h-[400px] bg-primary/10 rounded-full blur-[120px] opacity-50 pointer-events-none"></div>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[500px] h-[300px] bg-primary/10 rounded-full blur-[100px] opacity-40 pointer-events-none"></div>
       
       {/* Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none"></div>
 
       {/* Hero Section */}
-      <section className="relative z-10 pt-6 sm:pt-12 lg:pt-20 pb-12 sm:pb-16 lg:pb-24">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 pt-4 sm:pt-8 lg:pt-12 pb-8 sm:pb-12 lg:pb-16">
+        <div className="w-full max-w-5xl mx-auto px-3 sm:px-4 lg:px-6">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             {/* Left Column - Text Content */}
             <div className="space-y-5 sm:space-y-6">
@@ -255,16 +255,16 @@ const Index = () => {
       </section>
 
       {/* Technologies Marquee */}
-      <section className="relative z-10 py-4 sm:py-6 border-y border-border/30 bg-muted/30 backdrop-blur-sm overflow-hidden">
+      <section className="relative z-10 py-3 sm:py-4 border-y border-border/30 bg-muted/30 backdrop-blur-sm overflow-hidden">
         <div className="flex animate-marquee w-max">
-          <div className="flex gap-4 sm:gap-6 px-2 items-center">
+          <div className="flex gap-3 sm:gap-4 px-2 items-center">
             {[...technologies, ...technologies].map((tech, index) => (
               <div 
                 key={index}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-background/50 rounded-lg border border-border/30 whitespace-nowrap hover:border-primary/50 transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 bg-background/50 rounded-lg border border-border/30 whitespace-nowrap hover:border-primary/50 transition-colors cursor-pointer"
               >
                 <tech.Logo />
-                <span className="font-medium text-sm text-foreground">{tech.name}</span>
+                <span className="font-medium text-xs sm:text-sm text-foreground">{tech.name}</span>
               </div>
             ))}
           </div>
@@ -285,8 +285,8 @@ const Index = () => {
       </section>
 
       {/* Featured Courses */}
-      <section className="relative z-10 py-10 sm:py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 py-8 sm:py-12">
+        <div className="w-full max-w-5xl mx-auto px-3 sm:px-4 lg:px-6">
           {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
             <div>
@@ -363,8 +363,8 @@ const Index = () => {
       </section>
 
       {/* Features Grid */}
-      <section className="relative z-10 py-10 sm:py-14 bg-muted/30 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 py-8 sm:py-12 bg-muted/30 backdrop-blur-sm">
+        <div className="w-full max-w-5xl mx-auto px-3 sm:px-4 lg:px-6">
           <div className="text-center mb-8">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2">
               Why <span className="gradient-text">Vilver</span>?
@@ -397,8 +397,8 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="relative z-10 py-10 sm:py-16">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 py-8 sm:py-12">
+        <div className="w-full max-w-3xl mx-auto px-3 sm:px-4 lg:px-6">
           <div className="relative overflow-hidden bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20 rounded-2xl border border-primary/30 p-6 sm:p-8 lg:p-10 text-center">
             {/* Glow */}
             <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10 blur-3xl pointer-events-none"></div>
@@ -440,8 +440,8 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 py-6 border-t border-border/30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <footer className="relative z-10 py-4 border-t border-border/30">
+        <div className="w-full max-w-5xl mx-auto px-3 sm:px-4 lg:px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <Flame className="h-5 w-5 text-primary" />
