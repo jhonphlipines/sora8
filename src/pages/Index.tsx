@@ -365,7 +365,7 @@ const Index = () => {
             
             <div className="relative z-10">
               <div className="inline-flex items-center justify-center w-12 h-12 bg-primary/20 rounded-xl mb-4 pulse-glow">
-                <Flame className="h-6 w-6 text-primary" />
+                <Layers className="h-6 w-6 text-primary" />
               </div>
               
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2">
