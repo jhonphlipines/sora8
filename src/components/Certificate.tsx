@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Award, Download, FileImage, FileText } from "lucide-react";
+import { Award, Download, FileImage, FileText, Medal } from "lucide-react";
 import { useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
@@ -27,7 +27,43 @@ export const Certificate = ({
   const certificateRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const percentage = Math.round(score / totalQuestions * 100);
-  const isPassed = percentage >= 70;
+  const isPassed = percentage >= 60;
+
+  const getMedalInfo = (percent: number) => {
+    if (percent >= 90) {
+      return {
+        type: "Gold",
+        label: "Excellent",
+        gradient: "from-yellow-400 via-yellow-300 to-yellow-500",
+        border: "#facc15",
+        fill: "#fbbf24",
+        textColor: "#ca8a04",
+        bgColor: "#fef3c7",
+      };
+    } else if (percent >= 70) {
+      return {
+        type: "Silver",
+        label: "Great Job",
+        gradient: "from-gray-300 via-gray-200 to-gray-400",
+        border: "#9ca3af",
+        fill: "#d1d5db",
+        textColor: "#4b5563",
+        bgColor: "#f3f4f6",
+      };
+    } else {
+      return {
+        type: "Bronze",
+        label: "Well Done",
+        gradient: "from-amber-600 via-amber-500 to-amber-700",
+        border: "#d97706",
+        fill: "#f59e0b",
+        textColor: "#92400e",
+        bgColor: "#fef3c7",
+      };
+    }
+  };
+
+  const medalInfo = getMedalInfo(percentage);
 
   const captureCanvas = async () => {
     if (!certificateRef.current) throw new Error("Certificate ref not found");
@@ -181,7 +217,7 @@ export const Certificate = ({
             <p className="text-muted-foreground">You scored {score}/{totalQuestions} ({percentage}%)</p>
           </div>
           <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-6 mb-6">
-            <p className="text-destructive font-semibold">You need at least 70% to earn a certificate.</p>
+            <p className="text-destructive font-semibold">You need at least 60% to earn a certificate.</p>
             <p className="text-muted-foreground mt-2">Don't worry! You can retake the quiz to improve your score.</p>
           </div>
           <Button onClick={() => window.location.reload()} className="bg-primary">Retake Quiz</Button>
@@ -192,140 +228,187 @@ export const Certificate = ({
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      {/* Simple Coursera-style Certificate */}
+      {/* Certificate with Medal Layout */}
       <div 
         ref={certificateRef} 
         className="relative bg-white overflow-hidden shadow-2xl w-full" 
         style={{ aspectRatio: '1.414/1', minHeight: '280px' }}
       >
-        {/* Wavy Pattern Border - Bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-8 sm:h-12 md:h-16 opacity-10">
-          <svg viewBox="0 0 1200 100" className="w-full h-full" preserveAspectRatio="none">
-            <path 
-              d="M0,50 C150,100 350,0 500,50 C650,100 850,0 1000,50 C1150,100 1200,80 1200,50 L1200,100 L0,100 Z" 
-              fill="#9ca3af"
-            />
-            <path 
-              d="M0,60 C150,110 350,10 500,60 C650,110 850,10 1000,60 C1150,110 1200,90 1200,60 L1200,100 L0,100 Z" 
-              fill="#6b7280"
-            />
-          </svg>
-        </div>
+        {/* Decorative Border */}
+        <div className="absolute inset-2 sm:inset-3 md:inset-4 border-2 border-gray-300"></div>
+        <div className="absolute inset-3 sm:inset-4 md:inset-5 border border-gray-200"></div>
 
-        {/* Simple Border */}
-        <div className="absolute inset-2 sm:inset-3 md:inset-4 border border-gray-300"></div>
+        {/* Corner Decorations */}
+        <div className="absolute top-4 left-4 sm:top-5 sm:left-5 md:top-6 md:left-6 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 border-l-2 border-t-2 border-gray-400"></div>
+        <div className="absolute top-4 right-4 sm:top-5 sm:right-5 md:top-6 md:right-6 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 border-r-2 border-t-2 border-gray-400"></div>
+        <div className="absolute bottom-4 left-4 sm:bottom-5 sm:left-5 md:bottom-6 md:left-6 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 border-l-2 border-b-2 border-gray-400"></div>
+        <div className="absolute bottom-4 right-4 sm:bottom-5 sm:right-5 md:bottom-6 md:right-6 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 border-r-2 border-b-2 border-gray-400"></div>
 
-        {/* Corner Ribbon - COURSE CERTIFICATE */}
-        <div className="absolute top-0 right-0 w-24 sm:w-32 md:w-44 lg:w-52">
-          <svg viewBox="0 0 200 200" className="w-full h-auto">
-            {/* Ribbon Background */}
-            <polygon points="60,0 200,0 200,140 200,200 140,200 0,60 0,0" fill="#6b7280" />
-            <polygon points="70,0 200,0 200,130 130,200 0,70 0,0" fill="#9ca3af" />
-            
-            {/* COURSE CERTIFICATE Text */}
-            <text 
-              x="100" 
-              y="50" 
-              textAnchor="middle" 
-              fill="white" 
-              fontSize="14" 
-              fontWeight="bold" 
-              fontFamily="Arial, sans-serif"
-              letterSpacing="1"
-            >
-              COURSE
-            </text>
-            <text 
-              x="100" 
-              y="68" 
-              textAnchor="middle" 
-              fill="white" 
-              fontSize="12" 
-              fontWeight="bold" 
-              fontFamily="Arial, sans-serif"
-              letterSpacing="1"
-            >
-              CERTIFICATE
-            </text>
-          </svg>
-        </div>
-
-        {/* Vilver Seal in Ribbon Area */}
-        <div className="absolute top-[45px] right-[25px] sm:top-[60px] sm:right-[35px] md:top-[85px] md:right-[50px] lg:top-[100px] lg:right-[60px]">
-          <div className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full border-2 sm:border-3 md:border-4 border-gray-500 bg-white flex items-center justify-center">
-            <div className="text-center">
-              <p className="text-[5px] sm:text-[7px] md:text-[9px] lg:text-xs text-gray-500 uppercase tracking-wider">Vilver</p>
-              <p className="text-[4px] sm:text-[5px] md:text-[6px] lg:text-[8px] text-gray-400 uppercase">Learning</p>
+        {/* Main Content - Two Column Layout */}
+        <div className="relative z-10 h-full flex">
+          {/* Left Side - Details */}
+          <div className="flex-1 flex flex-col justify-between p-4 sm:p-6 md:p-8 lg:p-10">
+            {/* Header */}
+            <div>
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light text-gray-400 tracking-wider mb-1">
+                vilver
+              </h1>
+              <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500 uppercase tracking-[0.2em]">
+                Certificate of Completion
+              </p>
             </div>
-          </div>
-        </div>
 
-        {/* Content */}
-        <div className="relative z-10 h-full flex flex-col p-4 sm:p-6 md:p-10 lg:p-12">
-          {/* Vilver Name - Top Left */}
-          <div className="mb-2 sm:mb-4 md:mb-6">
-            <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-gray-400 tracking-wider">
-              vilver
-            </h1>
-          </div>
+            {/* Certificate Content */}
+            <div className="space-y-2 sm:space-y-3 md:space-y-4">
+              {/* Date */}
+              <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500">
+                {completionDate.toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
+              </p>
 
-          {/* Date */}
-          <div className="mb-2 sm:mb-3 md:mb-4">
-            <p className="text-[9px] sm:text-xs md:text-sm text-gray-500">
-              {completionDate.toLocaleDateString('en-US', {
-                month: '2-digit',
-                day: '2-digit',
-                year: 'numeric'
-              })}
-            </p>
-          </div>
+              {/* This certifies */}
+              <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500">
+                This is to certify that
+              </p>
 
-          {/* Student Name */}
-          <div className="mb-1 sm:mb-2">
-            <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-serif text-gray-800 border-b border-gray-300 pb-1 inline-block">
-              {studentName}
-            </h2>
-          </div>
+              {/* Student Name */}
+              <h2 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-serif text-gray-800 border-b border-gray-300 pb-1 inline-block">
+                {studentName}
+              </h2>
 
-          {/* Has successfully completed */}
-          <p className="text-[9px] sm:text-xs md:text-sm text-gray-500 mb-2 sm:mb-3 md:mb-4">
-            has successfully completed
-          </p>
+              {/* Completion Text */}
+              <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500">
+                has successfully completed the course
+              </p>
 
-          {/* Course Name */}
-          <div className="mb-2 sm:mb-3 md:mb-4">
-            <h3 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-semibold text-gray-800 max-w-[70%]">
-              {courseName}
-            </h3>
-          </div>
+              {/* Course Name */}
+              <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-800">
+                {courseName}
+              </h3>
 
-          {/* Description */}
-          <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500 max-w-[60%] leading-relaxed mb-2 sm:mb-4 md:mb-6">
-            an online course authorized by Vilver Learning and offered through Vilver Platform with a score of {percentage}%
-          </p>
+              {/* Score Info */}
+              <p className="text-[7px] sm:text-[9px] md:text-[11px] text-gray-500">
+                with a score of <span className="font-semibold text-gray-700">{percentage}%</span>
+              </p>
+            </div>
 
-          {/* Signature Section */}
-          <div className="mt-auto mb-4 sm:mb-6 md:mb-8">
-            <div className="max-w-[40%]">
-              {/* Signature Line */}
-              <div className="border-b border-gray-400 mb-1 pb-1">
-                <p className="text-sm sm:text-lg md:text-xl italic text-gray-600 font-serif">Vilver</p>
+            {/* Signature Section */}
+            <div className="mt-2 sm:mt-4">
+              <div className="max-w-[50%]">
+                <div className="border-b border-gray-400 mb-1 pb-1">
+                  <p className="text-sm sm:text-base md:text-lg italic text-gray-600 font-serif">Vilver</p>
+                </div>
+                <p className="text-[7px] sm:text-[8px] md:text-[10px] text-gray-500">Vilver Learning Platform</p>
               </div>
-              <p className="text-[7px] sm:text-[9px] md:text-xs text-gray-500">Vilver Learning</p>
-              <p className="text-[7px] sm:text-[9px] md:text-xs text-gray-400">Learning Platform</p>
             </div>
           </div>
 
-          {/* Verification Footer */}
-          <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 left-4 right-4 sm:left-6 sm:right-6 md:left-10 md:right-10">
-            <div className="text-center">
-              <p className="text-[7px] sm:text-[9px] md:text-xs text-blue-600">
-                Verify at vilver.com/verify/{certificateId.slice(0, 12).toUpperCase()}
-              </p>
-              <p className="text-[6px] sm:text-[8px] md:text-[10px] text-gray-400 mt-0.5">
-                Vilver has confirmed the identity of this individual and their participation in the course.
+          {/* Right Side - Medal */}
+          <div className="w-[35%] sm:w-[30%] flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 border-l border-gray-200">
+            {/* Medal SVG */}
+            <div className="relative mb-2 sm:mb-4">
+              <svg 
+                viewBox="0 0 120 160" 
+                className="w-16 h-20 sm:w-20 sm:h-26 md:w-28 md:h-36 lg:w-32 lg:h-44"
+              >
+                {/* Ribbon */}
+                <polygon 
+                  points="35,0 50,50 60,0" 
+                  fill={medalInfo.border}
+                  opacity="0.8"
+                />
+                <polygon 
+                  points="85,0 70,50 60,0" 
+                  fill={medalInfo.border}
+                  opacity="0.9"
+                />
+                
+                {/* Medal Circle Shadow */}
+                <circle cx="60" cy="95" r="48" fill="rgba(0,0,0,0.1)" />
+                
+                {/* Medal Circle Outer */}
+                <circle 
+                  cx="60" 
+                  cy="92" 
+                  r="45" 
+                  fill={medalInfo.fill}
+                  stroke={medalInfo.border}
+                  strokeWidth="4"
+                />
+                
+                {/* Medal Inner Circle */}
+                <circle 
+                  cx="60" 
+                  cy="92" 
+                  r="35" 
+                  fill="none"
+                  stroke={medalInfo.border}
+                  strokeWidth="2"
+                  opacity="0.6"
+                />
+                
+                {/* Star in Medal */}
+                <polygon 
+                  points="60,55 67,78 92,78 72,92 79,115 60,102 41,115 48,92 28,78 53,78"
+                  fill="white"
+                  opacity="0.9"
+                />
+              </svg>
+            </div>
+
+            {/* Medal Type */}
+            <p 
+              className="text-sm sm:text-base md:text-xl lg:text-2xl font-bold mb-1"
+              style={{ color: medalInfo.textColor }}
+            >
+              {medalInfo.type}
+            </p>
+
+            {/* Medal Label */}
+            <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500 mb-2 sm:mb-4">
+              {medalInfo.label}
+            </p>
+
+            {/* Score Badge */}
+            <div 
+              className="px-2 py-1 sm:px-3 sm:py-1.5 rounded-full border-2 mb-2 sm:mb-4"
+              style={{ 
+                backgroundColor: medalInfo.bgColor,
+                borderColor: medalInfo.border 
+              }}
+            >
+              <p 
+                className="text-sm sm:text-base md:text-lg font-bold"
+                style={{ color: medalInfo.textColor }}
+              >
+                {percentage}%
               </p>
             </div>
+
+            {/* Score Range Legend */}
+            <div className="text-center space-y-0.5 sm:space-y-1">
+              <p className={`text-[6px] sm:text-[8px] md:text-[10px] ${percentage >= 90 ? 'font-bold' : ''}`} style={{ color: percentage >= 90 ? '#ca8a04' : '#9ca3af' }}>
+                🥇 90-100 Gold
+              </p>
+              <p className={`text-[6px] sm:text-[8px] md:text-[10px] ${percentage >= 70 && percentage < 90 ? 'font-bold' : ''}`} style={{ color: percentage >= 70 && percentage < 90 ? '#4b5563' : '#9ca3af' }}>
+                🥈 70-89 Silver
+              </p>
+              <p className={`text-[6px] sm:text-[8px] md:text-[10px] ${percentage >= 60 && percentage < 70 ? 'font-bold' : ''}`} style={{ color: percentage >= 60 && percentage < 70 ? '#92400e' : '#9ca3af' }}>
+                🥉 60-69 Bronze
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Verification Footer */}
+        <div className="absolute bottom-2 sm:bottom-3 md:bottom-4 left-4 right-4 sm:left-6 sm:right-6 md:left-8 md:right-8">
+          <div className="text-center border-t border-gray-200 pt-1 sm:pt-2">
+            <p className="text-[6px] sm:text-[8px] md:text-[10px] text-blue-600">
+              Verify at vilver.com/verify/{certificateId.slice(0, 12).toUpperCase()}
+            </p>
           </div>
         </div>
       </div>
