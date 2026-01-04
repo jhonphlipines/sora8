@@ -243,16 +243,18 @@ const Index = () => {
       </section>
 
       {/* Technologies Marquee */}
-      <section className="relative z-10 py-6 sm:py-8 overflow-hidden border-y border-border/30 bg-muted/20">
+      <section className="relative z-10 py-3 sm:py-4 overflow-hidden border-y border-border/20 bg-muted/10">
         <div className="flex items-center">
-          <div className="animate-marquee flex gap-8 sm:gap-12 min-w-max">
+          <div className="animate-marquee flex gap-4 sm:gap-6 min-w-max">
             {[...technologies, ...technologies].map((tech, index) => (
               <div
                 key={index}
-                className="flex items-center gap-3 px-4 py-2 bg-card/50 rounded-lg border border-border/30 hover:border-primary/50 hover:bg-card transition-all cursor-pointer group"
+                className="flex items-center gap-2 px-3 py-1.5 bg-card/30 rounded-md border border-border/20 hover:border-primary/40 hover:bg-card/50 transition-all cursor-pointer group"
               >
-                <tech.Logo />
-                <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors whitespace-nowrap">
+                <div className="w-5 h-5 [&>svg]:w-5 [&>svg]:h-5">
+                  <tech.Logo />
+                </div>
+                <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors whitespace-nowrap">
                   {tech.name}
                 </span>
               </div>
