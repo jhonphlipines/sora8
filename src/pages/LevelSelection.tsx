@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Lock, Trophy, Clock, BookOpen, Star } from "lucide-react";
-import { levelCategories, isLevelUnlocked, getCategoryProgress, Level, UserProgress } from "@/data/levelSystem";
+import { levelCategories, isLevelUnlocked, getCategoryProgress, Level, UserProgress, levelCategoryLogos } from "@/data/levelSystem";
 import { AIAssistant } from "@/components/AIAssistant";
 const LevelSelection = () => {
   const navigate = useNavigate();
@@ -119,8 +119,8 @@ const LevelSelection = () => {
 
             <div className="text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
-                <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${selectedCategoryData.color} flex items-center justify-center text-3xl`}>
-                  {selectedCategoryData.icon}
+                <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${selectedCategoryData.color} flex items-center justify-center p-3`}>
+                  <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: levelCategoryLogos[selectedCategoryData.icon] || selectedCategoryData.icon }} />
                 </div>
                 <div className="text-left">
                   <h1 className="text-3xl md:text-4xl font-bold bg-[var(--gradient-primary)] bg-clip-text text-transparent">
@@ -194,8 +194,8 @@ const LevelSelection = () => {
           const earnedBadges = category.levels.filter(level => userProgress.completedLevels.includes(level.id)).length;
           return <Card key={category.id} className="bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300 group cursor-pointer" onClick={() => handleCategorySelect(category.id)}>
                 <CardHeader className="text-center pb-4">
-                  <div className={`w-20 h-20 mx-auto bg-gradient-to-r ${category.color} rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <span className="text-3xl">{category.icon}</span>
+                  <div className={`w-20 h-20 mx-auto bg-gradient-to-r ${category.color} rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 p-4`}>
+                    <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: levelCategoryLogos[category.icon] || category.icon }} />
                   </div>
                   <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                     {category.name}
