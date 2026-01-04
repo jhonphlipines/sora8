@@ -243,21 +243,7 @@ const Index = () => {
       </section>
 
       {/* Technologies Marquee */}
-      <section className="relative z-10 border-y border-border/30 bg-black overflow-hidden py-3 sm:py-4">
-        <div className="flex animate-marquee hover:[animation-play-state:paused]">
-          {[...technologies, ...technologies, ...technologies].map((tech, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-2 mx-4 sm:mx-6 flex-shrink-0"
-            >
-              <tech.Logo />
-              <span className="text-white font-medium text-xs sm:text-sm whitespace-nowrap">
-                {tech.name}
-              </span>
-            </div>
-          ))}
-        </div>
-      </section>
+      
 
       {/* Featured Courses */}
       <section className="relative z-10 py-8 sm:py-12">
