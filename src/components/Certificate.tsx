@@ -345,14 +345,6 @@ export const Certificate = ({
           </div>
         </div>
 
-        {/* Verification Footer */}
-        <div className="absolute bottom-2 sm:bottom-3 md:bottom-4 left-4 right-4 sm:left-6 sm:right-6 md:left-8 md:right-8">
-          <div className="text-center border-t border-gray-200 pt-1 sm:pt-2">
-            <p className="text-[6px] sm:text-[8px] md:text-[10px] text-blue-600">
-              Verify at vilver.com/verify/{certificateId.slice(0, 12).toUpperCase()}
-            </p>
-          </div>
-        </div>
       </div>
 
       {/* Download Buttons */}
