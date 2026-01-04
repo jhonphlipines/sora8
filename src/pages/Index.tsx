@@ -376,7 +376,7 @@ const Index = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button onClick={() => navigate('/learn')} size="default" className="btn-fire text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg">
+                <Button onClick={() => navigate('/learn')} size="default" className="btn-fire text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg text-white">
                   <Rocket className="mr-1.5 h-4 w-4" />
                   Start Free
                 </Button>
