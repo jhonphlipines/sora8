@@ -294,7 +294,7 @@ export const Certificate = ({
           </div>
 
           {/* Right Side - Medal */}
-          <div className="w-[35%] sm:w-[30%] flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 border-l border-gray-200">
+          <div className="w-[35%] sm:w-[30%] flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 border-l border-gray-200 bg-gradient-to-br from-amber-50 to-orange-50">
             {/* Medal SVG */}
             <div className="relative mb-2 sm:mb-4">
               <svg viewBox="0 0 120 160" className="w-16 h-20 sm:w-20 sm:h-26 md:w-28 md:h-36 lg:w-32 lg:h-44">
