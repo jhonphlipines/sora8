@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth, useUser } from "@clerk/clerk-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import { User, Twitter, Linkedin, Github, Globe, Save } from "lucide-react";
+import { User, LogOut, Twitter, Linkedin, Github, Globe, Save } from "lucide-react";
 import { z } from "zod";
 
 const profileSchema = z.object({
@@ -24,10 +23,9 @@ const profileSchema = z.object({
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { isSignedIn, isLoaded } = useAuth();
-  const { user } = useUser();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState({
     display_name: "",
     bio: "",
@@ -39,20 +37,20 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      navigate("/auth");
-      return;
-    }
-
-    if (isLoaded && user) {
-      fetchProfile();
-    }
-  }, [isLoaded, isSignedIn, user, navigate]);
+    fetchProfile();
+  }, []);
 
   const fetchProfile = async () => {
-    if (!user) return;
-    
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        navigate("/auth");
+        return;
+      }
+
+      setUser(user);
+
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
@@ -73,17 +71,6 @@ const Profile = () => {
           github_url: data.github_url || "",
           website_url: data.website_url || "",
         });
-      } else {
-        // Pre-fill with Clerk user data
-        setProfile({
-          display_name: user.fullName || "",
-          bio: "",
-          avatar_url: user.imageUrl || "",
-          twitter_url: "",
-          linkedin_url: "",
-          github_url: "",
-          website_url: "",
-        });
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
@@ -94,10 +81,10 @@ const Profile = () => {
   };
 
   const handleSave = async () => {
-    if (!user) return;
-
     try {
+      // Validate input
       const validated = profileSchema.parse(profile);
+      
       setSaving(true);
 
       const { data: existingProfile } = await supabase
@@ -134,7 +121,17 @@ const Profile = () => {
     }
   };
 
-  if (!isLoaded || loading) {
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error("Error signing out");
+    } else {
+      toast.success("Signed out successfully");
+      navigate("/auth");
+    }
+  };
+
+  if (loading) {
     return (
       <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[60vh]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -159,14 +156,14 @@ const Profile = () => {
           <CardContent className="space-y-6">
             <div className="flex items-center gap-6">
               <Avatar className="h-20 w-20">
-                <AvatarImage src={profile.avatar_url || user?.imageUrl} alt="Profile" />
+                <AvatarImage src={profile.avatar_url} alt="Profile" />
                 <AvatarFallback className="bg-primary/10 text-primary text-2xl">
                   <User className="h-10 w-10" />
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1">
                 <p className="text-sm text-muted-foreground mb-1">Email</p>
-                <p className="font-medium">{user?.primaryEmailAddress?.emailAddress}</p>
+                <p className="font-medium">{user?.email}</p>
               </div>
             </div>
 
@@ -283,6 +280,15 @@ const Profile = () => {
           >
             <Save className="h-4 w-4 mr-2" />
             {saving ? "Saving..." : "Save Changes"}
+          </Button>
+          
+          <Button
+            variant="destructive"
+            onClick={handleSignOut}
+            className="flex-1"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Sign Out
           </Button>
         </div>
       </div>

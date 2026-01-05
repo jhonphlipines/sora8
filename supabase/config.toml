@@ -5,6 +5,3 @@ verify_jwt = false
 
 [functions.razorpay-payment]
 verify_jwt = false
-
-[functions.clerk-webhook]
-verify_jwt = false
