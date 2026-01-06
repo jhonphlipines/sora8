@@ -14,6 +14,114 @@ export type Database = {
   }
   public: {
     Tables: {
+      affiliate_clicks: {
+        Row: {
+          affiliate_link_id: string
+          clicked_at: string
+          id: string
+          ip_address: string | null
+          referrer: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          affiliate_link_id: string
+          clicked_at?: string
+          id?: string
+          ip_address?: string | null
+          referrer?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          affiliate_link_id?: string
+          clicked_at?: string
+          id?: string
+          ip_address?: string | null
+          referrer?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_clicks_affiliate_link_id_fkey"
+            columns: ["affiliate_link_id"]
+            isOneToOne: false
+            referencedRelation: "affiliate_links"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "affiliate_clicks_affiliate_link_id_fkey"
+            columns: ["affiliate_link_id"]
+            isOneToOne: false
+            referencedRelation: "affiliate_stats"
+            referencedColumns: ["link_id"]
+          },
+        ]
+      }
+      affiliate_links: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          referral_code: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          referral_code: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          referral_code?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      affiliate_signups: {
+        Row: {
+          affiliate_link_id: string
+          converted_at: string | null
+          converted_to_paid: boolean
+          id: string
+          referred_user_id: string
+          signed_up_at: string
+        }
+        Insert: {
+          affiliate_link_id: string
+          converted_at?: string | null
+          converted_to_paid?: boolean
+          id?: string
+          referred_user_id: string
+          signed_up_at?: string
+        }
+        Update: {
+          affiliate_link_id?: string
+          converted_at?: string | null
+          converted_to_paid?: boolean
+          id?: string
+          referred_user_id?: string
+          signed_up_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_signups_affiliate_link_id_fkey"
+            columns: ["affiliate_link_id"]
+            isOneToOne: false
+            referencedRelation: "affiliate_links"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "affiliate_signups_affiliate_link_id_fkey"
+            columns: ["affiliate_link_id"]
+            isOneToOne: false
+            referencedRelation: "affiliate_stats"
+            referencedColumns: ["link_id"]
+          },
+        ]
+      }
       payment_history: {
         Row: {
           amount: number
@@ -232,10 +340,22 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      affiliate_stats: {
+        Row: {
+          created_at: string | null
+          is_active: boolean | null
+          link_id: string | null
+          paid_users: number | null
+          referral_code: string | null
+          total_clicks: number | null
+          total_signups: number | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      generate_referral_code: { Args: never; Returns: string }
     }
     Enums: {
       [_ in never]: never
