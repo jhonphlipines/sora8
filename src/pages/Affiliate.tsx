@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Copy, Link2, Users, MousePointer, DollarSign, TrendingUp, RefreshCw, Share2 } from "lucide-react";
 import { Header } from "@/components/Header";
-
 interface AffiliateStats {
   link_id: string;
   user_id: string;
@@ -18,17 +17,19 @@ interface AffiliateStats {
   total_signups: number;
   paid_count: number;
 }
-
 const Affiliate = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [stats, setStats] = useState<AffiliateStats | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
-
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) {
         navigate('/auth');
         return;
@@ -38,21 +39,17 @@ const Affiliate = () => {
     };
     checkAuth();
   }, [navigate]);
-
   const fetchStats = async (uid: string) => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('affiliate_stats')
-        .select('*')
-        .eq('user_id', uid)
-        .maybeSingle();
-
+      const {
+        data,
+        error
+      } = await supabase.from('affiliate_stats').select('*').eq('user_id', uid).maybeSingle();
       if (error && error.code !== 'PGRST116') {
         console.error('Error fetching stats:', error);
         toast.error('Failed to load affiliate stats');
       }
-      
       setStats(data);
     } catch (error) {
       console.error('Error:', error);
@@ -60,7 +57,6 @@ const Affiliate = () => {
       setLoading(false);
     }
   };
-
   const generateReferralCode = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
@@ -69,21 +65,17 @@ const Affiliate = () => {
     }
     return result;
   };
-
   const createAffiliateLink = async () => {
     if (!userId) return;
-    
     setCreating(true);
     try {
       const referralCode = generateReferralCode();
-      
-      const { error } = await supabase
-        .from('affiliate_links')
-        .insert({
-          user_id: userId,
-          referral_code: referralCode
-        });
-
+      const {
+        error
+      } = await supabase.from('affiliate_links').insert({
+        user_id: userId,
+        referral_code: referralCode
+      });
       if (error) {
         if (error.code === '23505') {
           toast.error('You already have an affiliate link');
@@ -92,7 +84,6 @@ const Affiliate = () => {
         }
         return;
       }
-
       toast.success('Affiliate link created successfully!');
       fetchStats(userId);
     } catch (error) {
@@ -102,18 +93,15 @@ const Affiliate = () => {
       setCreating(false);
     }
   };
-
   const copyLink = () => {
     if (!stats) return;
     const link = `${window.location.origin}/auth?ref=${stats.referral_code}`;
     navigator.clipboard.writeText(link);
     toast.success('Link copied to clipboard!');
   };
-
   const shareLink = async () => {
     if (!stats) return;
     const link = `${window.location.origin}/auth?ref=${stats.referral_code}`;
-    
     if (navigator.share) {
       try {
         await navigator.share({
@@ -128,12 +116,9 @@ const Affiliate = () => {
       copyLink();
     }
   };
-
   const referralLink = stats ? `${window.location.origin}/auth?ref=${stats.referral_code}` : '';
-
-  return (
-    <div className="min-h-screen bg-background">
-      <Header />
+  return <div className="min-h-screen bg-background">
+      
       
       <main className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="mb-8">
@@ -143,12 +128,9 @@ const Affiliate = () => {
           </p>
         </div>
 
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
+        {loading ? <div className="flex items-center justify-center py-20">
             <RefreshCw className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        ) : !stats ? (
-          <Card className="max-w-lg mx-auto">
+          </div> : !stats ? <Card className="max-w-lg mx-auto">
             <CardHeader className="text-center">
               <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
                 <Link2 className="h-8 w-8 text-primary" />
@@ -160,22 +142,16 @@ const Affiliate = () => {
             </CardHeader>
             <CardContent className="flex justify-center">
               <Button onClick={createAffiliateLink} disabled={creating} size="lg">
-                {creating ? (
-                  <>
+                {creating ? <>
                     <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
                     Creating...
-                  </>
-                ) : (
-                  <>
+                  </> : <>
                     <Link2 className="mr-2 h-4 w-4" />
                     Create Affiliate Link
-                  </>
-                )}
+                  </>}
               </Button>
             </CardContent>
-          </Card>
-        ) : (
-          <div className="space-y-6">
+          </Card> : <div className="space-y-6">
             {/* Referral Link Card */}
             <Card>
               <CardHeader>
@@ -189,11 +165,7 @@ const Affiliate = () => {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <Input 
-                    value={referralLink}
-                    readOnly 
-                    className="flex-1 font-mono text-sm"
-                  />
+                  <Input value={referralLink} readOnly className="flex-1 font-mono text-sm" />
                   <div className="flex gap-2">
                     <Button onClick={copyLink} variant="outline" className="gap-2">
                       <Copy className="h-4 w-4" />
@@ -264,10 +236,7 @@ const Affiliate = () => {
                     <div>
                       <p className="text-sm text-muted-foreground">Conversion Rate</p>
                       <p className="text-3xl font-bold">
-                        {stats.total_clicks > 0 
-                          ? `${((stats.total_signups / stats.total_clicks) * 100).toFixed(1)}%`
-                          : '0%'
-                        }
+                        {stats.total_clicks > 0 ? `${(stats.total_signups / stats.total_clicks * 100).toFixed(1)}%` : '0%'}
                       </p>
                     </div>
                   </div>
@@ -301,11 +270,8 @@ const Affiliate = () => {
                 </ul>
               </CardContent>
             </Card>
-          </div>
-        )}
+          </div>}
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default Affiliate;
