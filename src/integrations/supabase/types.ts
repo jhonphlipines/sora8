@@ -345,7 +345,7 @@ export type Database = {
           created_at: string | null
           is_active: boolean | null
           link_id: string | null
-          paid_users: number | null
+          paid_count: number | null
           referral_code: string | null
           total_clicks: number | null
           total_signups: number | null
