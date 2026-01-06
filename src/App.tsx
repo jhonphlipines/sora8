@@ -26,6 +26,8 @@ import Notes from "./pages/Notes";
 import InteractiveCourses from "./pages/InteractiveCourses";
 import AI from "./pages/AI";
 import Books from "./pages/Books";
+import Affiliate from "./pages/Affiliate";
+import Referral from "./pages/Referral";
 import MobileFooter from "./components/MobileFooter";
 
 const queryClient = new QueryClient();
@@ -63,6 +65,8 @@ const App = () => (
                   <Route path="/quiz/:testType" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
                   <Route path="/quiz" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
                   <Route path="/results" element={<ProtectedRoute><Results /></ProtectedRoute>} />
+                  <Route path="/affiliate" element={<ProtectedRoute><Affiliate /></ProtectedRoute>} />
+                  <Route path="/r" element={<Referral />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<ProtectedRoute><NotFound /></ProtectedRoute>} />
                 </Routes>
