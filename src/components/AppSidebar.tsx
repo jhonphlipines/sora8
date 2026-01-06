@@ -31,6 +31,10 @@ const mainItems = [{
   title: "Pricing",
   url: "/pricing",
   icon: DollarSign
+}, {
+  title: "Affiliate",
+  url: "/affiliate",
+  icon: Share2
 }];
 const labItems = [{
   title: "Courses",
