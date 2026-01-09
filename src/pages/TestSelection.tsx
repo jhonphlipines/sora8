@@ -51,7 +51,7 @@ const TestSelection = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
           {filteredCategories.length > 0 ? filteredCategories.map(category => <Card key={category.id} className="bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300 group cursor-pointer" onClick={() => handleTestSelect(category.id)}>
                 <CardHeader className="text-center pb-3 sm:pb-4 p-3 sm:p-6">
-                  <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto bg-gradient-to-r ${category.color} rounded-full flex items-center justify-center mb-2 sm:mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300 p-2 sm:p-3`}>
+                  <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto bg-transparent rounded-full flex items-center justify-center mb-2 sm:mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300 p-2 sm:p-3`}>
                     <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: categoryLogos[category.icon] || category.icon }} />
                   </div>
                   <CardTitle className="text-base sm:text-lg md:text-xl font-bold text-foreground group-hover:text-primary transition-colors">
