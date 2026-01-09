@@ -129,7 +129,7 @@ const Affiliate = () => {
         </div>
 
         {/* Commission Banner */}
-        <Card className="mb-6 bg-gradient-to-r from-primary/10 via-accent/5 to-primary/10 border-primary/30">
+        <Card className="mb-6 bg-transparent border-primary/30">
           <CardContent className="py-6">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4">
