@@ -2091,6 +2091,258 @@ const postSchema = new mongoose.Schema({
 });`,
         exercise: "Design a database schema for an e-commerce application including users, products, orders, and reviews. Implement the models and basic CRUD operations."
       }]
+    },
+    // GitHub Copilot Course
+    {
+      id: "github-copilot-intro",
+      name: "GitHub Copilot",
+      level: "Introduction",
+      icon: <Code className="h-8 w-8" />,
+      color: "from-purple-500 to-purple-600",
+      description: "AI-powered pair programming with GitHub Copilot",
+      slides: [
+        {
+          title: "Introduction to GitHub Copilot",
+          content: "GitHub Copilot is the world's first at-scale AI developer tool that can help you write code faster with less work. GitHub Copilot draws context from comments and code to suggest individual lines and whole functions instantly. Research finds that when GitHub Copilot helps developers code faster, they can focus on solving bigger problems, stay in the flow longer, and feel more fulfilled with their work.",
+          keyPoints: [
+            "OpenAI created the generative pretrained language model powered by OpenAI Codex",
+            "Available as extension for VS Code, Visual Studio, Neovim, and JetBrains IDEs",
+            "Understand how GitHub Copilot offers autocomplete-style suggestions",
+            "Learn the various ways to trigger GitHub Copilot",
+            "Know how to configure and troubleshoot GitHub Copilot"
+          ],
+          codeExample: `// Prerequisites for GitHub Copilot:
+// - GitHub account
+// - Basic understanding of GitHub fundamentals
+
+// GitHub Copilot helps you write code like this:
+// Just start typing a comment describing what you want...
+
+// Function to calculate the factorial of a number
+function factorial(n) {
+  // GitHub Copilot suggests the implementation!
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
+}`,
+          exercise: "Set up a GitHub account if you don't have one, and explore the GitHub Copilot documentation to understand its capabilities."
+        },
+        {
+          title: "AI Disruption in Technology",
+          content: "It's no secret that AI is disrupting the technology industry. AI is shaping how development teams work and build software. These advancements in AI can enhance the productivity of developers around the world. The addition of AI features to the developer tools that you use and love helps you collaborate, develop, test, and ship your products faster and more efficiently than ever before.",
+          keyPoints: [
+            "46% of new code is now written by AI",
+            "55% faster overall developer productivity",
+            "74% of developers feel more focused on satisfying work",
+            "GitHub Copilot is powered by OpenAI Codex",
+            "Trained on a dataset with large concentration of public source code"
+          ],
+          codeExample: `// GitHub Copilot can help with many tasks:
+
+// 1. Writing boilerplate code
+class UserService {
+  constructor(private userRepository: UserRepository) {}
+  
+  // Just type a comment and Copilot suggests the method
+  async getUserById(id: string) {
+    return await this.userRepository.findById(id);
+  }
+}
+
+// 2. Completing repetitive patterns
+const routes = [
+  { path: '/home', component: Home },
+  { path: '/about', component: About },
+  // Copilot suggests more routes based on pattern
+];`,
+          exercise: "Research and document 3 real-world use cases where AI-assisted coding could significantly improve your development workflow."
+        },
+        {
+          title: "GitHub Copilot Features",
+          content: "GitHub Copilot started as an AI pair programmer that keeps developers in the flow by autocompleting comments and code. But AI-powered autocompletion was just the starting point. With these features, GitHub Copilot is more than just an editor - it's becoming a readily accessible AI assistant throughout the entire development life cycle.",
+          keyPoints: [
+            "Copilot for Chat: ChatGPT-like interface integrated in VS Code and Visual Studio",
+            "Copilot for Pull Requests: AI-powered tags in PR descriptions using GPT-4",
+            "Copilot for CLI: Compose commands and loops in the terminal",
+            "Deeply embedded in IDE, recognizes code and error messages",
+            "Can generate unit tests and propose fixes to bugs"
+          ],
+          codeExample: `// Copilot Chat Example - Ask questions in natural language:
+// "How do I implement a binary search in Python?"
+
+def binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1
+
+// Copilot can explain this code, generate tests, 
+// and suggest improvements!`,
+          exercise: "Explore the different Copilot features: chat, inline suggestions, and CLI. Document which feature would be most useful for your typical development tasks."
+        },
+        {
+          title: "Subscription Plans",
+          content: "GitHub Copilot is available in several plans, each offering different capabilities for individuals, teams, and organizations. From free tiers for individual developers to enterprise solutions for large organizations, there's a plan for every need.",
+          keyPoints: [
+            "Copilot Free: 2000 completions/month, 50 chat requests, access to GPT-4o and Claude 3.5",
+            "Copilot Pro: Unlimited completions and chat, priority AI model access",
+            "Copilot Pro+: All Pro features plus premium request capacity",
+            "Copilot Business: Centralized management, security filtering, IP indemnity",
+            "Copilot Enterprise: Personalized suggestions from internal code, organization customization"
+          ],
+          codeExample: `// Getting started with Copilot Free:
+// 1. Open Visual Studio Code
+// 2. Click on the GitHub Copilot icon
+// 3. Click "Sign in to Use"
+// 4. Log in to your GitHub account
+
+// Features by Plan:
+const copilotPlans = {
+  free: {
+    completions: 2000,
+    chatRequests: 50,
+    models: ['GPT-4o', 'Claude 3.5 Sonnet']
+  },
+  pro: {
+    completions: 'unlimited',
+    chatRequests: 'unlimited',
+    priorityModels: true
+  },
+  business: {
+    ...pro,
+    securityFiltering: true,
+    centralizedManagement: true
+  }
+};`,
+          exercise: "Compare the different GitHub Copilot plans and determine which one would best suit your needs based on your development workflow and team size."
+        },
+        {
+          title: "Interacting with Copilot",
+          content: "This section explores ways to maximize your interaction with GitHub Copilot in your development environment. By understanding the service's features and capabilities, you learn how to use it effectively. Inline suggestions are the most immediate form of assistance - as you type, Copilot analyzes your code and context to offer real-time code completions.",
+          keyPoints: [
+            "Tab or right arrow to accept suggestions, Esc to reject",
+            "Command palette: Ctrl+Shift+P (Windows/Linux) or Cmd+Shift+P (Mac)",
+            "Inline chat: Ctrl+I (Windows/Linux) or Cmd+I (Mac)",
+            "Slash commands: /explain, /suggest, /tests, /comment",
+            "Multiple suggestions: Alt+] or Option+] to cycle through alternatives"
+          ],
+          codeExample: `# Inline Suggestions Example (Python):
+def calculate_average(numbers):
+    # Start typing here and watch Copilot suggest:
+    if not numbers:
+        return 0
+    return sum(numbers) / len(numbers)
+
+# Using Comments to Generate Code:
+# Function to reverse a string
+def reverse_string(s):
+    return s[::-1]  # Copilot suggests this!
+
+# Slash Commands Example:
+# Select a function, use shortcut, type: /explain
+# Copilot will explain what the code does`,
+          exercise: "Practice using different interaction methods: inline suggestions, command palette, inline chat, and slash commands. Try each method at least 3 times."
+        },
+        {
+          title: "Copilot Chat and Automated Features",
+          content: "Copilot chat is an interactive feature that enables you to communicate with Copilot using natural language. You can ask questions or request code snippets, and Copilot provides responses based on your input. Additionally, Copilot can generate unit tests automatically, helping you maintain code integrity and catch bugs early.",
+          keyPoints: [
+            "Open Copilot chat panel in your IDE for natural language queries",
+            "Ideal for exploring new coding concepts or unfamiliar syntax",
+            "Automated test generation saves time and effort",
+            "Use 'Explain This' feature for understanding existing code",
+            "Copilot learns from context - well-structured code gets better suggestions"
+          ],
+          codeExample: `// Automated Test Generation Example:
+
+// Original function:
+def add(a, b):
+    return a + b
+
+// Copilot generates tests like this:
+def test_add():
+    assert add(2, 3) == 5
+    assert add(-1, 1) == 0
+    assert add(0, 0) == 0
+
+// Ask Copilot to explain code:
+// "What does this recursive function do?"
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)`,
+          exercise: "Use Copilot to generate unit tests for a function you've written. Then use the 'Explain This' feature on code from an open-source project."
+        },
+        {
+          title: "Setting Up GitHub Copilot in VS Code",
+          content: "Before you can start using GitHub Copilot, you need to set up a free trial or subscription for your account. After signing up, you need to install an extension for your preferred environment. GitHub Copilot supports VS Code, Visual Studio, JetBrains IDEs, and Neovim.",
+          keyPoints: [
+            "Sign up via GitHub profile Settings > Copilot",
+            "Install GitHub Copilot extension from Visual Studio Marketplace",
+            "Authorize VS Code in your GitHub account when prompted",
+            "Enable/disable globally or for specific languages",
+            "Configure inline suggestions in Preferences > Settings > Extensions"
+          ],
+          codeExample: `// VS Code Setup Steps:
+
+// 1. In Visual Studio Marketplace:
+//    - Go to GitHub Copilot extension page
+//    - Click Install
+
+// 2. In VS Code:
+//    - On Extension: GitHub Copilot tab, click Install
+//    - Sign in to GitHub when prompted
+
+// 3. Enable/Disable Settings:
+//    - Click status icon in bottom pane
+//    - Select Enable or Disable
+//    - Choose globally or per-language
+
+// 4. Configure inline suggestions:
+//    File > Preferences > Settings
+//    Extensions > GitHub Copilot
+//    Toggle "Enable Auto Completions"`,
+          exercise: "Install the GitHub Copilot extension in VS Code and configure it according to your preferences. Test that inline suggestions are working correctly."
+        },
+        {
+          title: "Troubleshooting GitHub Copilot",
+          content: "In VS Code, the log files are useful for diagnosing connection problems. The GitHub Copilot extension stores log files in the standard log location for VS Code extensions. Network restrictions, firewalls, or your proxy might cause problems when connecting to GitHub Copilot.",
+          keyPoints: [
+            "Access logs via command palette: 'Developer: Open Log File'",
+            "Or use 'Developer: Open Extensions Logs Folder'",
+            "View Electron logs via Help > Toggle Developer Tools",
+            "Collect diagnostics: Command palette > 'GitHub Copilot: Collect Diagnostics'",
+            "Check network restrictions, firewalls, and proxy settings"
+          ],
+          codeExample: `// Troubleshooting Steps:
+
+// 1. Open Command Palette:
+//    Mac: Shift+Command+P
+//    Windows/Linux: Ctrl+Shift+P
+
+// 2. View Logs:
+//    Type: "Developer: Open Log File"
+//    Or: "Developer: Open Extensions Logs Folder"
+
+// 3. Collect Diagnostics:
+//    Type: "GitHub Copilot: Collect Diagnostics"
+//    This opens a new editor with diagnostic info
+
+// 4. Check for errors:
+//    - Network connectivity issues
+//    - Firewall blocking connections
+//    - Proxy configuration problems
+
+// 5. View Electron Logs (rare cases):
+//    Help > Toggle Developer Tools`,
+          exercise: "Familiarize yourself with the troubleshooting tools. Open the log files location and run the diagnostic collection to see what information is available."
+        }
+      ]
     }
   ];
 
