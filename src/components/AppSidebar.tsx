@@ -181,22 +181,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton className="hover:bg-sidebar-accent/50 text-sidebar-foreground" onClick={() => {
-                const shareData = {
-                  title: 'VILVER.xyz - CodeCert Labs',
-                  text: 'Check out this amazing coding learning platform!',
-                  url: window.location.origin
-                };
-                if (navigator.share) {
-                  navigator.share(shareData);
-                } else {
-                  navigator.clipboard.writeText(window.location.origin);
-                  alert('Link copied to clipboard!');
-                }
-              }}>
-                  <Share2 className="h-4 w-4" />
-                  {!isCollapsed && <span>Share Website</span>}
-                </SidebarMenuButton>
+                
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
