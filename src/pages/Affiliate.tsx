@@ -124,9 +124,30 @@ const Affiliate = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Affiliate Dashboard</h1>
           <p className="text-muted-foreground">
-            Share your unique link and track referrals
+            Share your unique link and earn <span className="text-primary font-semibold">10% commission</span> per paid user!
           </p>
         </div>
+
+        {/* Commission Banner */}
+        <Card className="mb-6 bg-gradient-to-r from-primary/10 via-accent/5 to-primary/10 border-primary/30">
+          <CardContent className="py-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-primary/20 rounded-full">
+                  <DollarSign className="h-8 w-8 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold">Earn 10% Commission</h3>
+                  <p className="text-muted-foreground">For every paid user you refer, you earn 10% of their payment!</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Share2 className="h-5 w-5 text-primary" />
+                <span className="font-medium">Share → Signup → Earn</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {loading ? <div className="flex items-center justify-center py-20">
             <RefreshCw className="h-8 w-8 animate-spin text-primary" />
