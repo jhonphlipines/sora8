@@ -119,7 +119,7 @@ const LevelSelection = () => {
 
             <div className="text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
-                <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${selectedCategoryData.color} flex items-center justify-center p-3`}>
+                <div className="w-16 h-16 rounded-full bg-transparent flex items-center justify-center p-3">
                   <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: levelCategoryLogos[selectedCategoryData.icon] || selectedCategoryData.icon }} />
                 </div>
                 <div className="text-left">
@@ -194,7 +194,7 @@ const LevelSelection = () => {
           const earnedBadges = category.levels.filter(level => userProgress.completedLevels.includes(level.id)).length;
           return <Card key={category.id} className="bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300 group cursor-pointer" onClick={() => handleCategorySelect(category.id)}>
                 <CardHeader className="text-center pb-4">
-                  <div className={`w-20 h-20 mx-auto bg-gradient-to-r ${category.color} rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 p-4`}>
+                  <div className="w-20 h-20 mx-auto bg-transparent rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 p-4">
                     <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: levelCategoryLogos[category.icon] || category.icon }} />
                   </div>
                   <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
