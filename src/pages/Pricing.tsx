@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, CheckCircle, Award, Clock, BookOpen, CreditCard, Bot, Video, Calendar } from "lucide-react";
+import { ArrowLeft, CheckCircle, Award, Clock, BookOpen, CreditCard, Bot, Video, Calendar, DollarSign } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -17,8 +17,8 @@ declare global {
   }
 }
 
-// Exchange rate (approximate - in production you'd fetch this from an API)
-const USD_TO_INR_RATE = 83.5;
+// Exchange rate (1 USD = 90 INR)
+const USD_TO_INR_RATE = 90;
 
 const Pricing = () => {
   const navigate = useNavigate();
@@ -34,8 +34,12 @@ const Pricing = () => {
   const PRO_MONTHLY_INR = 799;
   
   // Yearly prices (with discount)
-  const BASIC_YEARLY_INR = 2500; // ~17% off
-  const PRO_YEARLY_INR = 7999; // ~17% off
+  const BASIC_YEARLY_INR = 2500; // ~17% off (₹250 x 12 = ₹3000, save ₹500)
+  const PRO_YEARLY_INR = 7999; // ~17% off (₹799 x 12 = ₹9588, save ~₹1589)
+
+  // Certificate counts
+  const BASIC_CERTIFICATES = 5;
+  const PRO_CERTIFICATES = 120;
 
   useEffect(() => {
     const fetchUserCredits = async () => {
@@ -160,8 +164,8 @@ const Pricing = () => {
 
   const basicPrice = getPrice(BASIC_MONTHLY_INR, BASIC_YEARLY_INR);
   const proPrice = getPrice(PRO_MONTHLY_INR, PRO_YEARLY_INR);
-  const basicCredits = getCredits(5);
-  const proCredits = getCredits(10);
+  const basicCredits = BASIC_CERTIFICATES;
+  const proCredits = PRO_CERTIFICATES;
 
   return (
     <div className="min-h-screen bg-background py-4 sm:py-8 px-3 sm:px-4">
@@ -201,6 +205,22 @@ const Pricing = () => {
               </Label>
             </div>
 
+            {/* Currency Toggle Button */}
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrencyDialogOpen(true)}
+                className="flex items-center gap-2"
+              >
+                <DollarSign className="h-4 w-4" />
+                <span>₹/$ Currency</span>
+              </Button>
+              <span className="text-xs text-muted-foreground">
+                (1 USD = ₹{USD_TO_INR_RATE})
+              </span>
+            </div>
+
             {/* User Credits Display */}
             {!loading && userId && (
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-6">
@@ -227,7 +247,7 @@ const Pricing = () => {
                 <span className="text-sm text-muted-foreground font-normal">/{isYearly ? 'year' : 'month'}</span>
               </div>
               <CardDescription className="text-muted-foreground text-sm">
-                Get {basicCredits} certificate credits
+                Get {basicCredits} Professional Certificates
               </CardDescription>
             </CardHeader>
             
@@ -281,7 +301,7 @@ const Pricing = () => {
                 <span className="text-sm text-muted-foreground font-normal">/{isYearly ? 'year' : 'month'}</span>
               </div>
               <CardDescription className="text-muted-foreground text-sm">
-                Get {proCredits} certificate credits + extras
+                Get {proCredits} Professional Certificates + Premium Features
               </CardDescription>
             </CardHeader>
             
