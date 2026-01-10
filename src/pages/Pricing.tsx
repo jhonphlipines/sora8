@@ -3,10 +3,13 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { ArrowLeft, CheckCircle, Award, Clock, BookOpen, CreditCard, Bot, Video, Calendar } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 declare global {
   interface Window {
@@ -14,11 +17,25 @@ declare global {
   }
 }
 
+// Exchange rate (approximate - in production you'd fetch this from an API)
+const USD_TO_INR_RATE = 83.5;
+
 const Pricing = () => {
   const navigate = useNavigate();
   const [userCredits, setUserCredits] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
+  const [isYearly, setIsYearly] = useState(false);
+  const [currencyDialogOpen, setCurrencyDialogOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<{ amount: number; credits: number; name: string } | null>(null);
+
+  // Monthly prices in INR
+  const BASIC_MONTHLY_INR = 250;
+  const PRO_MONTHLY_INR = 799;
+  
+  // Yearly prices (with discount)
+  const BASIC_YEARLY_INR = 2500; // ~17% off
+  const PRO_YEARLY_INR = 7999; // ~17% off
 
   useEffect(() => {
     const fetchUserCredits = async () => {
@@ -39,21 +56,46 @@ const Pricing = () => {
     fetchUserCredits();
   }, []);
 
-  const handlePayment = async (amount: number, credits: number, planName: string) => {
-    try {
-      if (!userId) {
-        toast.error("Please login to purchase credits");
-        navigate('/auth');
-        return;
-      }
+  const getPrice = (baseMonthly: number, baseYearly: number) => {
+    return isYearly ? baseYearly : baseMonthly;
+  };
 
+  const getCredits = (baseCredits: number) => {
+    return isYearly ? baseCredits * 12 : baseCredits;
+  };
+
+  const handleBuyClick = (amount: number, credits: number, planName: string) => {
+    if (!userId) {
+      toast.error("Please login to purchase credits");
+      navigate('/auth');
+      return;
+    }
+    setSelectedPlan({ amount, credits, name: planName });
+    setCurrencyDialogOpen(true);
+  };
+
+  const handlePayment = async (currency: 'INR' | 'USD') => {
+    if (!selectedPlan || !userId) return;
+    
+    setCurrencyDialogOpen(false);
+    
+    let amountInINR = selectedPlan.amount;
+    let displayAmount = selectedPlan.amount;
+    
+    if (currency === 'USD') {
+      // Convert INR to USD for display, but Razorpay will charge in INR
+      displayAmount = Math.ceil(selectedPlan.amount / USD_TO_INR_RATE);
+      amountInINR = selectedPlan.amount; // Keep original INR amount for payment
+    }
+
+    try {
       toast.loading("Initiating payment...");
 
       const { data: orderData, error: orderError } = await supabase.functions.invoke('razorpay-payment', {
         body: { 
           action: 'createOrder',
-          amount: amount,
-          currency: 'INR'
+          amount: amountInINR,
+          currency: 'INR' // Razorpay charges in INR
         }
       });
 
@@ -64,7 +106,7 @@ const Pricing = () => {
         amount: orderData.order.amount,
         currency: orderData.order.currency,
         name: "EDU SKILL",
-        description: `${planName} - ${credits} Certificate Credits`,
+        description: `${selectedPlan.name} - ${selectedPlan.credits} Certificate Credits`,
         order_id: orderData.order.id,
         handler: async function (response: any) {
           try {
@@ -77,16 +119,16 @@ const Pricing = () => {
                 paymentId: response.razorpay_payment_id,
                 signature: response.razorpay_signature,
                 userId: userId,
-                creditsPurchased: credits,
-                amount: amount
+                creditsPurchased: selectedPlan.credits,
+                amount: amountInINR
               }
             });
 
             if (verifyError) throw verifyError;
 
             if (verifyData.verified) {
-              toast.success(`Payment successful! ${credits} credits added 🎉`);
-              setUserCredits((prev) => (prev ?? 0) + credits);
+              toast.success(`Payment successful! ${selectedPlan.credits} credits added 🎉`);
+              setUserCredits((prev) => (prev ?? 0) + selectedPlan.credits);
               navigate('/tests');
             } else {
               toast.error("Payment verification failed");
@@ -116,6 +158,11 @@ const Pricing = () => {
     }
   };
 
+  const basicPrice = getPrice(BASIC_MONTHLY_INR, BASIC_YEARLY_INR);
+  const proPrice = getPrice(PRO_MONTHLY_INR, PRO_YEARLY_INR);
+  const basicCredits = getCredits(5);
+  const proCredits = getCredits(10);
+
   return (
     <div className="min-h-screen bg-background py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-5xl mx-auto">
@@ -138,6 +185,22 @@ const Pricing = () => {
               Purchase certificate credits and showcase your programming expertise with professional certificates.
             </p>
 
+            {/* Billing Toggle */}
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <Label htmlFor="billing-toggle" className={!isYearly ? 'font-semibold' : 'text-muted-foreground'}>
+                Monthly
+              </Label>
+              <Switch
+                id="billing-toggle"
+                checked={isYearly}
+                onCheckedChange={setIsYearly}
+              />
+              <Label htmlFor="billing-toggle" className={isYearly ? 'font-semibold' : 'text-muted-foreground'}>
+                Yearly
+                <Badge variant="secondary" className="ml-2 text-xs">Save 17%</Badge>
+              </Label>
+            </div>
+
             {/* User Credits Display */}
             {!loading && userId && (
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-6">
@@ -150,7 +213,7 @@ const Pricing = () => {
 
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-8 sm:mb-12">
-          {/* Basic Pack - ₹250 */}
+          {/* Basic Pack */}
           <Card className="bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300">
             <CardHeader className="text-center pb-4 sm:pb-6 p-4 sm:p-6">
               <div className="w-14 h-14 mx-auto bg-blue-600 rounded-full flex items-center justify-center mb-4">
@@ -160,10 +223,11 @@ const Pricing = () => {
                 Basic Pack
               </CardTitle>
               <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
-                ₹250
+                ₹{basicPrice.toLocaleString()}
+                <span className="text-sm text-muted-foreground font-normal">/{isYearly ? 'year' : 'month'}</span>
               </div>
               <CardDescription className="text-muted-foreground text-sm">
-                Get 5 certificate credits
+                Get {basicCredits} certificate credits
               </CardDescription>
             </CardHeader>
             
@@ -171,7 +235,7 @@ const Pricing = () => {
               <ul className="space-y-2.5 text-sm">
                 <li className="flex items-center gap-2.5">
                   <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                  <span className="text-muted-foreground">5 Professional Certificates</span>
+                  <span className="text-muted-foreground">{basicCredits} Professional Certificates</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
@@ -193,14 +257,14 @@ const Pricing = () => {
               
               <Button 
                 className="w-full mt-4 bg-blue-600 hover:bg-blue-700 border-0 text-sm py-5 text-white"
-                onClick={() => handlePayment(250, 5, "Basic Pack")}
+                onClick={() => handleBuyClick(basicPrice, basicCredits, "Basic Pack")}
               >
-                Buy Now - ₹250
+                Buy Now - ₹{basicPrice.toLocaleString()}
               </Button>
             </CardContent>
           </Card>
 
-          {/* Pro Pack - ₹799 */}
+          {/* Pro Pack */}
           <Card className="bg-[var(--gradient-card)] border-border/50 hover:shadow-xl transition-all duration-300 ring-2 ring-primary/30 relative">
             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
               <Badge className="bg-primary text-primary-foreground text-xs px-3">Best Value</Badge>
@@ -213,10 +277,11 @@ const Pricing = () => {
                 Pro Pack
               </CardTitle>
               <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
-                ₹799
+                ₹{proPrice.toLocaleString()}
+                <span className="text-sm text-muted-foreground font-normal">/{isYearly ? 'year' : 'month'}</span>
               </div>
               <CardDescription className="text-muted-foreground text-sm">
-                Get 10 certificate credits + extras
+                Get {proCredits} certificate credits + extras
               </CardDescription>
             </CardHeader>
             
@@ -224,7 +289,7 @@ const Pricing = () => {
               <ul className="space-y-2.5 text-sm">
                 <li className="flex items-center gap-2.5">
                   <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                  <span className="text-muted-foreground">10 Professional Certificates</span>
+                  <span className="text-muted-foreground">{proCredits} Professional Certificates</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
@@ -258,13 +323,51 @@ const Pricing = () => {
               
               <Button 
                 className="w-full mt-4 bg-[var(--gradient-primary)] border-0 text-sm py-5 text-white"
-                onClick={() => handlePayment(799, 10, "Pro Pack")}
+                onClick={() => handleBuyClick(proPrice, proCredits, "Pro Pack")}
               >
-                Buy Now - ₹799
+                Buy Now - ₹{proPrice.toLocaleString()}
               </Button>
             </CardContent>
           </Card>
         </div>
+
+        {/* Currency Selection Dialog */}
+        <Dialog open={currencyDialogOpen} onOpenChange={setCurrencyDialogOpen}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Choose Payment Currency</DialogTitle>
+              <DialogDescription>
+                Select your preferred currency for payment. USD payments will be converted at current exchange rate.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <Button
+                variant="outline"
+                className="h-24 flex flex-col gap-2"
+                onClick={() => handlePayment('INR')}
+              >
+                <span className="text-2xl font-bold">₹</span>
+                <span className="text-lg font-semibold">
+                  ₹{selectedPlan?.amount.toLocaleString()}
+                </span>
+                <span className="text-xs text-muted-foreground">Pay in INR</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="h-24 flex flex-col gap-2"
+                onClick={() => handlePayment('USD')}
+              >
+                <span className="text-2xl font-bold">$</span>
+                <span className="text-lg font-semibold">
+                  ${selectedPlan ? Math.ceil(selectedPlan.amount / USD_TO_INR_RATE) : 0}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  ~₹{selectedPlan?.amount.toLocaleString()} (Rate: {USD_TO_INR_RATE})
+                </span>
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Features Section */}
         <Card className="bg-[var(--gradient-card)] border-border/50 mb-8 sm:mb-12">
@@ -344,10 +447,19 @@ const Pricing = () => {
 
               <div>
                 <h4 className="font-semibold text-foreground mb-2">
-                  What's included in the Pro Pack?
+                  What's the difference between monthly and yearly billing?
                 </h4>
                 <p className="text-sm text-muted-foreground">
-                  The Pro Pack includes 10 certificate credits plus access to AI Assistant, AI Video Summarizer, and 1 free exam every month.
+                  Yearly billing gives you 12 months of credits at a 17% discount. You get all credits upfront for the year.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-foreground mb-2">
+                  Can I pay in USD?
+                </h4>
+                <p className="text-sm text-muted-foreground">
+                  Yes! You can choose to pay in USD. The amount will be converted at current exchange rate (~₹83.5 per $1).
                 </p>
               </div>
             </div>
