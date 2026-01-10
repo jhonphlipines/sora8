@@ -62,6 +62,8 @@ export type Database = {
           id: string
           is_active: boolean
           referral_code: string
+          upi_id: string | null
+          upi_phone_number: string | null
           user_id: string
         }
         Insert: {
@@ -69,6 +71,8 @@ export type Database = {
           id?: string
           is_active?: boolean
           referral_code: string
+          upi_id?: string | null
+          upi_phone_number?: string | null
           user_id: string
         }
         Update: {
@@ -76,6 +80,47 @@ export type Database = {
           id?: string
           is_active?: boolean
           referral_code?: string
+          upi_id?: string | null
+          upi_phone_number?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      affiliate_payouts: {
+        Row: {
+          amount: number
+          currency: string
+          id: string
+          payout_type: string
+          processed_at: string | null
+          requested_at: string
+          status: string
+          upi_id: string | null
+          upi_phone_number: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          currency?: string
+          id?: string
+          payout_type?: string
+          processed_at?: string | null
+          requested_at?: string
+          status?: string
+          upi_id?: string | null
+          upi_phone_number?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          currency?: string
+          id?: string
+          payout_type?: string
+          processed_at?: string | null
+          requested_at?: string
+          status?: string
+          upi_id?: string | null
+          upi_phone_number?: string | null
           user_id?: string
         }
         Relationships: []
