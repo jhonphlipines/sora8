@@ -174,17 +174,7 @@ const Index = () => {
               </div>
 
               {/* Stats Row */}
-              <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-4 pt-2 animate-fade-in" style={{
-              animationDelay: '0.4s'
-            }}>
-                {stats.map((stat, index) => <div key={index} className="flex items-center gap-2">
-                    <stat.icon className="h-4 w-4 text-primary flex-shrink-0" />
-                    <div>
-                      <p className="text-lg sm:text-xl font-bold text-foreground">{stat.value}</p>
-                      <p className="text-[10px] sm:text-xs text-muted-foreground">{stat.label}</p>
-                    </div>
-                  </div>)}
-              </div>
+              
             </div>
 
             {/* Right Column - Code Preview */}
