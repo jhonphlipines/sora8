@@ -167,6 +167,44 @@ export type Database = {
           },
         ]
       }
+      certificate_purchases: {
+        Row: {
+          amount: number
+          certificate_id: string
+          id: string
+          purchased_at: string
+          razorpay_order_id: string | null
+          razorpay_payment_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          certificate_id: string
+          id?: string
+          purchased_at?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          certificate_id?: string
+          id?: string
+          purchased_at?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificate_purchases_certificate_id_fkey"
+            columns: ["certificate_id"]
+            isOneToOne: false
+            referencedRelation: "user_certificates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payment_history: {
         Row: {
           amount: number
