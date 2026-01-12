@@ -43,6 +43,37 @@ interface PerformanceData {
   recentActivity: { type: string; name: string; date: Date; score?: number }[];
 }
 
+// Category name mappings for better display
+const CATEGORY_NAMES: Record<string, string> = {
+  'python-levels': 'Python',
+  'javascript-levels': 'JavaScript',
+  'java-levels': 'Java',
+  'cpp-levels': 'C++',
+  'typescript-levels': 'TypeScript',
+  'react-levels': 'React',
+  'java': 'Java',
+  'python': 'Python',
+  'javascript': 'JavaScript',
+  'html': 'HTML/CSS',
+  'sql': 'SQL',
+  'cpp': 'C++',
+  'typescript': 'TypeScript'
+};
+
+// Level name mappings
+const LEVEL_NAMES: Record<string, string> = {
+  'py-level-1': 'Python Basics',
+  'py-level-2': 'Data Types',
+  'py-level-3': 'Control Flow',
+  'py-level-4': 'Functions',
+  'py-level-5': 'OOP',
+  'js-level-1': 'JavaScript Basics',
+  'js-level-2': 'Variables & Types',
+  'js-level-3': 'Functions',
+  'js-level-4': 'DOM Manipulation',
+  'js-level-5': 'Async Programming'
+};
+
 const DataAnalysis = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -59,6 +90,16 @@ const DataAnalysis = () => {
   });
 
   const COLORS = ['#8B5CF6', '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#EC4899'];
+
+  // Helper function to get readable category name
+  const getCategoryName = (categoryId: string): string => {
+    return CATEGORY_NAMES[categoryId] || categoryId.replace(/-levels?$/, '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  };
+
+  // Helper function to get readable level name
+  const getLevelName = (levelId: string): string => {
+    return LEVEL_NAMES[levelId] || levelId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  };
 
   useEffect(() => {
     fetchPerformanceData();
@@ -130,12 +171,13 @@ const DataAnalysis = () => {
       // Group courses by category
       const categoryMap = new Map<string, number>();
       courses?.forEach(course => {
-        const count = categoryMap.get(course.category_id) || 0;
-        categoryMap.set(course.category_id, count + 1);
+        const categoryName = getCategoryName(course.category_id);
+        const count = categoryMap.get(categoryName) || 0;
+        categoryMap.set(categoryName, count + 1);
       });
 
       const coursesByCategory = Array.from(categoryMap.entries()).map(([name, count], idx) => ({
-        name: name.charAt(0).toUpperCase() + name.slice(1),
+        name,
         count,
         color: COLORS[idx % COLORS.length]
       }));
@@ -167,13 +209,13 @@ const DataAnalysis = () => {
       const recentActivity = [
         ...(courses?.slice(-5).map(c => ({
           type: 'course',
-          name: c.level_id,
+          name: getLevelName(c.level_id),
           date: new Date(c.completed_at),
           score: c.score
         })) || []),
         ...(problems?.slice(-5).map(p => ({
           type: 'problem',
-          name: p.problem_id,
+          name: `Problem #${p.problem_id}`,
           date: new Date(p.solved_at)
         })) || []),
         ...(certificates?.slice(-5).map(c => ({
@@ -181,7 +223,7 @@ const DataAnalysis = () => {
           name: c.certificate_name,
           date: new Date(c.earned_at)
         })) || [])
-      ].sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 5);
+      ].sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 10);
 
       setData({
         coursesCompleted,

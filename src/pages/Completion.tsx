@@ -12,6 +12,27 @@ interface UserCertificate {
   earned_at: string;
 }
 
+// Category name mappings for better display
+const CATEGORY_NAMES: Record<string, string> = {
+  'python-levels': 'Python',
+  'javascript-levels': 'JavaScript',
+  'java-levels': 'Java',
+  'cpp-levels': 'C++',
+  'typescript-levels': 'TypeScript',
+  'react-levels': 'React',
+  'java': 'Java',
+  'python': 'Python',
+  'javascript': 'JavaScript',
+  'html': 'HTML/CSS',
+  'sql': 'SQL',
+  'cpp': 'C++',
+  'typescript': 'TypeScript'
+};
+
+const getCategoryName = (categoryId: string): string => {
+  return CATEGORY_NAMES[categoryId] || categoryId.replace(/-levels?$/, '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+};
+
 const Completion = () => {
   const [certificates, setCertificates] = useState<UserCertificate[]>([]);
   const [loading, setLoading] = useState(true);
@@ -134,7 +155,7 @@ const Completion = () => {
                   {cert.certificate_name}
                 </CardTitle>
                 <CardDescription>
-                  Category: {cert.category_id}
+                  Category: {getCategoryName(cert.category_id)}
                 </CardDescription>
               </CardHeader>
               <CardContent>
