@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Flame, Play, Zap, Code2, Trophy, Rocket, ArrowRight, BookOpen, Terminal, Sparkles, ChevronRight, Clock, Award, Users, Star, Layers } from "lucide-react";
+import { Flame, Zap, Code2, Trophy, Rocket, ArrowRight, BookOpen, Terminal, Sparkles, ChevronRight, Clock, Award, Users, Star, Layers } from "lucide-react";
 
 // Programming language logos as SVG components
 const JSLogo = () => <svg viewBox="0 0 128 128" className="w-8 h-8">
@@ -163,7 +163,7 @@ const Index = () => {
               animationDelay: '0.3s'
             }}>
                 <Button onClick={() => navigate('/learn')} size="default" className="btn-fire group text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg bg-primary">
-                  <Play className="mr-1.5 h-4 w-4 group-hover:scale-110 transition-transform" />
+                  
                   Start Learning
                   <ArrowRight className="ml-1.5 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
