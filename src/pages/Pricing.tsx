@@ -10,7 +10,6 @@ import { AIAssistant } from "@/components/AIAssistant";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-
 declare global {
   interface Window {
     Razorpay: any;
@@ -19,7 +18,6 @@ declare global {
 
 // Exchange rate (1 USD = 90 INR)
 const USD_TO_INR_RATE = 90;
-
 const Pricing = () => {
   const navigate = useNavigate();
   const [userCredits, setUserCredits] = useState<number | null>(null);
@@ -27,12 +25,16 @@ const Pricing = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [isYearly, setIsYearly] = useState(false);
   const [currencyDialogOpen, setCurrencyDialogOpen] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<{ amount: number; credits: number; name: string } | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<{
+    amount: number;
+    credits: number;
+    name: string;
+  } | null>(null);
 
   // Monthly prices in INR
   const BASIC_MONTHLY_INR = 250;
   const PRO_MONTHLY_INR = 799;
-  
+
   // Yearly prices (with discount)
   const BASIC_YEARLY_INR = 2500; // ~17% off (₹250 x 12 = ₹3000, save ₹500)
   const PRO_YEARLY_INR = 7999; // ~17% off (₹799 x 12 = ₹9588, save ~₹1589)
@@ -40,71 +42,66 @@ const Pricing = () => {
   // Certificate counts
   const BASIC_CERTIFICATES = 5;
   const PRO_CERTIFICATES = 120;
-
   useEffect(() => {
     const fetchUserCredits = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (user) {
         setUserId(user.id);
-        const { data } = await supabase
-          .from('user_credits')
-          .select('credits')
-          .eq('user_id', user.id)
-          .maybeSingle();
-        
+        const {
+          data
+        } = await supabase.from('user_credits').select('credits').eq('user_id', user.id).maybeSingle();
         setUserCredits(data?.credits ?? 0);
       }
       setLoading(false);
     };
-
     fetchUserCredits();
   }, []);
-
   const getPrice = (baseMonthly: number, baseYearly: number) => {
     return isYearly ? baseYearly : baseMonthly;
   };
-
   const getCredits = (baseCredits: number) => {
     return isYearly ? baseCredits * 12 : baseCredits;
   };
-
   const handleBuyClick = (amount: number, credits: number, planName: string) => {
     if (!userId) {
       toast.error("Please login to purchase credits");
       navigate('/auth');
       return;
     }
-    setSelectedPlan({ amount, credits, name: planName });
+    setSelectedPlan({
+      amount,
+      credits,
+      name: planName
+    });
     setCurrencyDialogOpen(true);
   };
-
   const handlePayment = async (currency: 'INR' | 'USD') => {
     if (!selectedPlan || !userId) return;
-    
     setCurrencyDialogOpen(false);
-    
     let amountInINR = selectedPlan.amount;
     let displayAmount = selectedPlan.amount;
-    
     if (currency === 'USD') {
       // Convert INR to USD for display, but Razorpay will charge in INR
       displayAmount = Math.ceil(selectedPlan.amount / USD_TO_INR_RATE);
       amountInINR = selectedPlan.amount; // Keep original INR amount for payment
     }
-
     try {
       toast.loading("Initiating payment...");
-
-      const { data: orderData, error: orderError } = await supabase.functions.invoke('razorpay-payment', {
-        body: { 
+      const {
+        data: orderData,
+        error: orderError
+      } = await supabase.functions.invoke('razorpay-payment', {
+        body: {
           action: 'createOrder',
           amount: amountInINR,
           currency: 'INR' // Razorpay charges in INR
         }
       });
-
       if (orderError) throw orderError;
-
       const options = {
         key: "rzp_live_RmkssLbXJRxtd6",
         amount: orderData.order.amount,
@@ -115,8 +112,10 @@ const Pricing = () => {
         handler: async function (response: any) {
           try {
             toast.loading("Verifying payment...");
-
-            const { data: verifyData, error: verifyError } = await supabase.functions.invoke('razorpay-payment', {
+            const {
+              data: verifyData,
+              error: verifyError
+            } = await supabase.functions.invoke('razorpay-payment', {
               body: {
                 action: 'verifyPayment',
                 orderId: response.razorpay_order_id,
@@ -127,12 +126,10 @@ const Pricing = () => {
                 amount: amountInINR
               }
             });
-
             if (verifyError) throw verifyError;
-
             if (verifyData.verified) {
               toast.success(`Payment successful! ${selectedPlan.credits} credits added 🎉`);
-              setUserCredits((prev) => (prev ?? 0) + selectedPlan.credits);
+              setUserCredits(prev => (prev ?? 0) + selectedPlan.credits);
               navigate('/tests');
             } else {
               toast.error("Payment verification failed");
@@ -151,32 +148,23 @@ const Pricing = () => {
           color: "#0EA5E9"
         }
       };
-
       const razorpay = new window.Razorpay(options);
       razorpay.open();
-
       toast.dismiss();
     } catch (error) {
       console.error('Payment error:', error);
       toast.error("Failed to initiate payment");
     }
   };
-
   const basicPrice = getPrice(BASIC_MONTHLY_INR, BASIC_YEARLY_INR);
   const proPrice = getPrice(PRO_MONTHLY_INR, PRO_YEARLY_INR);
   const basicCredits = BASIC_CERTIFICATES;
   const proCredits = PRO_CERTIFICATES;
-
-  return (
-    <div className="min-h-screen bg-background py-4 sm:py-8 px-3 sm:px-4">
+  return <div className="min-h-screen bg-background py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/')}
-            className="mb-3 sm:mb-4 text-sm"
-          >
+          <Button variant="ghost" onClick={() => navigate('/')} className="mb-3 sm:mb-4 text-sm">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Home
           </Button>
@@ -194,11 +182,7 @@ const Pricing = () => {
               <Label htmlFor="billing-toggle" className={!isYearly ? 'font-semibold' : 'text-muted-foreground'}>
                 Monthly
               </Label>
-              <Switch
-                id="billing-toggle"
-                checked={isYearly}
-                onCheckedChange={setIsYearly}
-              />
+              <Switch id="billing-toggle" checked={isYearly} onCheckedChange={setIsYearly} />
               <Label htmlFor="billing-toggle" className={isYearly ? 'font-semibold' : 'text-muted-foreground'}>
                 Yearly
                 <Badge variant="secondary" className="ml-2 text-xs">Save 17%</Badge>
@@ -207,12 +191,7 @@ const Pricing = () => {
 
             {/* Currency Toggle Button */}
             <div className="flex items-center justify-center gap-2 mb-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrencyDialogOpen(true)}
-                className="flex items-center gap-2"
-              >
+              <Button variant="outline" size="sm" onClick={() => setCurrencyDialogOpen(true)} className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4" />
                 <span>₹/$ Currency</span>
               </Button>
@@ -222,12 +201,10 @@ const Pricing = () => {
             </div>
 
             {/* User Credits Display */}
-            {!loading && userId && (
-              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-6">
+            {!loading && userId && <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-6">
                 <CreditCard className="h-4 w-4" />
                 <span className="font-semibold">Your Credits: {userCredits ?? 0}</span>
-              </div>
-            )}
+              </div>}
           </div>
         </div>
 
@@ -275,10 +252,7 @@ const Pricing = () => {
                 </li>
               </ul>
               
-              <Button 
-                className="w-full mt-4 bg-blue-600 hover:bg-blue-700 border-0 text-sm py-5 text-white"
-                onClick={() => handleBuyClick(basicPrice, basicCredits, "Basic Pack")}
-              >
+              <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 border-0 text-sm py-5 text-white" onClick={() => handleBuyClick(basicPrice, basicCredits, "Basic Pack")}>
                 Buy Now - ₹{basicPrice.toLocaleString()}
               </Button>
             </CardContent>
@@ -341,10 +315,7 @@ const Pricing = () => {
                 </li>
               </ul>
               
-              <Button 
-                className="w-full mt-4 bg-[var(--gradient-primary)] border-0 text-sm py-5 text-white"
-                onClick={() => handleBuyClick(proPrice, proCredits, "Pro Pack")}
-              >
+              <Button className="w-full mt-4 bg-[var(--gradient-primary)] border-0 text-sm py-5 text-white" onClick={() => handleBuyClick(proPrice, proCredits, "Pro Pack")}>
                 Buy Now - ₹{proPrice.toLocaleString()}
               </Button>
             </CardContent>
@@ -361,22 +332,14 @@ const Pricing = () => {
               </DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-2 gap-4 mt-4">
-              <Button
-                variant="outline"
-                className="h-24 flex flex-col gap-2"
-                onClick={() => handlePayment('INR')}
-              >
+              <Button variant="outline" className="h-24 flex flex-col gap-2" onClick={() => handlePayment('INR')}>
                 <span className="text-2xl font-bold">₹</span>
                 <span className="text-lg font-semibold">
                   ₹{selectedPlan?.amount.toLocaleString()}
                 </span>
                 <span className="text-xs text-muted-foreground">Pay in INR</span>
               </Button>
-              <Button
-                variant="outline"
-                className="h-24 flex flex-col gap-2"
-                onClick={() => handlePayment('USD')}
-              >
+              <Button variant="outline" className="h-24 flex flex-col gap-2" onClick={() => handlePayment('USD')}>
                 <span className="text-2xl font-bold">$</span>
                 <span className="text-lg font-semibold">
                   ${selectedPlan ? Math.ceil(selectedPlan.amount / USD_TO_INR_RATE) : 0}
@@ -486,15 +449,11 @@ const Pricing = () => {
           </CardContent>
         </Card>
 
-        <p className="text-xs text-center text-muted-foreground mt-6">
-          Secure payment via Razorpay
-        </p>
+        
       </div>
       
       {/* AI Assistant */}
       <AIAssistant context="Pricing Plans" />
-    </div>
-  );
+    </div>;
 };
-
 export default Pricing;
