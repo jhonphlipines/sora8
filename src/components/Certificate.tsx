@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Award, Download, FileImage, FileText, Medal } from "lucide-react";
-import { useRef, useState } from "react";
+import { Award, Download, FileImage, FileText, Lock, CreditCard } from "lucide-react";
+import { useRef, useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { supabase } from "@/integrations/supabase/client";
+
 interface CertificateProps {
   studentName: string;
   score: number;
@@ -13,6 +15,9 @@ interface CertificateProps {
   completionDate: Date;
   certificateId: string;
 }
+
+const CERTIFICATE_PRICE = 99; // Price in INR
+
 export const Certificate = ({
   studentName,
   score,
@@ -21,13 +26,48 @@ export const Certificate = ({
   completionDate,
   certificateId
 }: CertificateProps) => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const certificateRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isPurchased, setIsPurchased] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [checkingPurchase, setCheckingPurchase] = useState(true);
+  
   const percentage = Math.round(score / totalQuestions * 100);
   const isPassed = percentage >= 60;
+
+  // Check if certificate is already purchased
+  useEffect(() => {
+    const checkPurchase = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          setCheckingPurchase(false);
+          return;
+        }
+
+        const { data } = await supabase
+          .from('certificate_purchases')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('certificate_id', certificateId)
+          .maybeSingle();
+
+        setIsPurchased(!!data);
+      } catch (error) {
+        console.error('Error checking purchase:', error);
+      } finally {
+        setCheckingPurchase(false);
+      }
+    };
+
+    if (certificateId) {
+      checkPurchase();
+    } else {
+      setCheckingPurchase(false);
+    }
+  }, [certificateId]);
+
   const getMedalInfo = (percent: number) => {
     if (percent >= 90) {
       return {
@@ -61,7 +101,116 @@ export const Certificate = ({
       };
     }
   };
+
   const medalInfo = getMedalInfo(percentage);
+
+  const handlePayment = async () => {
+    setIsProcessingPayment(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Login Required",
+          description: "Please login to purchase certificate",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Create Razorpay order
+      const { data: orderData, error: orderError } = await supabase.functions.invoke('razorpay-payment', {
+        body: {
+          action: 'createOrder',
+          amount: CERTIFICATE_PRICE,
+          currency: 'INR'
+        }
+      });
+
+      if (orderError || !orderData?.order) {
+        throw new Error('Failed to create payment order');
+      }
+
+      // Load Razorpay script if not loaded
+      if (!(window as any).Razorpay) {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+          script.onload = resolve;
+          script.onerror = reject;
+          document.body.appendChild(script);
+        });
+      }
+
+      const options = {
+        key: 'rzp_live_RmkssLbXJRxtd6',
+        amount: orderData.order.amount,
+        currency: orderData.order.currency,
+        name: 'Vilver',
+        description: `Certificate: ${courseName}`,
+        order_id: orderData.order.id,
+        handler: async (response: any) => {
+          try {
+            // Verify payment
+            const { data: verifyData, error: verifyError } = await supabase.functions.invoke('razorpay-payment', {
+              body: {
+                action: 'verifyPayment',
+                orderId: response.razorpay_order_id,
+                paymentId: response.razorpay_payment_id,
+                signature: response.razorpay_signature,
+                userId: user.id,
+                amount: CERTIFICATE_PRICE
+              }
+            });
+
+            if (verifyError || !verifyData?.verified) {
+              throw new Error('Payment verification failed');
+            }
+
+            // Record the purchase
+            await supabase.from('certificate_purchases').insert({
+              user_id: user.id,
+              certificate_id: certificateId,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              amount: CERTIFICATE_PRICE
+            });
+
+            setIsPurchased(true);
+            toast({
+              title: "Payment Successful!",
+              description: "You can now download your certificate."
+            });
+          } catch (error) {
+            console.error('Payment verification error:', error);
+            toast({
+              title: "Payment Error",
+              description: "There was an issue with your payment. Please contact support.",
+              variant: "destructive"
+            });
+          }
+        },
+        prefill: {
+          email: user.email
+        },
+        theme: {
+          color: '#8B5CF6'
+        }
+      };
+
+      const razorpay = new (window as any).Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error('Payment error:', error);
+      toast({
+        title: "Payment Failed",
+        description: error instanceof Error ? error.message : "Unknown error",
+        variant: "destructive"
+      });
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  };
+
   const captureCanvas = async () => {
     if (!certificateRef.current) throw new Error("Certificate ref not found");
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -74,7 +223,16 @@ export const Certificate = ({
       logging: false
     });
   };
+
   const downloadAsImage = async () => {
+    if (!isPurchased) {
+      toast({
+        title: "Purchase Required",
+        description: "Please purchase the certificate to download",
+        variant: "destructive"
+      });
+      return;
+    }
     if (!certificateRef.current) {
       toast({
         title: "Please wait",
@@ -111,7 +269,16 @@ export const Certificate = ({
       setIsDownloading(false);
     }
   };
+
   const downloadAsJPG = async () => {
+    if (!isPurchased) {
+      toast({
+        title: "Purchase Required",
+        description: "Please purchase the certificate to download",
+        variant: "destructive"
+      });
+      return;
+    }
     if (!certificateRef.current) {
       toast({
         title: "Please wait",
@@ -148,7 +315,16 @@ export const Certificate = ({
       setIsDownloading(false);
     }
   };
+
   const downloadAsPDF = async () => {
+    if (!isPurchased) {
+      toast({
+        title: "Purchase Required",
+        description: "Please purchase the certificate to download",
+        variant: "destructive"
+      });
+      return;
+    }
     if (!certificateRef.current) {
       toast({
         title: "Please wait",
@@ -193,12 +369,23 @@ export const Certificate = ({
       setIsDownloading(false);
     }
   };
+
   const downloadAll = async () => {
+    if (!isPurchased) {
+      toast({
+        title: "Purchase Required",
+        description: "Please purchase the certificate to download",
+        variant: "destructive"
+      });
+      return;
+    }
     await downloadAsImage();
     setTimeout(() => downloadAsPDF(), 1000);
   };
+
   if (!isPassed) {
-    return <Card className="w-full max-w-2xl mx-auto bg-card border-border/50 shadow-2xl">
+    return (
+      <Card className="w-full max-w-2xl mx-auto bg-card border-border/50 shadow-2xl">
         <CardContent className="text-center py-12">
           <div className="mb-6">
             <div className="w-20 h-20 mx-auto bg-destructive/20 rounded-full flex items-center justify-center mb-4">
@@ -213,14 +400,17 @@ export const Certificate = ({
           </div>
           <Button onClick={() => window.location.reload()} className="bg-primary">Retake Quiz</Button>
         </CardContent>
-      </Card>;
+      </Card>
+    );
   }
-  return <div className="w-full max-w-4xl mx-auto">
+
+  return (
+    <div className="w-full max-w-4xl mx-auto">
       {/* Certificate with Medal Layout */}
       <div ref={certificateRef} className="relative bg-white overflow-hidden shadow-2xl w-full" style={{
-      aspectRatio: '1.414/1',
-      minHeight: '280px'
-    }}>
+        aspectRatio: '1.414/1',
+        minHeight: '280px'
+      }}>
         {/* Decorative Border */}
         <div className="absolute inset-2 sm:inset-3 md:inset-4 border-2 border-gray-300"></div>
         <div className="absolute inset-3 sm:inset-4 md:inset-5 border border-gray-200"></div>
@@ -250,10 +440,10 @@ export const Certificate = ({
               {/* Date */}
               <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500">
                 {completionDate.toLocaleDateString('en-US', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric'
-              })}
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
               </p>
 
               {/* This certifies */}
@@ -318,8 +508,8 @@ export const Certificate = ({
 
             {/* Medal Type */}
             <p className="text-sm sm:text-base md:text-xl lg:text-2xl font-bold mb-1" style={{
-            color: medalInfo.textColor
-          }}>
+              color: medalInfo.textColor
+            }}>
               {medalInfo.type}
             </p>
 
@@ -330,44 +520,67 @@ export const Certificate = ({
 
             {/* Score Badge */}
             <div className="px-2 py-1 sm:px-3 sm:py-1.5 rounded-full border-2 mb-2 sm:mb-4" style={{
-            backgroundColor: medalInfo.bgColor,
-            borderColor: medalInfo.border
-          }}>
-              <p className="text-sm sm:text-base md:text-lg font-bold" style={{
-              color: medalInfo.textColor
+              backgroundColor: medalInfo.bgColor,
+              borderColor: medalInfo.border
             }}>
+              <p className="text-sm sm:text-base md:text-lg font-bold" style={{
+                color: medalInfo.textColor
+              }}>
                 {percentage}%
               </p>
             </div>
-
-            {/* Score Range Legend */}
-            
           </div>
         </div>
-
       </div>
 
-      {/* Download Buttons */}
-      <div className="flex flex-wrap gap-2 sm:gap-3 justify-center mt-4 sm:mt-6 pb-20 sm:pb-16 md:pb-8 px-2">
-        <Button onClick={downloadAsImage} disabled={isDownloading} variant="outline" size="sm" className="border-gray-300 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm">
-          <FileImage className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-          PNG
-        </Button>
-        
-        <Button onClick={downloadAsJPG} disabled={isDownloading} variant="outline" size="sm" className="border-gray-300 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm">
-          <FileImage className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-          JPG
-        </Button>
-        
-        <Button onClick={downloadAsPDF} disabled={isDownloading} variant="outline" size="sm" className="border-gray-300 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm">
-          <FileText className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-          PDF
-        </Button>
-        
-        <Button onClick={downloadAll} disabled={isDownloading} size="sm" className="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white shadow-lg text-xs sm:text-sm">
-          <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-          {isDownloading ? "Downloading..." : "Download All"}
-        </Button>
+      {/* Payment/Download Section */}
+      <div className="mt-4 sm:mt-6 pb-20 sm:pb-16 md:pb-8 px-2">
+        {checkingPurchase ? (
+          <div className="flex justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        ) : !isPurchased ? (
+          <div className="text-center space-y-4">
+            <div className="bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/20 rounded-lg p-6">
+              <Lock className="h-8 w-8 text-primary mx-auto mb-3" />
+              <h3 className="text-lg font-semibold mb-2">Unlock Your Certificate</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Pay ₹{CERTIFICATE_PRICE} to download your certificate in PNG, JPG, and PDF formats.
+              </p>
+              <Button 
+                onClick={handlePayment} 
+                disabled={isProcessingPayment}
+                className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
+              >
+                <CreditCard className="h-4 w-4 mr-2" />
+                {isProcessingPayment ? "Processing..." : `Pay ₹${CERTIFICATE_PRICE} to Download`}
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
+            <Button onClick={downloadAsImage} disabled={isDownloading} variant="outline" size="sm" className="border-gray-300 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm">
+              <FileImage className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              PNG
+            </Button>
+            
+            <Button onClick={downloadAsJPG} disabled={isDownloading} variant="outline" size="sm" className="border-gray-300 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm">
+              <FileImage className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              JPG
+            </Button>
+            
+            <Button onClick={downloadAsPDF} disabled={isDownloading} variant="outline" size="sm" className="border-gray-300 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm">
+              <FileText className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              PDF
+            </Button>
+            
+            <Button onClick={downloadAll} disabled={isDownloading} size="sm" className="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white shadow-lg text-xs sm:text-sm">
+              <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              {isDownloading ? "Downloading..." : "Download All"}
+            </Button>
+          </div>
+        )}
       </div>
-    </div>;
+    </div>
+  );
 };
