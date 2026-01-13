@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { ArrowLeft, CheckCircle, Award, Clock, BookOpen, CreditCard, Bot, Video, Calendar, DollarSign } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,7 +21,6 @@ const Pricing = () => {
   const [userCredits, setUserCredits] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
-  const [isYearly, setIsYearly] = useState(false);
   const [currencyDialogOpen, setCurrencyDialogOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<{
     amount: number;
@@ -32,16 +29,12 @@ const Pricing = () => {
   } | null>(null);
 
   // Monthly prices in INR
-  const BASIC_MONTHLY_INR = 250;
+  const BASIC_MONTHLY_INR = 299;
   const PRO_MONTHLY_INR = 799;
 
-  // Yearly prices (with discount)
-  const BASIC_YEARLY_INR = 2500; // ~17% off (₹250 x 12 = ₹3000, save ₹500)
-  const PRO_YEARLY_INR = 7999; // ~17% off (₹799 x 12 = ₹9588, save ~₹1589)
-
-  // Certificate counts
+  // Certificate counts per month
   const BASIC_CERTIFICATES = 5;
-  const PRO_CERTIFICATES = 120;
+  const PRO_CERTIFICATES = 30;
   useEffect(() => {
     const fetchUserCredits = async () => {
       const {
@@ -60,11 +53,8 @@ const Pricing = () => {
     };
     fetchUserCredits();
   }, []);
-  const getPrice = (baseMonthly: number, baseYearly: number) => {
-    return isYearly ? baseYearly : baseMonthly;
-  };
-  const getCredits = (baseCredits: number) => {
-    return isYearly ? baseCredits * 12 : baseCredits;
+  const getPrice = (baseMonthly: number) => {
+    return baseMonthly;
   };
   const handleBuyClick = (amount: number, credits: number, planName: string) => {
     if (!userId) {
@@ -156,8 +146,8 @@ const Pricing = () => {
       toast.error("Failed to initiate payment");
     }
   };
-  const basicPrice = getPrice(BASIC_MONTHLY_INR, BASIC_YEARLY_INR);
-  const proPrice = getPrice(PRO_MONTHLY_INR, PRO_YEARLY_INR);
+  const basicPrice = getPrice(BASIC_MONTHLY_INR);
+  const proPrice = getPrice(PRO_MONTHLY_INR);
   const basicCredits = BASIC_CERTIFICATES;
   const proCredits = PRO_CERTIFICATES;
   return <div className="min-h-screen bg-background py-4 sm:py-8 px-3 sm:px-4">
@@ -177,17 +167,6 @@ const Pricing = () => {
               Purchase certificate credits and showcase your programming expertise with professional certificates.
             </p>
 
-            {/* Billing Toggle */}
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <Label htmlFor="billing-toggle" className={!isYearly ? 'font-semibold' : 'text-muted-foreground'}>
-                Monthly
-              </Label>
-              <Switch id="billing-toggle" checked={isYearly} onCheckedChange={setIsYearly} />
-              <Label htmlFor="billing-toggle" className={isYearly ? 'font-semibold' : 'text-muted-foreground'}>
-                Yearly
-                <Badge variant="secondary" className="ml-2 text-xs">Save 17%</Badge>
-              </Label>
-            </div>
 
             {/* Currency Toggle Button */}
             <div className="flex items-center justify-center gap-2 mb-4">
@@ -221,7 +200,7 @@ const Pricing = () => {
               </CardTitle>
               <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
                 ₹{basicPrice.toLocaleString()}
-                <span className="text-sm text-muted-foreground font-normal">/{isYearly ? 'year' : 'month'}</span>
+                <span className="text-sm text-muted-foreground font-normal">/month</span>
               </div>
               <CardDescription className="text-muted-foreground text-sm">
                 Get {basicCredits} Professional Certificates
@@ -272,7 +251,7 @@ const Pricing = () => {
               </CardTitle>
               <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
                 ₹{proPrice.toLocaleString()}
-                <span className="text-sm text-muted-foreground font-normal">/{isYearly ? 'year' : 'month'}</span>
+                <span className="text-sm text-muted-foreground font-normal">/month</span>
               </div>
               <CardDescription className="text-muted-foreground text-sm">
                 Get {proCredits} Professional Certificates + Premium Features

@@ -16,7 +16,7 @@ interface CertificateProps {
   certificateId: string;
 }
 
-const CERTIFICATE_PRICE = 99; // Price in INR
+
 
 export const Certificate = ({
   studentName,
@@ -30,15 +30,16 @@ export const Certificate = ({
   const certificateRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isPurchased, setIsPurchased] = useState(false);
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [userCredits, setUserCredits] = useState<number>(0);
+  const [isUsingCredit, setIsUsingCredit] = useState(false);
   const [checkingPurchase, setCheckingPurchase] = useState(true);
   
   const percentage = Math.round(score / totalQuestions * 100);
   const isPassed = percentage >= 60;
 
-  // Check if certificate is already purchased
+  // Check if certificate is already purchased and get user credits
   useEffect(() => {
-    const checkPurchase = async () => {
+    const checkPurchaseAndCredits = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
@@ -46,23 +47,33 @@ export const Certificate = ({
           return;
         }
 
-        const { data } = await supabase
+        // Check certificate purchase
+        const { data: purchaseData } = await supabase
           .from('certificate_purchases')
           .select('id')
           .eq('user_id', user.id)
           .eq('certificate_id', certificateId)
           .maybeSingle();
 
-        setIsPurchased(!!data);
+        setIsPurchased(!!purchaseData);
+
+        // Get user credits
+        const { data: creditsData } = await supabase
+          .from('user_credits')
+          .select('credits')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        setUserCredits(creditsData?.credits ?? 0);
       } catch (error) {
-        console.error('Error checking purchase:', error);
+        console.error('Error checking purchase/credits:', error);
       } finally {
         setCheckingPurchase(false);
       }
     };
 
     if (certificateId) {
-      checkPurchase();
+      checkPurchaseAndCredits();
     } else {
       setCheckingPurchase(false);
     }
@@ -104,110 +115,58 @@ export const Certificate = ({
 
   const medalInfo = getMedalInfo(percentage);
 
-  const handlePayment = async () => {
-    setIsProcessingPayment(true);
+  const handleUseCredit = async () => {
+    setIsUsingCredit(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
           title: "Login Required",
-          description: "Please login to purchase certificate",
+          description: "Please login to use credits",
           variant: "destructive"
         });
         return;
       }
 
-      // Create Razorpay order
-      const { data: orderData, error: orderError } = await supabase.functions.invoke('razorpay-payment', {
-        body: {
-          action: 'createOrder',
-          amount: CERTIFICATE_PRICE,
-          currency: 'INR'
-        }
+      if (userCredits < 1) {
+        toast({
+          title: "No Credits Available",
+          description: "Please purchase a plan to get certificate credits",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Deduct credit
+      const { error: creditError } = await supabase
+        .from('user_credits')
+        .update({ credits: userCredits - 1 })
+        .eq('user_id', user.id);
+
+      if (creditError) throw creditError;
+
+      // Record the purchase
+      await supabase.from('certificate_purchases').insert({
+        user_id: user.id,
+        certificate_id: certificateId,
+        amount: 0 // Used credit, no payment
       });
 
-      if (orderError || !orderData?.order) {
-        throw new Error('Failed to create payment order');
-      }
-
-      // Load Razorpay script if not loaded
-      if (!(window as any).Razorpay) {
-        await new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-          script.onload = resolve;
-          script.onerror = reject;
-          document.body.appendChild(script);
-        });
-      }
-
-      const options = {
-        key: 'rzp_live_RmkssLbXJRxtd6',
-        amount: orderData.order.amount,
-        currency: orderData.order.currency,
-        name: 'Vilver',
-        description: `Certificate: ${courseName}`,
-        order_id: orderData.order.id,
-        handler: async (response: any) => {
-          try {
-            // Verify payment
-            const { data: verifyData, error: verifyError } = await supabase.functions.invoke('razorpay-payment', {
-              body: {
-                action: 'verifyPayment',
-                orderId: response.razorpay_order_id,
-                paymentId: response.razorpay_payment_id,
-                signature: response.razorpay_signature,
-                userId: user.id,
-                amount: CERTIFICATE_PRICE
-              }
-            });
-
-            if (verifyError || !verifyData?.verified) {
-              throw new Error('Payment verification failed');
-            }
-
-            // Record the purchase
-            await supabase.from('certificate_purchases').insert({
-              user_id: user.id,
-              certificate_id: certificateId,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              amount: CERTIFICATE_PRICE
-            });
-
-            setIsPurchased(true);
-            toast({
-              title: "Payment Successful!",
-              description: "You can now download your certificate."
-            });
-          } catch (error) {
-            console.error('Payment verification error:', error);
-            toast({
-              title: "Payment Error",
-              description: "There was an issue with your payment. Please contact support.",
-              variant: "destructive"
-            });
-          }
-        },
-        prefill: {
-          email: user.email
-        },
-        theme: {
-          color: '#8B5CF6'
-        }
-      };
-
-      const razorpay = new (window as any).Razorpay(options);
-      razorpay.open();
-    } catch (error) {
-      console.error('Payment error:', error);
+      setIsPurchased(true);
+      setUserCredits(prev => prev - 1);
       toast({
-        title: "Payment Failed",
-        description: error instanceof Error ? error.message : "Unknown error",
+        title: "Certificate Unlocked!",
+        description: "You can now download your certificate. 1 credit used."
+      });
+    } catch (error) {
+      console.error('Error using credit:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to use credit",
         variant: "destructive"
       });
     } finally {
-      setIsProcessingPayment(false);
+      setIsUsingCredit(false);
     }
   };
 
@@ -544,17 +503,37 @@ export const Certificate = ({
             <div className="bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/20 rounded-lg p-6">
               <Lock className="h-8 w-8 text-primary mx-auto mb-3" />
               <h3 className="text-lg font-semibold mb-2">Unlock Your Certificate</h3>
-              <p className="text-muted-foreground text-sm mb-4">
-                Pay ₹{CERTIFICATE_PRICE} to download your certificate in PNG, JPG, and PDF formats.
-              </p>
-              <Button 
-                onClick={handlePayment} 
-                disabled={isProcessingPayment}
-                className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
-              >
-                <CreditCard className="h-4 w-4 mr-2" />
-                {isProcessingPayment ? "Processing..." : `Pay ₹${CERTIFICATE_PRICE} to Download`}
-              </Button>
+              {userCredits > 0 ? (
+                <>
+                  <p className="text-muted-foreground text-sm mb-2">
+                    Use 1 credit to download your certificate in PNG, JPG, and PDF formats.
+                  </p>
+                  <p className="text-primary font-semibold mb-4">
+                    You have {userCredits} credit{userCredits !== 1 ? 's' : ''} available
+                  </p>
+                  <Button 
+                    onClick={handleUseCredit} 
+                    disabled={isUsingCredit}
+                    className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
+                  >
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    {isUsingCredit ? "Processing..." : "Use 1 Credit to Download"}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <p className="text-muted-foreground text-sm mb-4">
+                    You don't have any credits. Purchase a plan to get certificate credits.
+                  </p>
+                  <Button 
+                    onClick={() => window.location.href = '/pricing'}
+                    className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
+                  >
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    View Pricing Plans
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         ) : (
