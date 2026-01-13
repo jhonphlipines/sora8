@@ -1039,17 +1039,122 @@ const goLevels: Level[] = [
   {
     id: "go-level-3",
     level: 3,
-    name: "Concurrency",
-    description: "Goroutines and channels",
+    name: "Concurrency Basics",
+    description: "Goroutines and channels fundamentals",
     requiredScore: 80,
     timeLimit: 540,
     questions: ["go11", "go12", "go13", "go14", "go15"],
     badge: {
-      name: "Concurrency Master",
+      name: "Concurrency Starter",
       icon: "🔀",
       color: "from-green-400 to-teal-500"
     },
     prerequisites: ["go-level-2"]
+  },
+  {
+    id: "go-level-4",
+    level: 4,
+    name: "Interfaces",
+    description: "Interface design and implementation",
+    requiredScore: 80,
+    timeLimit: 600,
+    questions: ["go16", "go17", "go18", "go19", "go20"],
+    badge: {
+      name: "Interface Master",
+      icon: "🔌",
+      color: "from-purple-400 to-pink-500"
+    },
+    prerequisites: ["go-level-3"]
+  },
+  {
+    id: "go-level-5",
+    level: 5,
+    name: "Error Handling",
+    description: "Errors, panics, and recovery",
+    requiredScore: 85,
+    timeLimit: 600,
+    questions: ["go21", "go22", "go23", "go24", "go25"],
+    badge: {
+      name: "Error Handler",
+      icon: "🛡️",
+      color: "from-red-400 to-orange-500"
+    },
+    prerequisites: ["go-level-4"]
+  },
+  {
+    id: "go-level-6",
+    level: 6,
+    name: "Packages & Modules",
+    description: "Module management and package design",
+    requiredScore: 85,
+    timeLimit: 660,
+    questions: ["go26", "go27", "go28", "go29", "go30"],
+    badge: {
+      name: "Package Pro",
+      icon: "📦",
+      color: "from-yellow-400 to-orange-500"
+    },
+    prerequisites: ["go-level-5"]
+  },
+  {
+    id: "go-level-7",
+    level: 7,
+    name: "Advanced Concurrency",
+    description: "Select, sync, and concurrent patterns",
+    requiredScore: 85,
+    timeLimit: 720,
+    questions: ["go31", "go32", "go33", "go34", "go35"],
+    badge: {
+      name: "Concurrency Expert",
+      icon: "⚡",
+      color: "from-indigo-400 to-purple-500"
+    },
+    prerequisites: ["go-level-6"]
+  },
+  {
+    id: "go-level-8",
+    level: 8,
+    name: "Testing & Benchmarking",
+    description: "Unit tests, benchmarks, and profiling",
+    requiredScore: 85,
+    timeLimit: 720,
+    questions: ["go36", "go37", "go38", "go39", "go40"],
+    badge: {
+      name: "Test Master",
+      icon: "🧪",
+      color: "from-teal-400 to-cyan-500"
+    },
+    prerequisites: ["go-level-7"]
+  },
+  {
+    id: "go-level-9",
+    level: 9,
+    name: "Web Development",
+    description: "HTTP servers, routing, and middleware",
+    requiredScore: 90,
+    timeLimit: 780,
+    questions: ["go41", "go42", "go43", "go44", "go45"],
+    badge: {
+      name: "Web Gopher",
+      icon: "🌐",
+      color: "from-blue-400 to-cyan-500"
+    },
+    prerequisites: ["go-level-8"]
+  },
+  {
+    id: "go-level-10",
+    level: 10,
+    name: "Go Mastery",
+    description: "Advanced patterns and best practices",
+    requiredScore: 95,
+    timeLimit: 900,
+    questions: ["go46", "go47", "go48", "go49", "go50"],
+    badge: {
+      name: "Go Grandmaster",
+      icon: "👑",
+      color: "from-amber-400 to-yellow-500"
+    },
+    prerequisites: ["go-level-9"]
   }
 ];
 
@@ -1087,17 +1192,122 @@ const swiftLevels: Level[] = [
   {
     id: "swift-level-3",
     level: 3,
-    name: "Classes & Protocols",
-    description: "Object-oriented programming in Swift",
-    requiredScore: 80,
-    timeLimit: 540,
+    name: "Collections",
+    description: "Arrays, dictionaries, and sets",
+    requiredScore: 75,
+    timeLimit: 480,
     questions: ["swift11", "swift12", "swift13", "swift14", "swift15"],
     badge: {
-      name: "Protocol Master",
-      icon: "📋",
-      color: "from-purple-400 to-pink-500"
+      name: "Collection Master",
+      icon: "📚",
+      color: "from-blue-400 to-cyan-500"
     },
     prerequisites: ["swift-level-2"]
+  },
+  {
+    id: "swift-level-4",
+    level: 4,
+    name: "Functions & Closures",
+    description: "Function syntax and closures",
+    requiredScore: 80,
+    timeLimit: 540,
+    questions: ["swift16", "swift17", "swift18", "swift19", "swift20"],
+    badge: {
+      name: "Closure Expert",
+      icon: "⚡",
+      color: "from-yellow-400 to-orange-500"
+    },
+    prerequisites: ["swift-level-3"]
+  },
+  {
+    id: "swift-level-5",
+    level: 5,
+    name: "Classes & Structs",
+    description: "Object-oriented programming in Swift",
+    requiredScore: 80,
+    timeLimit: 600,
+    questions: ["swift21", "swift22", "swift23", "swift24", "swift25"],
+    badge: {
+      name: "OOP Master",
+      icon: "🏗️",
+      color: "from-purple-400 to-pink-500"
+    },
+    prerequisites: ["swift-level-4"]
+  },
+  {
+    id: "swift-level-6",
+    level: 6,
+    name: "Protocols & Extensions",
+    description: "Protocol-oriented programming",
+    requiredScore: 85,
+    timeLimit: 660,
+    questions: ["swift26", "swift27", "swift28", "swift29", "swift30"],
+    badge: {
+      name: "Protocol Pro",
+      icon: "📋",
+      color: "from-indigo-400 to-purple-500"
+    },
+    prerequisites: ["swift-level-5"]
+  },
+  {
+    id: "swift-level-7",
+    level: 7,
+    name: "Error Handling",
+    description: "Throwing, catching, and propagating errors",
+    requiredScore: 85,
+    timeLimit: 660,
+    questions: ["swift31", "swift32", "swift33", "swift34", "swift35"],
+    badge: {
+      name: "Error Handler",
+      icon: "🔧",
+      color: "from-red-400 to-orange-500"
+    },
+    prerequisites: ["swift-level-6"]
+  },
+  {
+    id: "swift-level-8",
+    level: 8,
+    name: "Generics",
+    description: "Generic functions, types, and constraints",
+    requiredScore: 85,
+    timeLimit: 720,
+    questions: ["swift36", "swift37", "swift38", "swift39", "swift40"],
+    badge: {
+      name: "Generic Guru",
+      icon: "🎯",
+      color: "from-teal-400 to-blue-500"
+    },
+    prerequisites: ["swift-level-7"]
+  },
+  {
+    id: "swift-level-9",
+    level: 9,
+    name: "Concurrency",
+    description: "Async/await and structured concurrency",
+    requiredScore: 90,
+    timeLimit: 780,
+    questions: ["swift41", "swift42", "swift43", "swift44", "swift45"],
+    badge: {
+      name: "Async Master",
+      icon: "⏳",
+      color: "from-cyan-400 to-blue-500"
+    },
+    prerequisites: ["swift-level-8"]
+  },
+  {
+    id: "swift-level-10",
+    level: 10,
+    name: "Swift Mastery",
+    description: "Advanced patterns and iOS development",
+    requiredScore: 95,
+    timeLimit: 900,
+    questions: ["swift46", "swift47", "swift48", "swift49", "swift50"],
+    badge: {
+      name: "Swift Grandmaster",
+      icon: "👑",
+      color: "from-amber-400 to-yellow-500"
+    },
+    prerequisites: ["swift-level-9"]
   }
 ];
 
@@ -1120,32 +1330,137 @@ const cppLevels: Level[] = [
   {
     id: "cpp-level-2",
     level: 2,
-    name: "Pointers & Memory",
-    description: "Memory management and pointers",
+    name: "Control Structures",
+    description: "Loops, conditionals, and flow control",
     requiredScore: 75,
-    timeLimit: 480,
+    timeLimit: 420,
     questions: ["cpp6", "cpp7", "cpp8", "cpp9", "cpp10"],
     badge: {
-      name: "Memory Manager",
-      icon: "🧠",
-      color: "from-blue-400 to-indigo-500"
+      name: "Control Expert",
+      icon: "🎮",
+      color: "from-blue-400 to-cyan-500"
     },
     prerequisites: ["cpp-level-1"]
   },
   {
     id: "cpp-level-3",
     level: 3,
-    name: "Object-Oriented C++",
-    description: "Classes, inheritance, and polymorphism",
+    name: "Functions",
+    description: "Function overloading and recursion",
+    requiredScore: 75,
+    timeLimit: 480,
+    questions: ["cpp11", "cpp12", "cpp13", "cpp14", "cpp15"],
+    badge: {
+      name: "Function Pro",
+      icon: "⚡",
+      color: "from-yellow-400 to-orange-500"
+    },
+    prerequisites: ["cpp-level-2"]
+  },
+  {
+    id: "cpp-level-4",
+    level: 4,
+    name: "Pointers & References",
+    description: "Memory addresses and references",
+    requiredScore: 80,
+    timeLimit: 540,
+    questions: ["cpp16", "cpp17", "cpp18", "cpp19", "cpp20"],
+    badge: {
+      name: "Pointer Master",
+      icon: "🎯",
+      color: "from-purple-400 to-pink-500"
+    },
+    prerequisites: ["cpp-level-3"]
+  },
+  {
+    id: "cpp-level-5",
+    level: 5,
+    name: "Dynamic Memory",
+    description: "Heap allocation and memory management",
     requiredScore: 80,
     timeLimit: 600,
-    questions: ["cpp11", "cpp12", "cpp13", "cpp14", "cpp15"],
+    questions: ["cpp21", "cpp22", "cpp23", "cpp24", "cpp25"],
+    badge: {
+      name: "Memory Manager",
+      icon: "🧠",
+      color: "from-blue-400 to-indigo-500"
+    },
+    prerequisites: ["cpp-level-4"]
+  },
+  {
+    id: "cpp-level-6",
+    level: 6,
+    name: "OOP Basics",
+    description: "Classes, objects, and encapsulation",
+    requiredScore: 85,
+    timeLimit: 660,
+    questions: ["cpp26", "cpp27", "cpp28", "cpp29", "cpp30"],
+    badge: {
+      name: "OOP Starter",
+      icon: "🏗️",
+      color: "from-green-400 to-teal-500"
+    },
+    prerequisites: ["cpp-level-5"]
+  },
+  {
+    id: "cpp-level-7",
+    level: 7,
+    name: "Inheritance & Polymorphism",
+    description: "Class hierarchies and virtual functions",
+    requiredScore: 85,
+    timeLimit: 720,
+    questions: ["cpp31", "cpp32", "cpp33", "cpp34", "cpp35"],
     badge: {
       name: "OOP Master",
       icon: "🏛️",
       color: "from-indigo-400 to-purple-500"
     },
-    prerequisites: ["cpp-level-2"]
+    prerequisites: ["cpp-level-6"]
+  },
+  {
+    id: "cpp-level-8",
+    level: 8,
+    name: "Templates",
+    description: "Generic programming with templates",
+    requiredScore: 85,
+    timeLimit: 720,
+    questions: ["cpp36", "cpp37", "cpp38", "cpp39", "cpp40"],
+    badge: {
+      name: "Template Guru",
+      icon: "📐",
+      color: "from-cyan-400 to-blue-500"
+    },
+    prerequisites: ["cpp-level-7"]
+  },
+  {
+    id: "cpp-level-9",
+    level: 9,
+    name: "STL & Containers",
+    description: "Standard Template Library and containers",
+    requiredScore: 90,
+    timeLimit: 780,
+    questions: ["cpp41", "cpp42", "cpp43", "cpp44", "cpp45"],
+    badge: {
+      name: "STL Expert",
+      icon: "📚",
+      color: "from-orange-400 to-red-500"
+    },
+    prerequisites: ["cpp-level-8"]
+  },
+  {
+    id: "cpp-level-10",
+    level: 10,
+    name: "C++ Mastery",
+    description: "Modern C++ and advanced patterns",
+    requiredScore: 95,
+    timeLimit: 900,
+    questions: ["cpp46", "cpp47", "cpp48", "cpp49", "cpp50"],
+    badge: {
+      name: "C++ Grandmaster",
+      icon: "👑",
+      color: "from-amber-400 to-yellow-500"
+    },
+    prerequisites: ["cpp-level-9"]
   }
 ];
 
@@ -1194,6 +1509,111 @@ const rustLevels: Level[] = [
       color: "from-purple-400 to-pink-500"
     },
     prerequisites: ["rust-level-2"]
+  },
+  {
+    id: "rust-level-4",
+    level: 4,
+    name: "Error Handling",
+    description: "Result, Option, and panic handling",
+    requiredScore: 80,
+    timeLimit: 600,
+    questions: ["rust16", "rust17", "rust18", "rust19", "rust20"],
+    badge: {
+      name: "Error Handler",
+      icon: "🛡️",
+      color: "from-yellow-400 to-orange-500"
+    },
+    prerequisites: ["rust-level-3"]
+  },
+  {
+    id: "rust-level-5",
+    level: 5,
+    name: "Collections",
+    description: "Vectors, HashMaps, and iterators",
+    requiredScore: 80,
+    timeLimit: 600,
+    questions: ["rust21", "rust22", "rust23", "rust24", "rust25"],
+    badge: {
+      name: "Collection Pro",
+      icon: "📚",
+      color: "from-blue-400 to-cyan-500"
+    },
+    prerequisites: ["rust-level-4"]
+  },
+  {
+    id: "rust-level-6",
+    level: 6,
+    name: "Traits & Generics",
+    description: "Trait definitions and generic types",
+    requiredScore: 85,
+    timeLimit: 660,
+    questions: ["rust26", "rust27", "rust28", "rust29", "rust30"],
+    badge: {
+      name: "Trait Master",
+      icon: "⚡",
+      color: "from-indigo-400 to-purple-500"
+    },
+    prerequisites: ["rust-level-5"]
+  },
+  {
+    id: "rust-level-7",
+    level: 7,
+    name: "Lifetimes",
+    description: "Lifetime annotations and references",
+    requiredScore: 85,
+    timeLimit: 720,
+    questions: ["rust31", "rust32", "rust33", "rust34", "rust35"],
+    badge: {
+      name: "Lifetime Guru",
+      icon: "⏳",
+      color: "from-teal-400 to-blue-500"
+    },
+    prerequisites: ["rust-level-6"]
+  },
+  {
+    id: "rust-level-8",
+    level: 8,
+    name: "Concurrency",
+    description: "Threads, channels, and shared state",
+    requiredScore: 85,
+    timeLimit: 720,
+    questions: ["rust36", "rust37", "rust38", "rust39", "rust40"],
+    badge: {
+      name: "Concurrency Expert",
+      icon: "🔀",
+      color: "from-green-400 to-teal-500"
+    },
+    prerequisites: ["rust-level-7"]
+  },
+  {
+    id: "rust-level-9",
+    level: 9,
+    name: "Async Rust",
+    description: "Async/await and futures",
+    requiredScore: 90,
+    timeLimit: 780,
+    questions: ["rust41", "rust42", "rust43", "rust44", "rust45"],
+    badge: {
+      name: "Async Master",
+      icon: "🚀",
+      color: "from-cyan-400 to-blue-500"
+    },
+    prerequisites: ["rust-level-8"]
+  },
+  {
+    id: "rust-level-10",
+    level: 10,
+    name: "Rust Mastery",
+    description: "Unsafe Rust and advanced patterns",
+    requiredScore: 95,
+    timeLimit: 900,
+    questions: ["rust46", "rust47", "rust48", "rust49", "rust50"],
+    badge: {
+      name: "Rust Grandmaster",
+      icon: "👑",
+      color: "from-amber-400 to-yellow-500"
+    },
+    prerequisites: ["rust-level-9"]
   }
 ];
 
