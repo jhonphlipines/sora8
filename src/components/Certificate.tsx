@@ -33,6 +33,8 @@ export const Certificate = ({
   const [userCredits, setUserCredits] = useState<number>(0);
   const [isUsingCredit, setIsUsingCredit] = useState(false);
   const [checkingPurchase, setCheckingPurchase] = useState(true);
+  const [totalPurchasedCerts, setTotalPurchasedCerts] = useState<number>(0);
+  const [isFreeUnlock, setIsFreeUnlock] = useState(false);
   
   const percentage = Math.round(score / totalQuestions * 100);
   const isPassed = percentage >= 60;
@@ -47,13 +49,26 @@ export const Certificate = ({
           return;
         }
 
-        // Check certificate purchase
+        // Check certificate purchase for this specific certificate
         const { data: purchaseData } = await supabase
           .from('certificate_purchases')
           .select('id')
           .eq('user_id', user.id)
           .eq('certificate_id', certificateId)
           .maybeSingle();
+
+        // Get total count of purchased certificates for free tier check
+        const { count: totalCerts } = await supabase
+          .from('certificate_purchases')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id);
+
+        const purchasedCount = totalCerts ?? 0;
+        setTotalPurchasedCerts(purchasedCount);
+
+        // If user has less than 2 certificates and this one isn't purchased yet, it's free
+        const canGetFree = purchasedCount < 2 && !purchaseData;
+        setIsFreeUnlock(canGetFree);
 
         setIsPurchased(!!purchaseData);
 
@@ -115,6 +130,45 @@ export const Certificate = ({
 
   const medalInfo = getMedalInfo(percentage);
 
+  const handleFreeUnlock = async () => {
+    setIsUsingCredit(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Login Required",
+          description: "Please login to unlock your free certificate",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Record the free certificate purchase
+      await supabase.from('certificate_purchases').insert({
+        user_id: user.id,
+        certificate_id: certificateId,
+        amount: 0 // Free certificate
+      });
+
+      setIsPurchased(true);
+      setTotalPurchasedCerts(prev => prev + 1);
+      setIsFreeUnlock(false);
+      toast({
+        title: "Certificate Unlocked!",
+        description: "Your free certificate is ready to download."
+      });
+    } catch (error) {
+      console.error('Error unlocking free certificate:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to unlock certificate",
+        variant: "destructive"
+      });
+    } finally {
+      setIsUsingCredit(false);
+    }
+  };
+
   const handleUseCredit = async () => {
     setIsUsingCredit(true);
     try {
@@ -154,6 +208,7 @@ export const Certificate = ({
 
       setIsPurchased(true);
       setUserCredits(prev => prev - 1);
+      setTotalPurchasedCerts(prev => prev + 1);
       toast({
         title: "Certificate Unlocked!",
         description: "You can now download your certificate. 1 credit used."
@@ -501,37 +556,60 @@ export const Certificate = ({
         ) : !isPurchased ? (
           <div className="text-center space-y-4">
             <div className="bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/20 rounded-lg p-6">
-              <Lock className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="text-lg font-semibold mb-2">Unlock Your Certificate</h3>
-              {userCredits > 0 ? (
+              {isFreeUnlock ? (
                 <>
+                  <Award className="h-8 w-8 text-green-500 mx-auto mb-3" />
+                  <h3 className="text-lg font-semibold mb-2 text-green-600">🎉 Free Certificate!</h3>
                   <p className="text-muted-foreground text-sm mb-2">
-                    Use 1 credit to download your certificate in PNG, JPG, and PDF formats.
+                    This is one of your first 2 free certificates. Download it at no cost!
                   </p>
-                  <p className="text-primary font-semibold mb-4">
-                    You have {userCredits} credit{userCredits !== 1 ? 's' : ''} available
+                  <p className="text-green-600 font-semibold mb-4">
+                    {2 - totalPurchasedCerts} free certificate{2 - totalPurchasedCerts !== 1 ? 's' : ''} remaining
                   </p>
                   <Button 
-                    onClick={handleUseCredit} 
+                    onClick={handleFreeUnlock} 
                     disabled={isUsingCredit}
-                    className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
+                    className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
                   >
-                    <CreditCard className="h-4 w-4 mr-2" />
-                    {isUsingCredit ? "Processing..." : "Use 1 Credit to Download"}
+                    <Award className="h-4 w-4 mr-2" />
+                    {isUsingCredit ? "Unlocking..." : "Unlock Free Certificate"}
                   </Button>
                 </>
               ) : (
                 <>
-                  <p className="text-muted-foreground text-sm mb-4">
-                    You don't have any credits. Purchase a plan to get certificate credits.
-                  </p>
-                  <Button 
-                    onClick={() => window.location.href = '/pricing'}
-                    className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
-                  >
-                    <CreditCard className="h-4 w-4 mr-2" />
-                    View Pricing Plans
-                  </Button>
+                  <Lock className="h-8 w-8 text-primary mx-auto mb-3" />
+                  <h3 className="text-lg font-semibold mb-2">Unlock Your Certificate</h3>
+                  {userCredits > 0 ? (
+                    <>
+                      <p className="text-muted-foreground text-sm mb-2">
+                        Use 1 credit to download your certificate in PNG, JPG, and PDF formats.
+                      </p>
+                      <p className="text-primary font-semibold mb-4">
+                        You have {userCredits} credit{userCredits !== 1 ? 's' : ''} available
+                      </p>
+                      <Button 
+                        onClick={handleUseCredit} 
+                        disabled={isUsingCredit}
+                        className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
+                      >
+                        <CreditCard className="h-4 w-4 mr-2" />
+                        {isUsingCredit ? "Processing..." : "Use 1 Credit to Download"}
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-muted-foreground text-sm mb-4">
+                        You don't have any credits. Purchase a plan to get certificate credits.
+                      </p>
+                      <Button 
+                        onClick={() => window.location.href = '/pricing'}
+                        className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
+                      >
+                        <CreditCard className="h-4 w-4 mr-2" />
+                        View Pricing Plans
+                      </Button>
+                    </>
+                  )}
                 </>
               )}
             </div>
