@@ -10,6 +10,7 @@ import { FileText, Download, Trash2, Edit, Plus, Search, Calendar, Type } from "
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import jsPDF from "jspdf";
 
 interface Note {
   id: string;
@@ -206,6 +207,60 @@ ${textContent}`;
     toast({
       title: "Export successful",
       description: "Your notes have been exported as text file.",
+    });
+  };
+
+  const handleDownloadNotePdf = (note: Note) => {
+    const pdf = new jsPDF();
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const margin = 20;
+    const maxWidth = pageWidth - margin * 2;
+    let yPosition = 20;
+
+    // Title
+    pdf.setFontSize(18);
+    pdf.setFont("helvetica", "bold");
+    const titleLines = pdf.splitTextToSize(note.title, maxWidth);
+    pdf.text(titleLines, margin, yPosition);
+    yPosition += titleLines.length * 8 + 10;
+
+    // Metadata
+    pdf.setFontSize(10);
+    pdf.setFont("helvetica", "normal");
+    pdf.setTextColor(100);
+    pdf.text(`Created: ${new Date(note.created_at).toLocaleString()}`, margin, yPosition);
+    yPosition += 6;
+    pdf.text(`Updated: ${new Date(note.updated_at).toLocaleString()}`, margin, yPosition);
+    yPosition += 6;
+    if (note.video_title) {
+      pdf.text(`Video: ${note.video_title}`, margin, yPosition);
+      yPosition += 6;
+    }
+    yPosition += 10;
+
+    // Content - strip HTML tags for PDF
+    pdf.setFontSize(12);
+    pdf.setTextColor(0);
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = note.content;
+    const plainContent = tempDiv.textContent || tempDiv.innerText || "";
+    
+    const contentLines = pdf.splitTextToSize(plainContent, maxWidth);
+    
+    contentLines.forEach((line: string) => {
+      if (yPosition > pdf.internal.pageSize.getHeight() - 20) {
+        pdf.addPage();
+        yPosition = 20;
+      }
+      pdf.text(line, margin, yPosition);
+      yPosition += 7;
+    });
+
+    pdf.save(`${note.title.replace(/[^a-z0-9]/gi, "_")}.pdf`);
+    
+    toast({
+      title: "PDF Downloaded",
+      description: `"${note.title}" has been downloaded as PDF.`,
     });
   };
 
@@ -444,6 +499,18 @@ ${textContent}`;
                       )}
                     </div>
                     <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDownloadNotePdf(note);
+                        }}
+                        className="h-7 w-7 sm:h-8 sm:w-8 p-0 hover:bg-primary/10 hover:text-primary"
+                        title="Download as PDF"
+                      >
+                        <Download className="h-3 w-3 sm:h-4 sm:w-4" />
+                      </Button>
                       <Button
                         variant="ghost"
                         size="sm"
