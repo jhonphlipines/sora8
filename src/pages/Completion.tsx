@@ -26,10 +26,15 @@ const CATEGORY_NAMES: Record<string, string> = {
   'html': 'HTML/CSS',
   'sql': 'SQL',
   'cpp': 'C++',
-  'typescript': 'TypeScript'
+  'typescript': 'TypeScript',
+  'video-course-ai-engineer-basics': 'Video Course - AI & ML',
+  'video-course-python-basics': 'Video Course - Python',
 };
 
 const getCategoryName = (categoryId: string): string => {
+  if (categoryId.startsWith('video-course-')) {
+    return CATEGORY_NAMES[categoryId] || 'Video Course';
+  }
   return CATEGORY_NAMES[categoryId] || categoryId.replace(/-levels?$/, '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 };
 
