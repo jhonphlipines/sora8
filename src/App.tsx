@@ -28,6 +28,7 @@ import AI from "./pages/AI";
 import Books from "./pages/Books";
 import Affiliate from "./pages/Affiliate";
 import Referral from "./pages/Referral";
+import CertifiedVideoCourses from "./pages/CertifiedVideoCourses";
 import MobileFooter from "./components/MobileFooter";
 
 const queryClient = new QueryClient();
@@ -56,6 +57,7 @@ const App = () => (
                   <Route path="/notes" element={<ProtectedRoute><Notes /></ProtectedRoute>} />
                   <Route path="/data-analysis" element={<ProtectedRoute><DataAnalysis /></ProtectedRoute>} />
                   <Route path="/interactive-courses" element={<ProtectedRoute><InteractiveCourses /></ProtectedRoute>} />
+                  <Route path="/certified-courses" element={<ProtectedRoute><CertifiedVideoCourses /></ProtectedRoute>} />
                   <Route path="/ai" element={<ProtectedRoute><AI /></ProtectedRoute>} />
                   <Route path="/books" element={<ProtectedRoute><Books /></ProtectedRoute>} />
                   <Route path="/tests" element={<ProtectedRoute><TestSelection /></ProtectedRoute>} />
