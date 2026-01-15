@@ -170,15 +170,16 @@ const CertifiedVideoCourses = () => {
             {/* Video Player */}
             <div className="lg:col-span-2">
               <Card className="overflow-hidden border-border/50 bg-card/50 backdrop-blur">
-                <div className="aspect-video">
+                <div className="aspect-video bg-muted">
                   <iframe
                     width="100%"
                     height="100%"
-                    src={`https://www.youtube.com/embed/${selectedCourse.youtubeId}`}
+                    src={`https://www.youtube.com/embed/${selectedCourse.youtubeId}?rel=0&modestbranding=1`}
                     title={selectedCourse.title}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
+                    loading="eager"
                     className="w-full h-full"
                   />
                 </div>
@@ -338,13 +339,15 @@ const CertifiedVideoCourses = () => {
                 onClick={() => setSelectedCourse(course)}
               >
                 {/* Thumbnail */}
-                <div className="relative aspect-video overflow-hidden">
+                <div className="relative aspect-video overflow-hidden bg-muted">
                   <img
-                    src={`https://img.youtube.com/vi/${course.youtubeId}/maxresdefault.jpg`}
+                    src={`https://img.youtube.com/vi/${course.youtubeId}/mqdefault.jpg`}
                     alt={course.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                    decoding="async"
                     onError={(e) => {
-                      e.currentTarget.src = `https://img.youtube.com/vi/${course.youtubeId}/hqdefault.jpg`;
+                      e.currentTarget.src = `https://img.youtube.com/vi/${course.youtubeId}/default.jpg`;
                     }}
                   />
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
