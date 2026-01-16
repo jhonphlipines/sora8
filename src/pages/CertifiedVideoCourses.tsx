@@ -274,14 +274,14 @@ const CertifiedVideoCourses = () => {
                         <span className="font-semibold">Course Completed!</span>
                       </div>
                       <p className="text-sm text-muted-foreground mb-4">
-                        You've earned your certificate for this course.
+                        Unlock your certificate to view and download it.
                       </p>
                       <Button 
                         className="w-full"
                         onClick={() => setShowCertificate(true)}
                       >
-                        <Award className="h-4 w-4 mr-2" />
-                        View & Download Certificate
+                        <Lock className="h-4 w-4 mr-2" />
+                        Unlock Certificate
                       </Button>
                     </>
                   ) : (
@@ -318,12 +318,21 @@ const CertifiedVideoCourses = () => {
               <Card className="border-amber-500/30 bg-amber-500/5 backdrop-blur">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 text-amber-400 mb-2">
-                    <Lock className="h-5 w-5" />
-                    <span className="font-semibold">Certificate Access</span>
+                    <CreditCard className="h-5 w-5" />
+                    <span className="font-semibold">Certificate Pricing</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    First 2 certificates are free! Additional certificates require 1 credit each. Purchase credits from the Pricing page.
+                  <p className="text-sm text-muted-foreground mb-3">
+                    First 2 certificates are free! Additional certificates require 1 credit each.
                   </p>
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    className="w-full border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
+                    onClick={() => navigate('/pricing')}
+                  >
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    Buy Credits
+                  </Button>
                 </CardContent>
               </Card>
             </div>
