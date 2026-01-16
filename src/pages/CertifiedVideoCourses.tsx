@@ -39,6 +39,16 @@ const videoCourses: VideoCourse[] = [
     category: "Python Programming",
     certified: true,
   },
+  {
+    id: "web-development-course",
+    title: "Web Development Complete Course",
+    description: "Master web development from scratch with this comprehensive course. Learn HTML, CSS, JavaScript, and modern web technologies to build responsive and interactive websites.",
+    youtubeId: "2GvdTJaJTRM",
+    duration: "Full Course",
+    level: "Beginner",
+    category: "Web Development",
+    certified: true,
+  },
 ];
 
 const CertifiedVideoCourses = () => {
