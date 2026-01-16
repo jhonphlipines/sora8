@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Play, Award, Clock, Users, BookOpen, CheckCircle2, Loader2 } from "lucide-react";
+import { ArrowLeft, Play, Award, Clock, Users, BookOpen, CheckCircle2, Loader2, Lock, CreditCard } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Certificate } from "@/components/Certificate";
 
 interface VideoCourse {
   id: string;
@@ -58,6 +59,8 @@ const CertifiedVideoCourses = () => {
   const [completedCourses, setCompletedCourses] = useState<Set<string>>(new Set());
   const [isCompleting, setIsCompleting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showCertificate, setShowCertificate] = useState(false);
+  const [userName, setUserName] = useState<string>("");
 
   useEffect(() => {
     fetchCompletedCourses();
@@ -70,6 +73,15 @@ const CertifiedVideoCourses = () => {
         setLoading(false);
         return;
       }
+
+      // Get user display name
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('display_name')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      setUserName(profileData?.display_name || user.email?.split('@')[0] || 'Student');
 
       const { data, error } = await supabase
         .from('user_certificates')
@@ -266,10 +278,10 @@ const CertifiedVideoCourses = () => {
                       </p>
                       <Button 
                         className="w-full"
-                        onClick={() => navigate('/completion')}
+                        onClick={() => setShowCertificate(true)}
                       >
                         <Award className="h-4 w-4 mr-2" />
-                        View Certificate
+                        View & Download Certificate
                       </Button>
                     </>
                   ) : (
@@ -306,16 +318,41 @@ const CertifiedVideoCourses = () => {
               <Card className="border-amber-500/30 bg-amber-500/5 backdrop-blur">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 text-amber-400 mb-2">
-                    <Award className="h-5 w-5" />
-                    <span className="font-semibold">Certification Available</span>
+                    <Lock className="h-5 w-5" />
+                    <span className="font-semibold">Certificate Access</span>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    Complete this course to earn a verified certificate that you can share on your profile.
+                    First 2 certificates are free! Additional certificates require 1 credit each. Purchase credits from the Pricing page.
                   </p>
                 </CardContent>
               </Card>
             </div>
           </div>
+
+          {/* Certificate Modal */}
+          {showCertificate && (
+            <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 overflow-y-auto">
+              <div className="relative w-full max-w-5xl my-8">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowCertificate(false)}
+                  className="absolute -top-12 right-0 text-white border-white/30 hover:bg-white/10"
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Course
+                </Button>
+                <Certificate
+                  studentName={userName}
+                  score={100}
+                  totalQuestions={100}
+                  courseName={selectedCourse.title}
+                  completionDate={new Date()}
+                  certificateId={`video-course-${selectedCourse.id}`}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
