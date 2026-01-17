@@ -4,13 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { 
   ArrowLeft, Bot, Send, Sparkles, Code, BookOpen, Lightbulb, 
   Loader2, Paperclip, X, FileText, FileCode, FileArchive, File,
-  User, Trash2
+  User, Trash2, Lock, CreditCard, MessageCircle
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AIMessageContent from "@/components/AIMessageContent";
+import { supabase } from "@/integrations/supabase/client";
+
 type FileAttachment = {
   name: string;
   type: string;
@@ -26,6 +29,7 @@ type Message = {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const FREE_CHAT_LIMIT = 5;
 
 async function streamChat({
   messages,
@@ -148,12 +152,65 @@ const AI = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [attachedFiles, setAttachedFiles] = useState<FileAttachment[]>([]);
+  
+  // Chat limit states
+  const [userId, setUserId] = useState<string | null>(null);
+  const [chatCount, setChatCount] = useState(0);
+  const [hasUnlimitedAccess, setHasUnlimitedAccess] = useState(false);
+  const [isCheckingAccess, setIsCheckingAccess] = useState(true);
+
+  // Check user authentication and chat access
+  useEffect(() => {
+    const checkUserAccess = async () => {
+      setIsCheckingAccess(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        setUserId(user.id);
+        
+        // Fetch or create chat usage record
+        const { data: chatData, error } = await supabase
+          .from('user_ai_chats')
+          .select('chat_count, has_unlimited_access')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        if (chatData) {
+          setChatCount(chatData.chat_count);
+          setHasUnlimitedAccess(chatData.has_unlimited_access);
+        } else if (!error) {
+          // Create new record for user
+          await supabase
+            .from('user_ai_chats')
+            .insert({ user_id: user.id, chat_count: 0, has_unlimited_access: false });
+        }
+      }
+      setIsCheckingAccess(false);
+    };
+    
+    checkUserAccess();
+  }, []);
+
+  const remainingChats = Math.max(0, FREE_CHAT_LIMIT - chatCount);
+  const canChat = hasUnlimitedAccess || chatCount < FREE_CHAT_LIMIT;
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  const incrementChatCount = async () => {
+    if (!userId || hasUnlimitedAccess) return;
+    
+    const newCount = chatCount + 1;
+    setChatCount(newCount);
+    
+    await supabase
+      .from('user_ai_chats')
+      .update({ chat_count: newCount })
+      .eq('user_id', userId);
+  };
 
   const readFileContent = async (file: globalThis.File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -231,6 +288,27 @@ const AI = () => {
   const handleSend = async () => {
     if ((!input.trim() && attachedFiles.length === 0) || isLoading) return;
 
+    // Check if user is logged in
+    if (!userId) {
+      toast({
+        title: "Login Required",
+        description: "Please login to use AI chat",
+        variant: "destructive"
+      });
+      navigate('/auth');
+      return;
+    }
+
+    // Check chat limit
+    if (!canChat) {
+      toast({
+        title: "Chat Limit Reached",
+        description: "Please upgrade to Pro Pack for unlimited AI access",
+        variant: "destructive"
+      });
+      return;
+    }
+
     // Build message content with files
     let messageContent = input.trim();
     if (attachedFiles.length > 0) {
@@ -252,6 +330,9 @@ const AI = () => {
     setInput("");
     setAttachedFiles([]);
     setIsLoading(true);
+
+    // Increment chat count
+    await incrementChatCount();
 
     let assistantContent = "";
 
@@ -303,6 +384,192 @@ const AI = () => {
     { icon: Lightbulb, text: "Debug my code", prompt: "I have a bug in my code. Can you help me debug it?" },
   ];
 
+  // Show loading state while checking access
+  if (isCheckingAccess) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center">
+        <div className="flex items-center gap-3">
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+          <span className="text-muted-foreground">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Show paywall if user has exhausted free chats
+  if (!canChat && userId) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 pb-24">
+        {/* Header */}
+        <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border/50">
+          <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate('/')}
+              className="gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="hidden sm:inline">Back</span>
+            </Button>
+            
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <Bot className="h-8 w-8 text-primary" />
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 bg-red-500 rounded-full border-2 border-background" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                  Sora AI
+                </h1>
+                <p className="text-xs text-muted-foreground">Access Locked</p>
+              </div>
+            </div>
+            
+            <div className="w-20" />
+          </div>
+        </div>
+
+        <div className="max-w-lg mx-auto px-4 py-12">
+          <Card className="bg-card/50 border-border/50 backdrop-blur-sm">
+            <CardHeader className="text-center pb-4">
+              <div className="w-20 h-20 mx-auto bg-gradient-to-br from-primary/20 to-primary/5 rounded-full flex items-center justify-center mb-4 border border-primary/20">
+                <Lock className="h-10 w-10 text-primary" />
+              </div>
+              <CardTitle className="text-2xl font-bold">Free Chats Exhausted</CardTitle>
+              <CardDescription className="text-base">
+                You've used all {FREE_CHAT_LIMIT} free AI chats. Upgrade to Pro Pack for unlimited access!
+              </CardDescription>
+            </CardHeader>
+            
+            <CardContent className="space-y-6">
+              {/* Usage Summary */}
+              <div className="bg-muted/50 rounded-lg p-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <MessageCircle className="h-5 w-5 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">Chats Used</span>
+                </div>
+                <Badge variant="secondary" className="text-base px-3 py-1">
+                  {chatCount} / {FREE_CHAT_LIMIT}
+                </Badge>
+              </div>
+
+              {/* Pro Pack Promo */}
+              <div className="border border-primary/30 rounded-lg p-4 bg-primary/5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                  <span className="font-semibold text-foreground">Pro Pack Benefits</span>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground mb-4">
+                  <li className="flex items-center gap-2">
+                    <Bot className="h-4 w-4 text-primary" />
+                    Unlimited AI Chat Access
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CreditCard className="h-4 w-4 text-primary" />
+                    30 Certificate Credits
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FileText className="h-4 w-4 text-primary" />
+                    AI Video Summarizer
+                  </li>
+                </ul>
+                <div className="text-center">
+                  <span className="text-2xl font-bold text-foreground">₹799</span>
+                  <span className="text-sm text-muted-foreground">/month</span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-3">
+                <Button 
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                  size="lg"
+                  onClick={() => navigate('/pricing')}
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Upgrade to Pro Pack - ₹799
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => navigate('/')}
+                >
+                  Back to Home
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login prompt if not logged in
+  if (!userId) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 pb-24">
+        {/* Header */}
+        <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border/50">
+          <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate('/')}
+              className="gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="hidden sm:inline">Back</span>
+            </Button>
+            
+            <div className="flex items-center gap-2">
+              <Bot className="h-8 w-8 text-primary" />
+              <div>
+                <h1 className="text-lg font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                  Sora AI
+                </h1>
+                <p className="text-xs text-muted-foreground">Login Required</p>
+              </div>
+            </div>
+            
+            <div className="w-20" />
+          </div>
+        </div>
+
+        <div className="max-w-lg mx-auto px-4 py-12">
+          <Card className="bg-card/50 border-border/50 backdrop-blur-sm">
+            <CardHeader className="text-center pb-4">
+              <div className="w-20 h-20 mx-auto bg-gradient-to-br from-primary/20 to-primary/5 rounded-full flex items-center justify-center mb-4 border border-primary/20">
+                <User className="h-10 w-10 text-primary" />
+              </div>
+              <CardTitle className="text-2xl font-bold">Login to Continue</CardTitle>
+              <CardDescription className="text-base">
+                Sign in to get {FREE_CHAT_LIMIT} free AI chats and start learning!
+              </CardDescription>
+            </CardHeader>
+            
+            <CardContent className="space-y-4">
+              <Button 
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                size="lg"
+                onClick={() => navigate('/auth')}
+              >
+                Login / Sign Up
+              </Button>
+              <Button 
+                variant="outline"
+                className="w-full"
+                onClick={() => navigate('/')}
+              >
+                Back to Home
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 pb-24">
       {/* Header */}
@@ -331,19 +598,56 @@ const AI = () => {
             </div>
           </div>
           
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={clearChat}
-            className="gap-2 text-muted-foreground hover:text-destructive"
-          >
-            <Trash2 className="h-4 w-4" />
-            <span className="hidden sm:inline">Clear</span>
-          </Button>
+          <div className="flex items-center gap-2">
+            {/* Chat Counter Badge */}
+            {!hasUnlimitedAccess && (
+              <Badge 
+                variant={remainingChats <= 2 ? "destructive" : "secondary"} 
+                className="text-xs"
+              >
+                {remainingChats} chats left
+              </Badge>
+            )}
+            {hasUnlimitedAccess && (
+              <Badge className="bg-primary/20 text-primary text-xs">
+                <Sparkles className="h-3 w-3 mr-1" />
+                Pro
+              </Badge>
+            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearChat}
+              className="gap-2 text-muted-foreground hover:text-destructive"
+            >
+              <Trash2 className="h-4 w-4" />
+              <span className="hidden sm:inline">Clear</span>
+            </Button>
+          </div>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-4">
+        {/* Free Chat Warning */}
+        {!hasUnlimitedAccess && remainingChats <= 2 && remainingChats > 0 && (
+          <div className="mb-4 p-3 bg-destructive/10 border border-destructive/30 rounded-lg flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <MessageCircle className="h-4 w-4 text-destructive" />
+              <span className="text-sm text-destructive">
+                Only {remainingChats} free chat{remainingChats !== 1 ? 's' : ''} remaining!
+              </span>
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-xs border-destructive/50 text-destructive hover:bg-destructive/10"
+              onClick={() => navigate('/pricing')}
+            >
+              Upgrade
+            </Button>
+          </div>
+        )}
+
         {/* Quick Prompts - Show only on first message */}
         {messages.length === 1 && (
           <div className="flex flex-wrap gap-2 mb-4 justify-center">
@@ -521,7 +825,10 @@ const AI = () => {
           </div>
 
           <p className="text-xs text-muted-foreground text-center mt-2">
-            Upload text, code, PDF, or ZIP files (max 5MB) • Press Enter to send
+            {hasUnlimitedAccess 
+              ? "Unlimited AI access • Upload text, code, PDF, or ZIP files (max 5MB)" 
+              : `${remainingChats} free chats remaining • Upload text, code, PDF, or ZIP files (max 5MB)`
+            }
           </p>
         </div>
       </div>
