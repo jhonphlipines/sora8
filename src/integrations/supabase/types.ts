@@ -280,6 +280,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_ai_chats: {
+        Row: {
+          chat_count: number
+          created_at: string
+          has_unlimited_access: boolean
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chat_count?: number
+          created_at?: string
+          has_unlimited_access?: boolean
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chat_count?: number
+          created_at?: string
+          has_unlimited_access?: boolean
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_certificates: {
         Row: {
           category_id: string
