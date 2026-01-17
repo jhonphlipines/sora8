@@ -10,7 +10,7 @@ import {
   User, Trash2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
+import AIMessageContent from "@/components/AIMessageContent";
 type FileAttachment = {
   name: string;
   type: string;
@@ -404,16 +404,16 @@ const AI = () => {
                     className={`inline-block rounded-2xl px-4 py-3 ${
                       message.role === "user"
                         ? "bg-primary text-primary-foreground rounded-tr-sm"
-                        : "bg-card border border-border/50 rounded-tl-sm shadow-sm"
+                        : "bg-card border border-border/50 rounded-tl-sm shadow-sm max-w-full"
                     }`}
                   >
-                    <div className={`text-sm whitespace-pre-wrap leading-relaxed ${
-                      message.role === "assistant" ? "prose prose-sm max-w-none dark:prose-invert" : ""
-                    }`}>
-                      {message.role === "user" 
-                        ? (message.files ? input || "Analyzing files..." : message.content.split("\n\n[Attached Files]")[0])
-                        : message.content}
-                    </div>
+                    {message.role === "user" ? (
+                      <div className="text-sm whitespace-pre-wrap leading-relaxed">
+                        {message.files ? input || "Analyzing files..." : message.content.split("\n\n[Attached Files]")[0]}
+                      </div>
+                    ) : (
+                      <AIMessageContent content={message.content} />
+                    )}
                   </div>
                 </div>
               </div>
