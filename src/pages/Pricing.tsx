@@ -22,6 +22,7 @@ const Pricing = () => {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
   const [currencyDialogOpen, setCurrencyDialogOpen] = useState(false);
+  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
   const [selectedPlan, setSelectedPlan] = useState<{
     amount: number;
     credits: number;
@@ -32,9 +33,16 @@ const Pricing = () => {
   const BASIC_MONTHLY_INR = 299;
   const PRO_MONTHLY_INR = 799;
 
-  // Certificate counts per month
-  const BASIC_CERTIFICATES = 5;
-  const PRO_CERTIFICATES = 30;
+  // Yearly prices (11 months - 1 month free)
+  const BASIC_YEARLY_INR = BASIC_MONTHLY_INR * 11;
+  const PRO_YEARLY_INR = PRO_MONTHLY_INR * 11;
+
+  // Certificate counts
+  const BASIC_CERTIFICATES_MONTHLY = 5;
+  const PRO_CERTIFICATES_MONTHLY = 30;
+  const BASIC_CERTIFICATES_YEARLY = 5 * 12; // Full year credits
+  const PRO_CERTIFICATES_YEARLY = 30 * 12;
+
   useEffect(() => {
     const fetchUserCredits = async () => {
       const {
@@ -53,8 +61,17 @@ const Pricing = () => {
     };
     fetchUserCredits();
   }, []);
-  const getPrice = (baseMonthly: number) => {
-    return baseMonthly;
+
+  const getPrice = (monthlyPrice: number, yearlyPrice: number) => {
+    return billingPeriod === 'monthly' ? monthlyPrice : yearlyPrice;
+  };
+
+  const getCredits = (monthlyCredits: number, yearlyCredits: number) => {
+    return billingPeriod === 'monthly' ? monthlyCredits : yearlyCredits;
+  };
+
+  const getMonthlyEquivalent = (yearlyPrice: number) => {
+    return Math.round(yearlyPrice / 12);
   };
   const handleBuyClick = (amount: number, credits: number, planName: string) => {
     if (!userId) {
@@ -146,10 +163,11 @@ const Pricing = () => {
       toast.error("Failed to initiate payment");
     }
   };
-  const basicPrice = getPrice(BASIC_MONTHLY_INR);
-  const proPrice = getPrice(PRO_MONTHLY_INR);
-  const basicCredits = BASIC_CERTIFICATES;
-  const proCredits = PRO_CERTIFICATES;
+  const basicPrice = getPrice(BASIC_MONTHLY_INR, BASIC_YEARLY_INR);
+  const proPrice = getPrice(PRO_MONTHLY_INR, PRO_YEARLY_INR);
+  const basicCredits = getCredits(BASIC_CERTIFICATES_MONTHLY, BASIC_CERTIFICATES_YEARLY);
+  const proCredits = getCredits(PRO_CERTIFICATES_MONTHLY, PRO_CERTIFICATES_YEARLY);
+
   return <div className="min-h-screen bg-background py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
@@ -167,6 +185,38 @@ const Pricing = () => {
               Purchase certificate credits and showcase your programming expertise with professional certificates.
             </p>
 
+            {/* Billing Period Toggle */}
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="inline-flex items-center bg-muted/50 rounded-full p-1">
+                <button
+                  onClick={() => setBillingPeriod('monthly')}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    billingPeriod === 'monthly'
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Monthly
+                </button>
+                <button
+                  onClick={() => setBillingPeriod('yearly')}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                    billingPeriod === 'yearly'
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Yearly
+                  <Badge className="bg-green-500 text-white text-xs px-1.5 py-0">1 Month Free</Badge>
+                </button>
+              </div>
+            </div>
+
+            {billingPeriod === 'yearly' && (
+              <p className="text-sm text-green-500 font-medium mb-4">
+                🎉 Pay for 11 months, get 12 months of access!
+              </p>
+            )}
 
             {/* Currency Toggle Button */}
             <div className="flex items-center justify-center gap-2 mb-4">
@@ -198,12 +248,24 @@ const Pricing = () => {
               <CardTitle className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2">
                 Basic Pack
               </CardTitle>
+              {billingPeriod === 'yearly' && (
+                <div className="text-sm text-muted-foreground line-through mb-1">
+                  ₹{(BASIC_MONTHLY_INR * 12).toLocaleString()}/year
+                </div>
+              )}
               <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
                 ₹{basicPrice.toLocaleString()}
-                <span className="text-sm text-muted-foreground font-normal">/month</span>
+                <span className="text-sm text-muted-foreground font-normal">
+                  {billingPeriod === 'monthly' ? '/month' : '/year'}
+                </span>
               </div>
-              <CardDescription className="text-muted-foreground text-sm">
-                Get {basicCredits} Professional Certificates
+              {billingPeriod === 'yearly' && (
+                <p className="text-xs text-green-500 font-medium">
+                  ₹{getMonthlyEquivalent(basicPrice).toLocaleString()}/month • Save ₹{BASIC_MONTHLY_INR.toLocaleString()}
+                </p>
+              )}
+              <CardDescription className="text-muted-foreground text-sm mt-2">
+                Get {basicCredits} Professional Certificates {billingPeriod === 'yearly' ? '(Full Year)' : ''}
               </CardDescription>
             </CardHeader>
             
@@ -231,7 +293,7 @@ const Pricing = () => {
                 </li>
               </ul>
               
-              <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 border-0 text-sm py-5 text-white" onClick={() => handleBuyClick(basicPrice, basicCredits, "Basic Pack")}>
+              <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 border-0 text-sm py-5 text-white" onClick={() => handleBuyClick(basicPrice, basicCredits, `Basic Pack (${billingPeriod === 'monthly' ? 'Monthly' : 'Yearly'})`)}>
                 Buy Now - ₹{basicPrice.toLocaleString()}
               </Button>
             </CardContent>
@@ -249,12 +311,24 @@ const Pricing = () => {
               <CardTitle className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2">
                 Pro Pack
               </CardTitle>
+              {billingPeriod === 'yearly' && (
+                <div className="text-sm text-muted-foreground line-through mb-1">
+                  ₹{(PRO_MONTHLY_INR * 12).toLocaleString()}/year
+                </div>
+              )}
               <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
                 ₹{proPrice.toLocaleString()}
-                <span className="text-sm text-muted-foreground font-normal">/month</span>
+                <span className="text-sm text-muted-foreground font-normal">
+                  {billingPeriod === 'monthly' ? '/month' : '/year'}
+                </span>
               </div>
-              <CardDescription className="text-muted-foreground text-sm">
-                Get {proCredits} Professional Certificates + Premium Features
+              {billingPeriod === 'yearly' && (
+                <p className="text-xs text-green-500 font-medium">
+                  ₹{getMonthlyEquivalent(proPrice).toLocaleString()}/month • Save ₹{PRO_MONTHLY_INR.toLocaleString()}
+                </p>
+              )}
+              <CardDescription className="text-muted-foreground text-sm mt-2">
+                Get {proCredits} Professional Certificates + Premium Features {billingPeriod === 'yearly' ? '(Full Year)' : ''}
               </CardDescription>
             </CardHeader>
             
@@ -282,7 +356,7 @@ const Pricing = () => {
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Bot className="h-4 w-4 text-purple-500 flex-shrink-0" />
-                  <span className="text-muted-foreground">AI Assistant Access</span>
+                  <span className="text-muted-foreground">Unlimited AI Assistant</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Video className="h-4 w-4 text-purple-500 flex-shrink-0" />
@@ -290,11 +364,11 @@ const Pricing = () => {
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Calendar className="h-4 w-4 text-purple-500 flex-shrink-0" />
-                  <span className="text-muted-foreground">Monthly 1 Free Exam</span>
+                  <span className="text-muted-foreground">{billingPeriod === 'yearly' ? '12 Free Exams (1/month)' : 'Monthly 1 Free Exam'}</span>
                 </li>
               </ul>
               
-              <Button className="w-full mt-4 bg-[var(--gradient-primary)] border-0 text-sm py-5 text-white" onClick={() => handleBuyClick(proPrice, proCredits, "Pro Pack")}>
+              <Button className="w-full mt-4 bg-[var(--gradient-primary)] border-0 text-sm py-5 text-white" onClick={() => handleBuyClick(proPrice, proCredits, `Pro Pack (${billingPeriod === 'monthly' ? 'Monthly' : 'Yearly'})`)}>
                 Buy Now - ₹{proPrice.toLocaleString()}
               </Button>
             </CardContent>
