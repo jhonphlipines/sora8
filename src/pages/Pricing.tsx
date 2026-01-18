@@ -3,11 +3,16 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, CheckCircle, Award, Clock, BookOpen, CreditCard, Bot, Video, Calendar, DollarSign } from "lucide-react";
+import { ArrowLeft, CheckCircle, Award, Clock, BookOpen, CreditCard, Bot, Video, Calendar, Check, ChevronDown } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 declare global {
   interface Window {
     Razorpay: any;
@@ -21,13 +26,8 @@ const Pricing = () => {
   const [userCredits, setUserCredits] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
-  const [currencyDialogOpen, setCurrencyDialogOpen] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState<'INR' | 'USD'>('INR');
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
-  const [selectedPlan, setSelectedPlan] = useState<{
-    amount: number;
-    credits: number;
-    name: string;
-  } | null>(null);
 
   // Monthly prices in INR
   const BASIC_MONTHLY_INR = 299;
@@ -79,23 +79,18 @@ const Pricing = () => {
       navigate('/auth');
       return;
     }
-    setSelectedPlan({
-      amount,
-      credits,
-      name: planName
-    });
-    setCurrencyDialogOpen(true);
+    handlePayment(amount, credits, planName);
   };
-  const handlePayment = async (currency: 'INR' | 'USD') => {
-    if (!selectedPlan || !userId) return;
-    setCurrencyDialogOpen(false);
-    let amountInINR = selectedPlan.amount;
-    let displayAmount = selectedPlan.amount;
-    if (currency === 'USD') {
-      // Convert INR to USD for display, but Razorpay will charge in INR
-      displayAmount = Math.ceil(selectedPlan.amount / USD_TO_INR_RATE);
-      amountInINR = selectedPlan.amount; // Keep original INR amount for payment
+
+  const handlePayment = async (amount: number, credits: number, planName: string) => {
+    if (!userId) return;
+    
+    let amountInINR = amount;
+    if (selectedCurrency === 'USD') {
+      // Amount is already in INR for Razorpay
+      amountInINR = amount;
     }
+    
     try {
       toast.loading("Initiating payment...");
       const {
@@ -114,7 +109,7 @@ const Pricing = () => {
         amount: orderData.order.amount,
         currency: orderData.order.currency,
         name: "EDU SKILL",
-        description: `${selectedPlan.name} - ${selectedPlan.credits} Certificate Credits`,
+        description: `${planName} - ${credits} Certificate Credits`,
         order_id: orderData.order.id,
         handler: async function (response: any) {
           try {
@@ -129,14 +124,14 @@ const Pricing = () => {
                 paymentId: response.razorpay_payment_id,
                 signature: response.razorpay_signature,
                 userId: userId,
-                creditsPurchased: selectedPlan.credits,
+                creditsPurchased: credits,
                 amount: amountInINR
               }
             });
             if (verifyError) throw verifyError;
             if (verifyData.verified) {
-              toast.success(`Payment successful! ${selectedPlan.credits} credits added 🎉`);
-              setUserCredits(prev => (prev ?? 0) + selectedPlan.credits);
+              toast.success(`Payment successful! ${credits} credits added 🎉`);
+              setUserCredits(prev => (prev ?? 0) + credits);
               navigate('/tests');
             } else {
               toast.error("Payment verification failed");
@@ -162,6 +157,13 @@ const Pricing = () => {
       console.error('Payment error:', error);
       toast.error("Failed to initiate payment");
     }
+  };
+
+  const getDisplayPrice = (priceInINR: number) => {
+    if (selectedCurrency === 'USD') {
+      return `$${Math.ceil(priceInINR / USD_TO_INR_RATE)}`;
+    }
+    return `₹${priceInINR.toLocaleString()}`;
   };
   const basicPrice = getPrice(BASIC_MONTHLY_INR, BASIC_YEARLY_INR);
   const proPrice = getPrice(PRO_MONTHLY_INR, PRO_YEARLY_INR);
@@ -218,12 +220,32 @@ const Pricing = () => {
               </p>
             )}
 
-            {/* Currency Toggle Button */}
+            {/* Currency Dropdown Select */}
             <div className="flex items-center justify-center gap-2 mb-4">
-              <Button variant="outline" size="sm" onClick={() => setCurrencyDialogOpen(true)} className="flex items-center gap-2">
-                <DollarSign className="h-4 w-4" />
-                <span>₹/$ Currency</span>
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="flex items-center gap-2 min-w-[120px] justify-between bg-background">
+                    <span>{selectedCurrency === 'INR' ? 'INR (₹)' : 'USD ($)'}</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="center" className="w-[120px] bg-background border border-border z-50">
+                  <DropdownMenuItem 
+                    onClick={() => setSelectedCurrency('INR')}
+                    className="flex items-center justify-between cursor-pointer"
+                  >
+                    <span>INR (₹)</span>
+                    {selectedCurrency === 'INR' && <Check className="h-4 w-4 text-primary" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => setSelectedCurrency('USD')}
+                    className="flex items-center justify-between cursor-pointer"
+                  >
+                    <span>USD ($)</span>
+                    {selectedCurrency === 'USD' && <Check className="h-4 w-4 text-primary" />}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <span className="text-xs text-muted-foreground">
                 (1 USD = ₹{USD_TO_INR_RATE})
               </span>
@@ -250,18 +272,18 @@ const Pricing = () => {
               </CardTitle>
               {billingPeriod === 'yearly' && (
                 <div className="text-sm text-muted-foreground line-through mb-1">
-                  ₹{(BASIC_MONTHLY_INR * 12).toLocaleString()}/year
+                  {getDisplayPrice(BASIC_MONTHLY_INR * 12)}/year
                 </div>
               )}
               <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
-                ₹{basicPrice.toLocaleString()}
+                {getDisplayPrice(basicPrice)}
                 <span className="text-sm text-muted-foreground font-normal">
                   {billingPeriod === 'monthly' ? '/month' : '/year'}
                 </span>
               </div>
               {billingPeriod === 'yearly' && (
                 <p className="text-xs text-green-500 font-medium">
-                  ₹{getMonthlyEquivalent(basicPrice).toLocaleString()}/month • Save ₹{BASIC_MONTHLY_INR.toLocaleString()}
+                  {getDisplayPrice(getMonthlyEquivalent(basicPrice))}/month • Save {getDisplayPrice(BASIC_MONTHLY_INR)}
                 </p>
               )}
               <CardDescription className="text-muted-foreground text-sm mt-2">
@@ -294,7 +316,7 @@ const Pricing = () => {
               </ul>
               
               <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 border-0 text-sm py-5 text-white" onClick={() => handleBuyClick(basicPrice, basicCredits, `Basic Pack (${billingPeriod === 'monthly' ? 'Monthly' : 'Yearly'})`)}>
-                Buy Now - ₹{basicPrice.toLocaleString()}
+                Buy Now - {getDisplayPrice(basicPrice)}
               </Button>
             </CardContent>
           </Card>
@@ -313,18 +335,18 @@ const Pricing = () => {
               </CardTitle>
               {billingPeriod === 'yearly' && (
                 <div className="text-sm text-muted-foreground line-through mb-1">
-                  ₹{(PRO_MONTHLY_INR * 12).toLocaleString()}/year
+                  {getDisplayPrice(PRO_MONTHLY_INR * 12)}/year
                 </div>
               )}
               <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
-                ₹{proPrice.toLocaleString()}
+                {getDisplayPrice(proPrice)}
                 <span className="text-sm text-muted-foreground font-normal">
                   {billingPeriod === 'monthly' ? '/month' : '/year'}
                 </span>
               </div>
               {billingPeriod === 'yearly' && (
                 <p className="text-xs text-green-500 font-medium">
-                  ₹{getMonthlyEquivalent(proPrice).toLocaleString()}/month • Save ₹{PRO_MONTHLY_INR.toLocaleString()}
+                  {getDisplayPrice(getMonthlyEquivalent(proPrice))}/month • Save {getDisplayPrice(PRO_MONTHLY_INR)}
                 </p>
               )}
               <CardDescription className="text-muted-foreground text-sm mt-2">
@@ -369,41 +391,12 @@ const Pricing = () => {
               </ul>
               
               <Button className="w-full mt-4 bg-[var(--gradient-primary)] border-0 text-sm py-5 text-white" onClick={() => handleBuyClick(proPrice, proCredits, `Pro Pack (${billingPeriod === 'monthly' ? 'Monthly' : 'Yearly'})`)}>
-                Buy Now - ₹{proPrice.toLocaleString()}
+                Buy Now - {getDisplayPrice(proPrice)}
               </Button>
             </CardContent>
           </Card>
         </div>
 
-        {/* Currency Selection Dialog */}
-        <Dialog open={currencyDialogOpen} onOpenChange={setCurrencyDialogOpen}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>Choose Payment Currency</DialogTitle>
-              <DialogDescription>
-                Select your preferred currency for payment. USD payments will be converted at current exchange rate.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <Button variant="outline" className="h-24 flex flex-col gap-2" onClick={() => handlePayment('INR')}>
-                <span className="text-2xl font-bold">₹</span>
-                <span className="text-lg font-semibold">
-                  ₹{selectedPlan?.amount.toLocaleString()}
-                </span>
-                <span className="text-xs text-muted-foreground">Pay in INR</span>
-              </Button>
-              <Button variant="outline" className="h-24 flex flex-col gap-2" onClick={() => handlePayment('USD')}>
-                <span className="text-2xl font-bold">$</span>
-                <span className="text-lg font-semibold">
-                  ${selectedPlan ? Math.ceil(selectedPlan.amount / USD_TO_INR_RATE) : 0}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  ~₹{selectedPlan?.amount.toLocaleString()} (Rate: {USD_TO_INR_RATE})
-                </span>
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
 
         {/* Features Section */}
         <Card className="bg-[var(--gradient-card)] border-border/50 mb-8 sm:mb-12">
