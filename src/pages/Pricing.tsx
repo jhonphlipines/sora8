@@ -39,9 +39,9 @@ const Pricing = () => {
 
   // Certificate counts
   const BASIC_CERTIFICATES_MONTHLY = 5;
-  const PRO_CERTIFICATES_MONTHLY = 30;
+  const PRO_CERTIFICATES_MONTHLY = 20;
   const BASIC_CERTIFICATES_YEARLY = 5 * 12; // Full year credits
-  const PRO_CERTIFICATES_YEARLY = 30 * 12;
+  const PRO_CERTIFICATES_YEARLY = 20 * 12;
 
   useEffect(() => {
     const fetchUserCredits = async () => {
