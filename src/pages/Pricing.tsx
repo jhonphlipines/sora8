@@ -381,10 +381,6 @@ const Pricing = () => {
                   <span className="text-muted-foreground">Unlimited AI Assistant</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Video className="h-4 w-4 text-purple-500 flex-shrink-0" />
-                  <span className="text-muted-foreground">AI Video Summarizer</span>
-                </li>
-                <li className="flex items-center gap-2.5">
                   <Calendar className="h-4 w-4 text-purple-500 flex-shrink-0" />
                   <span className="text-muted-foreground">{billingPeriod === 'yearly' ? '12 Free Exams (1/month)' : 'Monthly 1 Free Exam'}</span>
                 </li>
