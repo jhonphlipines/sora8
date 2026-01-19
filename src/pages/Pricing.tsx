@@ -130,9 +130,21 @@ const Pricing = () => {
             });
             if (verifyError) throw verifyError;
             if (verifyData.verified) {
+              // Grant unlimited AI access for Pro Pack (799)
+              if (amountInINR === PRO_MONTHLY_INR || amountInINR === PRO_YEARLY_INR) {
+                await supabase
+                  .from('user_ai_chats')
+                  .upsert({ 
+                    user_id: userId, 
+                    has_unlimited_access: true 
+                  }, { 
+                    onConflict: 'user_id' 
+                  });
+              }
+              
               toast.success(`Payment successful! ${credits} credits added 🎉`);
               setUserCredits(prev => (prev ?? 0) + credits);
-              navigate('/tests');
+              navigate('/completion');
             } else {
               toast.error("Payment verification failed");
             }
