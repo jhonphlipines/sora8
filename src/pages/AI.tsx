@@ -179,10 +179,17 @@ const AI = () => {
           setChatCount(chatData.chat_count);
           setHasUnlimitedAccess(chatData.has_unlimited_access);
         } else if (!error) {
-          // Create new record for user
-          await supabase
+          // Create new record for user - trigger will set has_unlimited_access for first 2 users
+          const { data: newRecord } = await supabase
             .from('user_ai_chats')
-            .insert({ user_id: user.id, chat_count: 0, has_unlimited_access: false });
+            .insert({ user_id: user.id, chat_count: 0 })
+            .select('chat_count, has_unlimited_access')
+            .single();
+          
+          if (newRecord) {
+            setChatCount(newRecord.chat_count);
+            setHasUnlimitedAccess(newRecord.has_unlimited_access);
+          }
         }
       }
       setIsCheckingAccess(false);
@@ -468,10 +475,6 @@ const AI = () => {
                   <li className="flex items-center gap-2">
                     <CreditCard className="h-4 w-4 text-primary" />
                     30 Certificate Credits
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-primary" />
-                    AI Video Summarizer
                   </li>
                 </ul>
                 <div className="text-center">
