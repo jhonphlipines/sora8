@@ -6,7 +6,6 @@ import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { supabase } from "@/integrations/supabase/client";
-
 interface CertificateProps {
   studentName: string;
   score: number;
@@ -15,9 +14,6 @@ interface CertificateProps {
   completionDate: Date;
   certificateId: string;
 }
-
-
-
 export const Certificate = ({
   studentName,
   score,
@@ -26,7 +22,9 @@ export const Certificate = ({
   completionDate,
   certificateId
 }: CertificateProps) => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const certificateRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isPurchased, setIsPurchased] = useState(false);
@@ -35,7 +33,6 @@ export const Certificate = ({
   const [checkingPurchase, setCheckingPurchase] = useState(true);
   const [totalPurchasedCerts, setTotalPurchasedCerts] = useState<number>(0);
   const [isFreeUnlock, setIsFreeUnlock] = useState(false);
-  
   const percentage = Math.round(score / totalQuestions * 100);
   const isPassed = percentage >= 60;
 
@@ -43,42 +40,40 @@ export const Certificate = ({
   useEffect(() => {
     const checkPurchaseAndCredits = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const {
+          data: {
+            user
+          }
+        } = await supabase.auth.getUser();
         if (!user) {
           setCheckingPurchase(false);
           return;
         }
 
         // Check certificate purchase for this specific certificate
-        const { data: purchaseData } = await supabase
-          .from('certificate_purchases')
-          .select('id')
-          .eq('user_id', user.id)
-          .eq('certificate_id', certificateId)
-          .maybeSingle();
+        const {
+          data: purchaseData
+        } = await supabase.from('certificate_purchases').select('id').eq('user_id', user.id).eq('certificate_id', certificateId).maybeSingle();
 
         // Get total count of purchased certificates for free tier check
-        const { count: totalCerts } = await supabase
-          .from('certificate_purchases')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id);
-
+        const {
+          count: totalCerts
+        } = await supabase.from('certificate_purchases').select('*', {
+          count: 'exact',
+          head: true
+        }).eq('user_id', user.id);
         const purchasedCount = totalCerts ?? 0;
         setTotalPurchasedCerts(purchasedCount);
 
         // If user has less than 2 certificates and this one isn't purchased yet, it's free
         const canGetFree = purchasedCount < 2 && !purchaseData;
         setIsFreeUnlock(canGetFree);
-
         setIsPurchased(!!purchaseData);
 
         // Get user credits
-        const { data: creditsData } = await supabase
-          .from('user_credits')
-          .select('credits')
-          .eq('user_id', user.id)
-          .maybeSingle();
-
+        const {
+          data: creditsData
+        } = await supabase.from('user_credits').select('credits').eq('user_id', user.id).maybeSingle();
         setUserCredits(creditsData?.credits ?? 0);
       } catch (error) {
         console.error('Error checking purchase/credits:', error);
@@ -86,14 +81,12 @@ export const Certificate = ({
         setCheckingPurchase(false);
       }
     };
-
     if (certificateId) {
       checkPurchaseAndCredits();
     } else {
       setCheckingPurchase(false);
     }
   }, [certificateId]);
-
   const getMedalInfo = (percent: number) => {
     if (percent >= 90) {
       return {
@@ -127,13 +120,15 @@ export const Certificate = ({
       };
     }
   };
-
   const medalInfo = getMedalInfo(percentage);
-
   const handleFreeUnlock = async () => {
     setIsUsingCredit(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) {
         toast({
           title: "Login Required",
@@ -149,7 +144,6 @@ export const Certificate = ({
         certificate_id: certificateId,
         amount: 0 // Free certificate
       });
-
       setIsPurchased(true);
       setTotalPurchasedCerts(prev => prev + 1);
       setIsFreeUnlock(false);
@@ -168,11 +162,14 @@ export const Certificate = ({
       setIsUsingCredit(false);
     }
   };
-
   const handleUseCredit = async () => {
     setIsUsingCredit(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) {
         toast({
           title: "Login Required",
@@ -181,7 +178,6 @@ export const Certificate = ({
         });
         return;
       }
-
       if (userCredits < 1) {
         toast({
           title: "No Credits Available",
@@ -192,11 +188,11 @@ export const Certificate = ({
       }
 
       // Deduct credit
-      const { error: creditError } = await supabase
-        .from('user_credits')
-        .update({ credits: userCredits - 1 })
-        .eq('user_id', user.id);
-
+      const {
+        error: creditError
+      } = await supabase.from('user_credits').update({
+        credits: userCredits - 1
+      }).eq('user_id', user.id);
       if (creditError) throw creditError;
 
       // Record the purchase
@@ -205,7 +201,6 @@ export const Certificate = ({
         certificate_id: certificateId,
         amount: 0 // Used credit, no payment
       });
-
       setIsPurchased(true);
       setUserCredits(prev => prev - 1);
       setTotalPurchasedCerts(prev => prev + 1);
@@ -224,7 +219,6 @@ export const Certificate = ({
       setIsUsingCredit(false);
     }
   };
-
   const captureCanvas = async () => {
     if (!certificateRef.current) throw new Error("Certificate ref not found");
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -237,7 +231,6 @@ export const Certificate = ({
       logging: false
     });
   };
-
   const downloadAsImage = async () => {
     if (!isPurchased) {
       toast({
@@ -283,7 +276,6 @@ export const Certificate = ({
       setIsDownloading(false);
     }
   };
-
   const downloadAsJPG = async () => {
     if (!isPurchased) {
       toast({
@@ -329,7 +321,6 @@ export const Certificate = ({
       setIsDownloading(false);
     }
   };
-
   const downloadAsPDF = async () => {
     if (!isPurchased) {
       toast({
@@ -383,7 +374,6 @@ export const Certificate = ({
       setIsDownloading(false);
     }
   };
-
   const downloadAll = async () => {
     if (!isPurchased) {
       toast({
@@ -396,10 +386,8 @@ export const Certificate = ({
     await downloadAsImage();
     setTimeout(() => downloadAsPDF(), 1000);
   };
-
   if (!isPassed) {
-    return (
-      <Card className="w-full max-w-2xl mx-auto bg-card border-border/50 shadow-2xl">
+    return <Card className="w-full max-w-2xl mx-auto bg-card border-border/50 shadow-2xl">
         <CardContent className="text-center py-12">
           <div className="mb-6">
             <div className="w-20 h-20 mx-auto bg-destructive/20 rounded-full flex items-center justify-center mb-4">
@@ -414,17 +402,14 @@ export const Certificate = ({
           </div>
           <Button onClick={() => window.location.reload()} className="bg-primary">Retake Quiz</Button>
         </CardContent>
-      </Card>
-    );
+      </Card>;
   }
-
-  return (
-    <div className="w-full max-w-4xl mx-auto">
+  return <div className="w-full max-w-4xl mx-auto">
       {/* Certificate with Medal Layout */}
       <div ref={certificateRef} className="relative bg-white overflow-hidden shadow-2xl w-full" style={{
-        aspectRatio: '1.414/1',
-        minHeight: '280px'
-      }}>
+      aspectRatio: '1.414/1',
+      minHeight: '280px'
+    }}>
         {/* Decorative Border */}
         <div className="absolute inset-2 sm:inset-3 md:inset-4 border-2 border-gray-300"></div>
         <div className="absolute inset-3 sm:inset-4 md:inset-5 border border-gray-200"></div>
@@ -454,10 +439,10 @@ export const Certificate = ({
               {/* Date */}
               <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500">
                 {completionDate.toLocaleDateString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric'
-                })}
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+              })}
               </p>
 
               {/* This certifies */}
@@ -490,12 +475,8 @@ export const Certificate = ({
             <div className="mt-2 sm:mt-4">
               <div className="max-w-[50%]">
                 <div className="border-b border-gray-400 mb-1 pb-1">
-                  <img 
-                    src="/assets/head-signature.jpeg" 
-                    alt="Head Signature" 
-                    className="h-8 sm:h-10 md:h-12 object-contain mb-1"
-                  />
-                  <p className="text-sm sm:text-base md:text-lg italic text-gray-600 font-serif">Vilver</p>
+                  <img src="/assets/head-signature.jpeg" alt="Head Signature" className="h-8 sm:h-10 md:h-12 object-contain mb-1" />
+                  
                 </div>
                 <p className="text-[7px] sm:text-[8px] md:text-[10px] text-gray-500">Vilver Learning Platform</p>
               </div>
@@ -527,8 +508,8 @@ export const Certificate = ({
 
             {/* Medal Type */}
             <p className="text-sm sm:text-base md:text-xl lg:text-2xl font-bold mb-1" style={{
-              color: medalInfo.textColor
-            }}>
+            color: medalInfo.textColor
+          }}>
               {medalInfo.type}
             </p>
 
@@ -539,12 +520,12 @@ export const Certificate = ({
 
             {/* Score Badge */}
             <div className="px-2 py-1 sm:px-3 sm:py-1.5 rounded-full border-2 mb-2 sm:mb-4" style={{
-              backgroundColor: medalInfo.bgColor,
-              borderColor: medalInfo.border
-            }}>
+            backgroundColor: medalInfo.bgColor,
+            borderColor: medalInfo.border
+          }}>
               <p className="text-sm sm:text-base md:text-lg font-bold" style={{
-                color: medalInfo.textColor
-              }}>
+              color: medalInfo.textColor
+            }}>
                 {percentage}%
               </p>
             </div>
@@ -554,15 +535,11 @@ export const Certificate = ({
 
       {/* Payment/Download Section */}
       <div className="mt-4 sm:mt-6 pb-20 sm:pb-16 md:pb-8 px-2">
-        {checkingPurchase ? (
-          <div className="flex justify-center">
+        {checkingPurchase ? <div className="flex justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>
-        ) : !isPurchased ? (
-          <div className="text-center space-y-4">
+          </div> : !isPurchased ? <div className="text-center space-y-4">
             <div className="bg-gradient-to-r from-primary/10 to-purple-500/10 border border-primary/20 rounded-lg p-6">
-              {isFreeUnlock ? (
-                <>
+              {isFreeUnlock ? <>
                   <Award className="h-8 w-8 text-green-500 mx-auto mb-3" />
                   <h3 className="text-lg font-semibold mb-2 text-green-600">🎉 Free Certificate!</h3>
                   <p className="text-muted-foreground text-sm mb-2">
@@ -571,56 +548,36 @@ export const Certificate = ({
                   <p className="text-green-600 font-semibold mb-4">
                     {2 - totalPurchasedCerts} free certificate{2 - totalPurchasedCerts !== 1 ? 's' : ''} remaining
                   </p>
-                  <Button 
-                    onClick={handleFreeUnlock} 
-                    disabled={isUsingCredit}
-                    className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
-                  >
+                  <Button onClick={handleFreeUnlock} disabled={isUsingCredit} className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700">
                     <Award className="h-4 w-4 mr-2" />
                     {isUsingCredit ? "Unlocking..." : "Unlock Free Certificate"}
                   </Button>
-                </>
-              ) : (
-                <>
+                </> : <>
                   <Lock className="h-8 w-8 text-primary mx-auto mb-3" />
                   <h3 className="text-lg font-semibold mb-2">Unlock Your Certificate</h3>
-                  {userCredits > 0 ? (
-                    <>
+                  {userCredits > 0 ? <>
                       <p className="text-muted-foreground text-sm mb-2">
                         Use 1 credit to download your certificate in PNG, JPG, and PDF formats.
                       </p>
                       <p className="text-primary font-semibold mb-4">
                         You have {userCredits} credit{userCredits !== 1 ? 's' : ''} available
                       </p>
-                      <Button 
-                        onClick={handleUseCredit} 
-                        disabled={isUsingCredit}
-                        className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
-                      >
+                      <Button onClick={handleUseCredit} disabled={isUsingCredit} className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90">
                         <CreditCard className="h-4 w-4 mr-2" />
                         {isUsingCredit ? "Processing..." : "Use 1 Credit to Download"}
                       </Button>
-                    </>
-                  ) : (
-                    <>
+                    </> : <>
                       <p className="text-muted-foreground text-sm mb-4">
                         You don't have any credits. Purchase a plan to get certificate credits.
                       </p>
-                      <Button 
-                        onClick={() => window.location.href = '/pricing'}
-                        className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
-                      >
+                      <Button onClick={() => window.location.href = '/pricing'} className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90">
                         <CreditCard className="h-4 w-4 mr-2" />
                         View Pricing Plans
                       </Button>
-                    </>
-                  )}
-                </>
-              )}
+                    </>}
+                </>}
             </div>
-          </div>
-        ) : (
-          <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
+          </div> : <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
             <Button onClick={downloadAsImage} disabled={isDownloading} variant="outline" size="sm" className="border-gray-300 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm">
               <FileImage className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               PNG
@@ -640,9 +597,7 @@ export const Certificate = ({
               <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               {isDownloading ? "Downloading..." : "Download All"}
             </Button>
-          </div>
-        )}
+          </div>}
       </div>
-    </div>
-  );
+    </div>;
 };
