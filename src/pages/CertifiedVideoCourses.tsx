@@ -50,6 +50,16 @@ const videoCourses: VideoCourse[] = [
     category: "Web Development",
     certified: true,
   },
+  {
+    id: "dsa-complete-course",
+    title: "Data Structures & Algorithms Complete Course",
+    description: "Master Data Structures and Algorithms with this comprehensive course. Learn arrays, linked lists, trees, graphs, sorting, searching, and problem-solving techniques essential for coding interviews.",
+    youtubeId: "jWEe1fSa5F4",
+    duration: "Full Course",
+    level: "Intermediate",
+    category: "Data Structures",
+    certified: true,
+  },
 ];
 
 const CertifiedVideoCourses = () => {
