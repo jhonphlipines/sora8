@@ -490,6 +490,11 @@ export const Certificate = ({
             <div className="mt-2 sm:mt-4">
               <div className="max-w-[50%]">
                 <div className="border-b border-gray-400 mb-1 pb-1">
+                  <img 
+                    src="/assets/head-signature.jpeg" 
+                    alt="Head Signature" 
+                    className="h-8 sm:h-10 md:h-12 object-contain mb-1"
+                  />
                   <p className="text-sm sm:text-base md:text-lg italic text-gray-600 font-serif">Vilver</p>
                 </div>
                 <p className="text-[7px] sm:text-[8px] md:text-[10px] text-gray-500">Vilver Learning Platform</p>
