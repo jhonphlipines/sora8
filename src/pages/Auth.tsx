@@ -282,7 +282,7 @@ const Auth = () => {
           <CardContent>
             {/* Social Login Buttons */}
             <div className="space-y-3 mb-6">
-              <Button variant="outline" className="w-full h-11 gap-2" onClick={() => handleSocialLogin('google')} disabled={socialLoading !== null}>
+              <Button variant="outline" className="w-full h-11 gap-2 rounded-sm" onClick={() => handleSocialLogin('google')} disabled={socialLoading !== null}>
                 {socialLoading === 'google' ? <Loader2 className="h-5 w-5 animate-spin" /> : <GoogleIcon />}
                 Continue with Google
               </Button>
@@ -330,7 +330,7 @@ const Auth = () => {
                     <Label htmlFor="signup-password">Password</Label>
                     <Input id="signup-password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required />
                   </div>
-                  <Button type="submit" className="w-full" disabled={loading}>
+                  <Button type="submit" className="w-full rounded-sm" disabled={loading}>
                     {loading ? "Creating account..." : "Sign Up"}
                   </Button>
                 </form>
