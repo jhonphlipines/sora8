@@ -30,7 +30,7 @@ const videoCourses: VideoCourse[] = [
     category: "AI & Machine Learning",
     certified: true,
   },
-  {
+   {
     id: "python-basics",
     title: "First Steps in Python Basic",
     description: "Get started with Python programming from scratch. This beginner-friendly course covers Python basics, syntax, data types, and fundamental programming concepts to build a strong foundation.",
@@ -40,7 +40,7 @@ const videoCourses: VideoCourse[] = [
     category: "Python Programming",
     certified: true,
   },
-  {
+   {
     id: "web-development-course",
     title: "Web Development Complete Course",
     description: "Master web development from scratch with this comprehensive course. Learn HTML, CSS, JavaScript, and modern web technologies to build responsive and interactive websites.",
@@ -50,7 +50,7 @@ const videoCourses: VideoCourse[] = [
     category: "Web Development",
     certified: true,
   },
-  {
+   {
     id: "Huggingface-ai-agent",
     title: "Huggingface-ai-agent-course",
     description: "Master the basics of Hugging Face AI Agents with this comprehensive course.",
@@ -60,7 +60,7 @@ const videoCourses: VideoCourse[] = [
     category: "Data Structures",
     certified: true,
   },
- {
+   {
     id: "Harvard-University",
     title: "CS50x2026-Lecture0-Scratch",
     description: "This is CS50, Harvard University's introduction to the intellectual enterprises of computer science and the art of programming.",
@@ -70,7 +70,7 @@ const videoCourses: VideoCourse[] = [
     category: "cs50",
     certified: true,
   },
-  {
+   {
     id: "Harvard-University",
     title: "CS50x2026-Lecture1-C",
     description: "This is CS50, Harvard University's introduction to the intellectual enterprises of computer science and the art of programming.",
@@ -80,7 +80,7 @@ const videoCourses: VideoCourse[] = [
     category: "cs50",
     certified: true,
   },
-  {
+   {
     id: "Harvard-University",
     title: "CS50x2026-Lecture2-Arrays",
     description: "This is CS50, Harvard University's introduction to the intellectual enterprises of computer science and the art of programming.",
@@ -90,7 +90,7 @@ const videoCourses: VideoCourse[] = [
     category: "cs50",
     certified: true,
   },
-  {
+   {
     id: "Harvard-University",
     title: "CS50x2026-Lecture3-Algorithms",
     description: "This is CS50, Harvard University's introduction to the intellectual enterprises of computer science and the art of programming.",
@@ -105,7 +105,7 @@ const videoCourses: VideoCourse[] = [
     title: "CS50x2026-Lecture4-Memory",
     description: "This is CS50, Harvard University's introduction to the intellectual enterprises of computer science and the art of programming.",
     youtubeId: "db0H0U13YsA",
-    duration: "Week 3 Course",
+    duration: "Week 4 Course",
     level: "Intermediate",
     category: "cs50",
     certified: true,
