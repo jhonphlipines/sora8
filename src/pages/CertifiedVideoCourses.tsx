@@ -62,16 +62,6 @@ const videoCourses: VideoCourse[] = [
   },
   {
     id: "Harvard-University",
-    title: "CS50x2026-Lecture0-Scratch",
-    description: "The journey begins with an introduction to the fundamental concepts of programming using Scratch, a visual programming language, exploring loops, variables, and events.",
-    youtubeId: "SlqjA04_dpk",
-    duration: "Week 0 Course",
-    level: "Intermediate",
-    category: "cs50",
-    certified: true,
-  },
-  {
-    id: "Harvard-University",
     title: "CS50x2026-Lecture1-C",
     description: "An introduction to the C programming language, covering fundamental concepts such as data types, operators, conditional statements, loops, and the command line.",
     youtubeId: "SlqjA04_dpk",
