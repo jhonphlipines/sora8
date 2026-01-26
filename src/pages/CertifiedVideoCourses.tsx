@@ -51,9 +51,9 @@ const videoCourses: VideoCourse[] = [
     certified: true,
   },
   {
-    id: "dsa-complete-course",
-    title: "Data Structures & Algorithms Complete Course",
-    description: "Master Data Structures and Algorithms with this comprehensive course. Learn arrays, linked lists, trees, graphs, sorting, searching, and problem-solving techniques essential for coding interviews.",
+    id: "Huggingface-ai-agent",
+    title: "Huggingface-ai-agent-course",
+    description: "Master the basics of Hugging Face AI Agents with this comprehensive course.",
     youtubeId: "jWEe1fSa5F4",
     duration: "Full Course",
     level: "Intermediate",
