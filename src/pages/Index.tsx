@@ -162,12 +162,12 @@ const Index = () => {
               <div className="flex flex-col sm:flex-row gap-3 animate-fade-in" style={{
               animationDelay: '0.3s'
             }}>
-                <Button onClick={() => navigate('/learn')} size="default" className="btn-fire group text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg bg-primary text-white">
+                <Button onClick={() => navigate('/learn')} size="default" className="btn-fire group text-sm sm:text-base px-5 sm:px-6 py-2.5 bg-primary text-white rounded">
                   
                   Start Learning
                   <ArrowRight className="ml-1.5 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
-                <Button onClick={() => navigate('/tests')} variant="outline" size="default" className="text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-all">
+                <Button onClick={() => navigate('/tests')} variant="outline" size="default" className="text-sm sm:text-base px-5 sm:px-6 py-2.5 border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-all rounded">
                   <Trophy className="mr-1.5 h-4 w-4 text-primary" />
                   Get Certified
                 </Button>
