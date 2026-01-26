@@ -60,6 +60,17 @@ const videoCourses: VideoCourse[] = [
     category: "Data Structures",
     certified: true,
   },
+    {
+    id: "Harvard-University",
+    title: "CS50x2026-Lecture0-Scratch",
+    description: "This is CS50, Harvard University's introduction to the intellectual enterprises of computer science and the art of programming.",
+    youtubeId: "UuIEbpQms8o",
+    duration: "Week 0 Course",
+    level: "Intermediate",
+    category: "cs50",
+    certified: true,
+  },
+
 ];
 
 const CertifiedVideoCourses = () => {
