@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Download, Image } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import html2canvas from "html2canvas";
-import { jsPDF } from "jspdf";
+import jsPDF from "jspdf";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -14,6 +14,7 @@ interface CertificateProps {
   courseName: string;
   completionDate: Date;
   certificateId: string;
+  isFree?: boolean; // ✅ NEW
 }
 
 export const Certificate = ({
@@ -23,6 +24,7 @@ export const Certificate = ({
   courseName,
   completionDate,
   certificateId,
+  isFree = false, // ✅ default: false
 }: CertificateProps) => {
   const certificateRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
@@ -37,10 +39,18 @@ export const Certificate = ({
   /* ================= PURCHASE CHECK ================= */
   useEffect(() => {
     const checkPurchase = async () => {
+      if (isFree) {
+        // Free certificate — skip Supabase check
+        setIsPurchased(true);
+        setCheckingPurchase(false);
+        return;
+      }
+
       try {
         const {
           data: { user },
         } = await supabase.auth.getUser();
+
         if (!user) {
           setCheckingPurchase(false);
           return;
@@ -67,7 +77,7 @@ export const Certificate = ({
     };
 
     checkPurchase();
-  }, [certificateId, toast]);
+  }, [certificateId, isFree, toast]);
 
   /* ================= MEDAL ================= */
   const getMedalInfo = (p: number) => {
@@ -84,10 +94,7 @@ export const Certificate = ({
 
     try {
       setIsDownloading(true);
-
-      // Ensure html2canvas default import compatibility
-      const html2canvasFn = (html2canvas as any).default || html2canvas;
-      const canvas = await html2canvasFn(certificateRef.current, {
+      const canvas = await html2canvas(certificateRef.current, {
         scale: 3,
         backgroundColor: "#ffffff",
         useCORS: true,
@@ -136,8 +143,7 @@ export const Certificate = ({
 
     try {
       setIsDownloading(true);
-      const html2canvasFn = (html2canvas as any).default || html2canvas;
-      const canvas = await html2canvasFn(certificateRef.current, {
+      const canvas = await html2canvas(certificateRef.current, {
         scale: 3,
         backgroundColor: "#ffffff",
         useCORS: true,
@@ -191,7 +197,7 @@ export const Certificate = ({
             ref={certificateRef}
             className="relative bg-white shadow-2xl"
             style={{
-              width: "1123px", // A4 landscape
+              width: "1123px",
               height: "794px",
             }}
           >
@@ -270,7 +276,7 @@ export const Certificate = ({
               <Button
                 variant="default"
                 onClick={downloadAsPDF}
-                disabled={isDownloading || !isPurchased}
+                disabled={isDownloading || (!isPurchased && !isFree)}
               >
                 <Download className="mr-2 h-4 w-4" />
                 {isDownloading ? "Preparing..." : "Download PDF"}
@@ -279,17 +285,26 @@ export const Certificate = ({
               <Button
                 variant="default"
                 onClick={downloadAsPNG}
-                disabled={isDownloading || !isPurchased}
+                disabled={isDownloading || (!isPurchased && !isFree)}
               >
                 <Image className="mr-2 h-4 w-4" />
                 {isDownloading ? "Preparing..." : "Download PNG"}
               </Button>
             </div>
 
-            {!isPurchased && (
-              <p className="text-xs text-gray-500">
-                Purchasing is required to download the certificate. Please purchase to enable downloads.
-              </p>
+            {/* Upgrade prompt */}
+            {!isPurchased && !isFree && (
+              <div className="flex flex-col items-center space-y-2 mt-3">
+                <p className="text-sm text-gray-600">
+                  This certificate requires a premium plan.
+                </p>
+                <Button
+                  variant="secondary"
+                  onClick={() => (window.location.href = "/pricing")}
+                >
+                  Upgrade
+                </Button>
+              </div>
             )}
           </div>
         )}
