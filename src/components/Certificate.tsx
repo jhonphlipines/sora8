@@ -72,28 +72,30 @@ export const Certificate = ({
   }, [certificateId]);
 
   const getMedalInfo = (p: number) => {
-    if (p >= 90) return { fill: "#fbbf24", border: "#ca8a04", label: "Excellent" };
-    if (p >= 70) return { fill: "#d1d5db", border: "#6b7280", label: "Great Job" };
-    return { fill: "#f59e0b", border: "#92400e", label: "Well Done" };
+    if (p >= 90) return { label: "Gold", fill: "#fbbf24", border: "#ca8a04" };
+    if (p >= 70) return { label: "Silver", fill: "#d1d5db", border: "#6b7280" };
+    return { label: "Bronze", fill: "#f59e0b", border: "#92400e" };
   };
 
   const medalInfo = getMedalInfo(percentage);
 
   const captureCanvas = async () => {
-    if (!certificateRef.current) throw new Error("No ref");
+    if (!certificateRef.current) throw new Error("Certificate not ready");
     await new Promise(r => setTimeout(r, 500));
-    return html2canvas(certificateRef.current, { scale: 3, backgroundColor: "#fff" });
+    return html2canvas(certificateRef.current, {
+      scale: 3,
+      backgroundColor: "#ffffff"
+    });
   };
 
   const downloadAsImage = async () => {
     if (!isPurchased) return;
     setIsDownloading(true);
     const canvas = await captureCanvas();
-    const url = canvas.toDataURL("image/png");
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "certificate.png";
-    a.click();
+    const link = document.createElement("a");
+    link.href = canvas.toDataURL("image/png");
+    link.download = `certificate-${certificateId}.png`;
+    link.click();
     setIsDownloading(false);
   };
 
@@ -103,7 +105,7 @@ export const Certificate = ({
     const canvas = await captureCanvas();
     const pdf = new jsPDF("landscape", "mm", "a4");
     pdf.addImage(canvas.toDataURL("image/png"), "PNG", 10, 10, 277, 190);
-    pdf.save("certificate.pdf");
+    pdf.save(`certificate-${certificateId}.pdf`);
     setIsDownloading(false);
   };
 
@@ -111,6 +113,7 @@ export const Certificate = ({
     return (
       <Card className="max-w-xl mx-auto">
         <CardContent className="text-center py-10">
+          <Award className="mx-auto mb-3 text-red-500" />
           <h2 className="text-xl font-bold">Quiz Completed</h2>
           <p>You scored {percentage}%</p>
           <p className="text-red-500 mt-2">Minimum 60% required</p>
@@ -122,52 +125,64 @@ export const Certificate = ({
   return (
     <div className="max-w-4xl mx-auto">
 
-      {/* ===== CERTIFICATE DESIGN ===== */}
+      {/* ================= CERTIFICATE ================= */}
       <div
         ref={certificateRef}
-        className="relative bg-white w-full shadow-2xl flex items-center justify-center"
+        className="relative bg-white w-full shadow-2xl"
         style={{ aspectRatio: "1.414/1" }}
       >
         <div className="absolute inset-4 border-4 border-gray-300"></div>
         <div className="absolute inset-6 border border-gray-200"></div>
 
-        <div className="relative z-10 w-full h-full flex flex-col items-center justify-between px-12 py-10 text-center">
+        <div className="relative z-10 h-full flex flex-col justify-between px-14 py-10 text-center">
 
+          {/* HEADER */}
           <div>
-            <h1 className="text-4xl font-serif tracking-widest text-gray-700">
-              CERTIFICATE
+            <h1 className="text-4xl font-serif tracking-widest text-gray-800">
+              CERTIFICATE OF COMPLETION
             </h1>
-            <p className="uppercase tracking-[0.35em] text-xs text-gray-500">
-              of Completion
+            <p className="text-xs tracking-[0.3em] text-gray-500 mt-1">
+              VILVER LEARNING PLATFORM
             </p>
           </div>
 
-          <div className="space-y-3">
-            <p className="text-gray-500 text-sm">This certifies that</p>
+          {/* MAIN CONTENT */}
+          <div className="space-y-4">
+            <p className="text-gray-600 text-sm">
+              This is to certify that
+            </p>
 
-            <h2 className="text-4xl font-serif font-semibold border-b-2 border-gray-400 px-6 pb-2">
+            <h2 className="text-4xl font-serif font-bold border-b-2 border-gray-400 inline-block px-6 pb-2">
               {studentName}
             </h2>
 
-            <p className="text-gray-500 text-sm">
-              has successfully completed
+            <p className="text-gray-600 text-sm">
+              has successfully completed the course
             </p>
 
-            <h3 className="text-xl font-semibold">{courseName}</h3>
+            <h3 className="text-xl font-semibold text-gray-800">
+              {courseName}
+            </h3>
 
             <p className="text-gray-600">
-              Score: <span className="font-bold">{percentage}%</span>
+              with a score of <span className="font-bold">{percentage}%</span>
             </p>
           </div>
 
-          <div className="w-full flex justify-between items-center mt-6">
-            <div className="text-xs text-gray-500 text-left">
+          {/* FOOTER */}
+          <div className="flex justify-between items-end">
+
+            {/* LEFT */}
+            <div className="text-left text-xs text-gray-500">
               <p>Date</p>
               <p className="font-semibold">
                 {completionDate.toLocaleDateString()}
               </p>
+              <p className="mt-2">Certificate ID</p>
+              <p className="font-mono text-[11px]">{certificateId}</p>
             </div>
 
+            {/* MEDAL */}
             <div className="flex flex-col items-center">
               <svg viewBox="0 0 120 120" className="w-24 h-24">
                 <circle cx="60" cy="60" r="50" fill={medalInfo.fill} stroke={medalInfo.border} strokeWidth="5" />
@@ -178,13 +193,20 @@ export const Certificate = ({
               </svg>
               <p className="text-sm font-semibold mt-1">{medalInfo.label}</p>
             </div>
+
+            {/* SIGNATURE */}
+            <div className="text-right text-xs text-gray-500">
+              <div className="border-t border-gray-400 w-40 ml-auto mb-1"></div>
+              <p className="font-semibold">Authorized Signature</p>
+              <p>Vilver Learning</p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ===== DOWNLOAD BUTTONS ===== */}
+      {/* DOWNLOAD */}
       {isPurchased && (
-        <div className="flex gap-3 justify-center mt-6">
+        <div className="flex justify-center gap-3 mt-6">
           <Button onClick={downloadAsImage} variant="outline">
             <FileImage className="mr-2 h-4 w-4" /> PNG
           </Button>
