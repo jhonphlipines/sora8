@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Download } from "lucide-react";
-import { useRef, useState, useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { useEffect, useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface CertificateProps {
   studentName: string;
@@ -22,10 +22,10 @@ export const Certificate = ({
   totalQuestions,
   courseName,
   completionDate,
-  certificateId
+  certificateId,
 }: CertificateProps) => {
-  const { toast } = useToast();
   const certificateRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   const [isPurchased, setIsPurchased] = useState(false);
   const [checkingPurchase, setCheckingPurchase] = useState(true);
@@ -67,20 +67,17 @@ export const Certificate = ({
   const medal = getMedalInfo(percentage);
 
   /* ================= PDF ================= */
-  const captureCanvas = async () => {
-    if (!certificateRef.current) throw new Error("Certificate not ready");
-    await new Promise(r => setTimeout(r, 400));
-    return html2canvas(certificateRef.current, {
-      scale: 3,
-      backgroundColor: "#ffffff"
-    });
-  };
-
   const downloadAsPDF = async () => {
-    if (!isPurchased) return;
+    if (!certificateRef.current) return;
+
     try {
       setIsDownloading(true);
-      const canvas = await captureCanvas();
+
+      const canvas = await html2canvas(certificateRef.current, {
+        scale: 3,
+        backgroundColor: "#ffffff",
+      });
+
       const pdf = new jsPDF("landscape", "mm", "a4");
       pdf.addImage(canvas.toDataURL("image/png"), "PNG", 10, 10, 277, 190);
       pdf.save(`certificate-${certificateId}.pdf`);
@@ -88,7 +85,7 @@ export const Certificate = ({
       toast({
         title: "Download failed",
         description: "Please try again",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsDownloading(false);
@@ -109,98 +106,105 @@ export const Certificate = ({
   }
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="w-full">
 
-      {/* ================= CERTIFICATE ================= */}
-      <div
-        ref={certificateRef}
-        className="relative bg-white w-full shadow-2xl overflow-hidden"
-        style={{ aspectRatio: "1.414/1" }}
-      >
-        {/* Borders */}
-        <div className="absolute inset-2 sm:inset-4 border-2 sm:border-4 border-gray-300" />
-        <div className="absolute inset-3 sm:inset-6 border border-gray-200" />
+      {/* 🔥 SCALE CONTAINER (THIS FIXES MOBILE) */}
+      <div className="flex justify-center overflow-x-auto">
+        <div className="origin-top scale-[0.8] sm:scale-[0.95] lg:scale-100">
 
-        {/* Content */}
-        <div className="relative z-10 h-full px-4 sm:px-10 lg:px-16 py-6 sm:py-10 lg:py-12 flex flex-col justify-between text-center">
+          {/* ================= CERTIFICATE ================= */}
+          <div
+            ref={certificateRef}
+            className="relative bg-white shadow-2xl"
+            style={{
+              width: "1123px",  // A4 landscape
+              height: "794px",
+            }}
+          >
+            {/* Borders */}
+            <div className="absolute inset-6 border-4 border-gray-300" />
+            <div className="absolute inset-8 border border-gray-200" />
 
-          {/* HEADER */}
-          <div>
-            <h1 className="text-xl sm:text-3xl lg:text-4xl font-serif tracking-wide sm:tracking-widest text-gray-900">
-              CERTIFICATE OF COMPLETION
-            </h1>
-            <p className="text-[10px] sm:text-xs tracking-[0.25em] text-gray-500 mt-1 sm:mt-2">
-              VILVER LEARNING PLATFORM
-            </p>
-          </div>
+            {/* Content */}
+            <div className="relative h-full px-20 py-14 text-center flex flex-col justify-between">
 
-          {/* BODY */}
-          <div className="space-y-3 sm:space-y-5 mt-4 sm:mt-6">
-            <p className="text-gray-600 text-xs sm:text-sm">
-              This is to certify that
-            </p>
+              {/* HEADER */}
+              <div>
+                <h1 className="text-5xl font-serif tracking-widest text-gray-900">
+                  CERTIFICATE OF COMPLETION
+                </h1>
+                <p className="text-xs tracking-[0.35em] text-gray-500 mt-3">
+                  VILVER LEARNING PLATFORM
+                </p>
+              </div>
 
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-gray-900 border-b-2 border-gray-400 inline-block px-4 sm:px-10 pb-1 sm:pb-2">
-              {studentName}
-            </h2>
+              {/* BODY */}
+              <div className="space-y-6">
+                <p className="text-gray-600">
+                  This is to certify that
+                </p>
 
-            <p className="text-gray-600 text-xs sm:text-sm">
-              has successfully completed the course
-            </p>
+                <h2 className="text-5xl font-serif font-bold text-gray-900 border-b-2 border-gray-400 inline-block px-12 pb-2">
+                  {studentName}
+                </h2>
 
-            <h3 className="text-sm sm:text-lg lg:text-xl font-semibold text-gray-900">
-              {courseName}
-            </h3>
+                <p className="text-gray-600">
+                  has successfully completed the course
+                </p>
 
-            <p className="text-gray-700 text-xs sm:text-base">
-              with a score of <span className="font-bold">{percentage}%</span>
-            </p>
-          </div>
+                <h3 className="text-2xl font-semibold text-gray-900">
+                  {courseName}
+                </h3>
 
-          {/* FOOTER */}
-          <div className="mt-6 sm:mt-10 flex flex-col sm:grid sm:grid-cols-3 gap-4 sm:gap-0 items-center sm:items-end">
+                <p className="text-gray-700">
+                  with a score of <span className="font-bold">{percentage}%</span>
+                </p>
+              </div>
 
-            {/* DATE + ID */}
-            <div className="text-xs text-gray-600 text-center sm:text-left">
-              <p>Date</p>
-              <p className="font-semibold">
-                {completionDate.toLocaleDateString()}
-              </p>
+              {/* FOOTER */}
+              <div className="grid grid-cols-3 items-end">
 
-              <p className="mt-1 sm:mt-2">Certificate ID</p>
-              <p className="font-mono text-[10px] sm:text-[11px] break-all">
-                {certificateId}
-              </p>
+                {/* DATE + ID */}
+                <div className="text-left text-sm text-gray-600">
+                  <p>Date</p>
+                  <p className="font-semibold">
+                    {completionDate.toLocaleDateString()}
+                  </p>
+
+                  <p className="mt-2">Certificate ID</p>
+                  <p className="font-mono text-xs">
+                    {certificateId}
+                  </p>
+                </div>
+
+                {/* MEDAL */}
+                <div className="flex flex-col items-center">
+                  <svg viewBox="0 0 120 120" className="w-28 h-28">
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="50"
+                      fill={medal.fill}
+                      stroke={medal.border}
+                      strokeWidth="5"
+                    />
+                    <polygon
+                      points="60,30 68,52 92,52 72,66 80,88 60,74 40,88 48,66 28,52 52,52"
+                      fill="white"
+                    />
+                  </svg>
+                  <p className="mt-2 font-semibold">{medal.label}</p>
+                </div>
+
+                {/* SIGNATURE */}
+                <div className="text-right text-sm text-gray-600">
+                  <div className="border-t border-gray-400 w-44 ml-auto mb-2" />
+                  <p className="font-semibold">Authorized Signature</p>
+                  <p>Vilver Learning</p>
+                </div>
+
+              </div>
             </div>
-
-            {/* MEDAL */}
-            <div className="flex flex-col items-center">
-              <svg viewBox="0 0 120 120" className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="50"
-                  fill={medal.fill}
-                  stroke={medal.border}
-                  strokeWidth="5"
-                />
-                <polygon
-                  points="60,30 68,52 92,52 72,66 80,88 60,74 40,88 48,66 28,52 52,52"
-                  fill="white"
-                />
-              </svg>
-              <p className="text-xs sm:text-sm font-semibold mt-1 sm:mt-2">
-                {medal.label}
-              </p>
-            </div>
-
-            {/* SIGNATURE */}
-            <div className="text-xs text-gray-600 text-center sm:text-right w-full">
-              <div className="border-t border-gray-400 w-32 sm:w-40 mx-auto sm:ml-auto mb-1" />
-              <p className="font-semibold">Authorized Signature</p>
-              <p>Vilver Learning</p>
-            </div>
-
           </div>
         </div>
       </div>
