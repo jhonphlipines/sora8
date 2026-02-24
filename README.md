@@ -33,5 +33,5 @@ This project is designed to provide an engaging learning experience through a cl
 ### Option 1: Work Locally
 1. Clone the repository:
    ```bash
-   git clone <(https://github.com/vengidusamim-star/sora8.git)>
+   git clone <(https://github.com/jhonphlipines/sora8.git)>
    cd <SORA8>
